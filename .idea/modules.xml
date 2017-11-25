@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/Data-Structures/Data-Structures.iml" filepath="$PROJECT_DIR$/Data-Structures/Data-Structures.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Generics/Generics.iml" filepath="$PROJECT_DIR$/Generics/Generics.iml" />
+      <module fileurl="file://$PROJECT_DIR$/JDK18Learning/JDK18Learning.iml" filepath="$PROJECT_DIR$/JDK18Learning/JDK18Learning.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Spring/Spring.iml" filepath="$PROJECT_DIR$/Spring/Spring.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Thread/Thread.iml" filepath="$PROJECT_DIR$/Thread/Thread.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mulit-module/child-module/child-module.iml" filepath="$PROJECT_DIR$/mulit-module/child-module/child-module.iml" />
+      <module fileurl="file://$PROJECT_DIR$/classloader/classloader.iml" filepath="$PROJECT_DIR$/classloader/classloader.iml" />
+      <module fileurl="file://$PROJECT_DIR$/database-layer/database-layer.iml" filepath="$PROJECT_DIR$/database-layer/database-layer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/design-pattern/design-pattern.iml" filepath="$PROJECT_DIR$/design-pattern/design-pattern.iml" />
+      <module fileurl="file://$PROJECT_DIR$/exception/exception.iml" filepath="$PROJECT_DIR$/exception/exception.iml" />
+      <module fileurl="file://$PROJECT_DIR$/hibernate/hibernate.iml" filepath="$PROJECT_DIR$/hibernate/hibernate.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jetty/jetty.iml" filepath="$PROJECT_DIR$/jetty/jetty.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mulit-module/mulit-module.iml" filepath="$PROJECT_DIR$/mulit-module/mulit-module.iml" />
+      <module fileurl="file://$PROJECT_DIR$/plugin1/plugin1.iml" filepath="$PROJECT_DIR$/plugin1/plugin1.iml" />
+      <module fileurl="file://$PROJECT_DIR$/plugin2/plugin2.iml" filepath="$PROJECT_DIR$/plugin2/plugin2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/service-project.iml" filepath="$PROJECT_DIR$/service-project.iml" />
+      <module fileurl="file://$PROJECT_DIR$/spring-boot-tutorial/spring-boot-tutorial.iml" filepath="$PROJECT_DIR$/spring-boot-tutorial/spring-boot-tutorial.iml" />
+      <module fileurl="file://$PROJECT_DIR$/spring-transaction/spring-transaction.iml" filepath="$PROJECT_DIR$/spring-transaction/spring-transaction.iml" />
+      <module fileurl="file://$PROJECT_DIR$/state-transfer/state-transfer.iml" filepath="$PROJECT_DIR$/state-transfer/state-transfer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/tomcat/tomcat.iml" filepath="$PROJECT_DIR$/tomcat/tomcat.iml" />
+    </modules>
+  </component>
+</project>

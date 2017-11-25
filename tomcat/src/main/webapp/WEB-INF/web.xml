@@ -1,0 +1,25 @@
+<!DOCTYPE web-app PUBLIC
+        "-//Sun Microsystems, Inc.//DTD Web com.trendcore.spring.boot.Application 2.3//EN"
+        "http://java.sun.com/dtd/web-app_2_3.dtd" >
+
+<web-app>
+    <display-name>Archetype Created Web com.trendcore.spring.boot.Application</display-name>
+
+    <!--<filter>
+        <filter-name>ResourceFilter</filter-name>
+        <filter-class>com.trendcore.filters.ResourceFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>ResourceFilter</filter-name>
+        <servlet-name>CentralController</servlet-name>
+    </filter-mapping>-->
+    
+    <servlet>
+        <servlet-name>CentralController</servlet-name>
+        <servlet-class>com.trendcore.servlet.CentralController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CentralController</servlet-name>
+        <url-pattern>*.html</url-pattern>
+    </servlet-mapping>
+</web-app>
