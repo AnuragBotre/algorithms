@@ -13,12 +13,9 @@ public class Student {
 
         DataSet d = new DataSet(Person.class);
 
-        Integer id = d.list(0).get(Student.ID);
-        String s = d.list(0).get(Student.NAME);
 
-        Date date = d.list(0).get(Student.BIRTHDATE);
 
-        System.out.println(id + " " + s);
+
 
     }
 

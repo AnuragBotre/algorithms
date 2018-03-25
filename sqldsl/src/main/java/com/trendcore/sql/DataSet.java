@@ -7,7 +7,7 @@ public class DataSet<T> {
 
     private Class<T> tableClass;
 
-    private List list;
+    private List<Row<T>> list;
 
     private Map<Field,Integer> fields;
 
@@ -35,17 +35,8 @@ public class DataSet<T> {
         return this;
     }
 
-    public Row list(int i) {
+    public Row<T> get(int i) {
         return new Row();
     }
 
-    public class Row{
-
-        Object arr[];
-
-        public <R> R get(Column<R> col) {
-            System.out.println(col.name());
-            return null;
-        }
-    }
 }
