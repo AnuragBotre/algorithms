@@ -1,0 +1,4 @@
+https://blog.jooq.org/2016/12/20/jooq-tuesdays-mario-fusco-talks-about-functional-and-declarative-programming/
+jOOQ Tuesdays: Mario Fusco Talks About Functional and Declarative Programming
+
+https://github.com/mariofusco/lambdaj
