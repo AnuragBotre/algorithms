@@ -12,7 +12,6 @@
     <modules>
         <module>database-layer</module>
         <module>exception</module>
-        <module>spring-boot</module>
         <module>jetty</module>
         <module>tomcat</module>
         <module>state-transfer</module>
@@ -29,6 +28,7 @@
         <module>Spring</module>
         <module>spring-transaction</module>
         <module>hibernate</module>
+        <module>sqldsl</module>
     </modules>
 
     <dependencyManagement>
