@@ -19,7 +19,7 @@ public class DataSet<T> {
         fields = new HashMap(f.length);
 
 
-        Increment i = new Increment();
+        Seq i = new Seq();
         Arrays.asList(Person.class.getFields())
                 .forEach(field -> {
                     fields.put(field, i.increment());
