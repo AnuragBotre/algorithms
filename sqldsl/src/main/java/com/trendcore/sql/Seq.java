@@ -4,7 +4,7 @@ public class Seq {
 
     private int i;
 
-    public Integer increment(){
+    public Integer next(){
         return i++;
     }
 

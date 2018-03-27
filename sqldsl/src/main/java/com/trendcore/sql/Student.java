@@ -29,7 +29,7 @@ public class Student{
                 .forEach(field -> {
                     try {
                         Column o = (Column) field.get(this);
-                        o.setIndex(seq.increment());
+                        o.setIndex(seq.next());
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }

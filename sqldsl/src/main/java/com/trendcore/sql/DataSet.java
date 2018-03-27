@@ -22,7 +22,7 @@ public class DataSet<T> {
         Seq i = new Seq();
         Arrays.asList(Person.class.getFields())
                 .forEach(field -> {
-                    fields.put(field, i.increment());
+                    fields.put(field, i.next());
                 });
     }
 
