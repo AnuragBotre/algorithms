@@ -7,13 +7,13 @@ public class DataSet<T> {
 
     private Class<T> tableClass;
 
-    private List<Row<T>> list;
+
 
     private Map<Field,Integer> fields;
 
     public DataSet(Class<T> t) {
         this.tableClass = t;
-        list = new ArrayList();
+
 
         Field[] f = Person.class.getFields();
         fields = new HashMap(f.length);
@@ -35,8 +35,6 @@ public class DataSet<T> {
         return this;
     }
 
-    public Row<T> get(int i) {
-        return new Row();
-    }
+
 
 }

@@ -3,7 +3,7 @@ package com.trendcore.sql;
 import java.util.Arrays;
 import java.util.Date;
 
-public class Student{
+public class Student implements Row{
 
     public static Column<Integer> ID = new Column<>("ID");
     public static Column<String> NAME = new Column<>("NAME");
@@ -19,7 +19,10 @@ public class Student{
         return (T) obj[col.getIndex()];
     }
 
-
+    @Override
+    public <T> T get(int index) {
+        return (T) obj[index];
+    }
 
     public Student() {
         Class currentClass = this.getClass();
@@ -37,22 +40,49 @@ public class Student{
         obj = new Object[seq.val()];
     }
 
+    interface SomeInterface{
+        void val();
+    }
+
+
     public static void main(String[] args) {
 
+        class A implements SomeInterface{
+            String abc = "";
+            String a = "1";
+            String b = "1";
+
+            @Override
+            public void val() {
+
+            }
+        }
+
+        A a = new A();
+        a.a = "2";
 
         Student s = new Student();
 
-
-        s.val(Student.ID,1);
-        s.val(Student.BIRTHDATE,new Date());
-        s.val(Student.NAME,"John");
+        s.someMethod(a);
 
 
-        Integer val = s.val(Student.ID);
+        s.val(s.ID,1);
+        s.val(s.BIRTHDATE,new Date());
+        s.val(s.NAME,"John");
+
+
+        Integer val = s.val(s.ID);
         Date birthdate = s.val(Student.BIRTHDATE);
         String val1 = s.val(Student.NAME);
 
-        System.out.println(val + " " + birthdate + " " + val1);
+
+        Integer val2 = s.ID.val(s);
+
+        System.out.println(val + " " + birthdate + " " + val1 +" - "+ val2);
+    }
+
+    private void someMethod(SomeInterface a) {
+        a.val();
     }
 
 }

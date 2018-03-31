@@ -32,4 +32,7 @@ public class Column<T> {
         this.name = name;
     }
 
+    public T val(Row row) {
+        return row.get(index);
+    }
 }

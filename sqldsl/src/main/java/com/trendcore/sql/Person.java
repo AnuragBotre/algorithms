@@ -27,11 +27,11 @@ public class Person implements SQLField {
 
         DataSet<Student> d = new DataSet(Student.class);
 
-        Row<Student> s = d.get(0);
+        /*Row<Student> s = d.get(0);
 
         Integer integer = s.get(Student.ID);
         Date date = s.get(Student.BIRTHDATE);
-        String s1 = s.get(Student.NAME);
+        String s1 = s.get(Student.NAME);*/
 
 
     }
