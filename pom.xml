@@ -29,6 +29,8 @@
         <module>spring-transaction</module>
         <module>hibernate</module>
         <module>sqldsl</module>
+        <module>instrument</module>
+        <module>agent</module>
     </modules>
 
     <dependencyManagement>
