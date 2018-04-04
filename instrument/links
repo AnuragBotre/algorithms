@@ -1,0 +1,4 @@
+https://www.javamex.com/classmexer/
+Classmexer is a simple Java instrumentation agent that provides some convenience calls for measuring the memory usage of Java objects from within an application.
+It currently provides the following static calls from the MemoryUtil class, inside the com.javamex.classmexer package:
+
