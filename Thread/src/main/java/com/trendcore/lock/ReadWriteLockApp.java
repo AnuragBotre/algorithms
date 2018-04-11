@@ -7,6 +7,10 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class ReadWriteLockApp {
 
+    interface Action{
+        void execute();
+    }
+
     public static void main(String[] args) {
 
         class CommonData{
@@ -20,7 +24,6 @@ public class ReadWriteLockApp {
             }
 
             public Object getData() {
-
                 try{
                     lock.readLock().lock();
                     System.out.println("Reading Data by Thread = " + Thread.currentThread().getName() + " i = " + i);
@@ -28,7 +31,22 @@ public class ReadWriteLockApp {
                 }finally {
                     lock.readLock().unlock();
                 }
+            }
 
+
+
+            public boolean tryWithLock(Action action){
+                if(lock.readLock().tryLock()){
+                    try{
+                        System.out.println("Reading Data by Thread = " + Thread.currentThread().getName() + " i = " + i);
+                    }finally {
+                        lock.readLock().unlock();
+                    }
+                }else{
+                    action.execute();
+                }
+
+                return true;
             }
 
             public boolean modifyData(int i) {
@@ -52,7 +70,13 @@ public class ReadWriteLockApp {
             @Override
             public void run() {
                 while (true) {
-                    c.getData();
+                    //c.getData();
+                    c.tryWithLock(new Action() {
+                        @Override
+                        public void execute() {
+                            System.out.println("Can't acquire lock performing alternative action.");
+                        }
+                    });
                     try {
                         Thread.sleep(500);
                     } catch (InterruptedException e) {
