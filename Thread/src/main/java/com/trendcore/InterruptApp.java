@@ -14,8 +14,8 @@ public class InterruptApp {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     /*System.out.println(Thread.currentThread());*/
-                    //Thread.currentThread().interrupt();
-                    throw new RuntimeException(e);
+                    Thread.currentThread().interrupt();
+                    //throw new RuntimeException(e);
                 }
             }
         });

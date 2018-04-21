@@ -21,5 +21,8 @@ public class AnotherActionThread implements Runnable {
             list.add(i+5);
         }
 
+        Runtime rs =  Runtime.getRuntime();
+        rs.freeMemory();
+
     }
 }
