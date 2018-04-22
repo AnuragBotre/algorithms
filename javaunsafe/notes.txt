@@ -1,0 +1,16 @@
+http://mishadoff.com/blog/java-magic-part-4-sun-dot-misc-dot-unsafe/
+Java Magic. Part 4: sun.misc.Unsafe
+Java is a safe programming language and prevents programmer
+from doing a lot of stupid mistakes, most of which based on memory management.
+But, there is a way to do such mistakes intentionally, using Unsafe class.
+
+
+https://github.com/snazy/ohc
+OHC - An off-heap-cache
+
+
+https://github.com/eugenp/tutorials/tree/master/core-java
+
+
+http://www.baeldung.com/java-unsafe
+Sun MISC Unsafce - Examples
