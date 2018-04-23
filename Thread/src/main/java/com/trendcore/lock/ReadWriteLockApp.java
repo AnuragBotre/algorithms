@@ -74,7 +74,7 @@ public class ReadWriteLockApp {
                     c.tryWithLock(new Action() {
                         @Override
                         public void execute() {
-                            System.out.println("Can't acquire lock performing alternative action.");
+                            System.out.println("Can't acquire lock reading from database.");
                         }
                     });
                     try {
