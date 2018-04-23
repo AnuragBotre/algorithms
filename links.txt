@@ -1,3 +1,8 @@
+Awesome JVM
+https://github.com/deephacks/awesome-jvm
+A curated list of awesome JVM low level, performance and non-framework related stuff.
+
+
 https://blog.jooq.org/2016/12/20/jooq-tuesdays-mario-fusco-talks-about-functional-and-declarative-programming/
 jOOQ Tuesdays: Mario Fusco Talks About Functional and Declarative Programming
 

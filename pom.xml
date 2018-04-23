@@ -31,6 +31,8 @@
         <module>sqldsl</module>
         <module>instrument</module>
         <module>agent</module>
+        <module>Design-Patterns</module>
+        <module>javaunsafe</module>
     </modules>
 
     <dependencyManagement>
