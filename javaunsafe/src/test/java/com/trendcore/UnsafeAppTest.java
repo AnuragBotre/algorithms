@@ -47,7 +47,6 @@ public class UnsafeAppTest {
         A a = new A();
 
         A o = (A) unsafe.allocateInstance(A.class);
-        unsafe.
 
         System.out.println(o + " " + o.hashCode());
 
