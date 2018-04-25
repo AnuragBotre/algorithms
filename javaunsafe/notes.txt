@@ -1,3 +1,16 @@
+https://medium.com/@esaliya/fast-inter-process-communication-over-shared-memory-for-java-big-data-applications-6f1beb81f910
+Fast Inter-Process Communication over Shared Memory for Java Big Data Applications
+
+
+https://stackoverflow.com/questions/7060215/how-can-i-get-the-memory-location-of-a-object-in-java
+I want to know the location that JVM allocates to objects being placed in the system memory.
+
+
+https://github.com/EsotericSoftware/kryo
+Fast Serialization
+Popular high-performance libraries
+
+
 http://mishadoff.com/blog/java-magic-part-4-sun-dot-misc-dot-unsafe/
 Java Magic. Part 4: sun.misc.Unsafe
 Java is a safe programming language and prevents programmer

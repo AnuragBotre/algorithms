@@ -2,6 +2,7 @@ package com.trendcore;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.openjdk.jol.info.GraphLayout;
 import sun.misc.Unsafe;
 
 import java.lang.reflect.Constructor;
@@ -58,5 +59,39 @@ public class UnsafeAppTest {
             System.out.println(" " + o1.hashCode());
         }
 
+    }
+
+    @Test
+    public void memoryCorruption() throws Exception {
+        class Guard{
+            private int ACCESS_ALLOWED = 1;
+
+            public boolean giveAccess() {
+                return 42 == ACCESS_ALLOWED;
+            }
+        }
+
+        Guard guard = new Guard();
+        System.out.println(guard.giveAccess());   // false, no access
+
+        Guard anotherGuard = new Guard();
+
+        Field f = guard.getClass().getDeclaredField("ACCESS_ALLOWED");
+        unsafe.putInt(guard, unsafe.objectFieldOffset(f), 42); // memory corruption
+        System.out.println(guard.giveAccess()); // true, access granted
+
+        long x = MemoryUtility.addressOf(anotherGuard, unsafe);
+        System.out.println(x);
+        //For example, there is another Guard object in memory located next
+        // to current guard object.
+        // We can modify its ACCESS_ALLOWED field with the following code
+        //unsafe.putInt(guard, 16 +x, 42); // memory corruption
+
+        System.out.println(
+                GraphLayout.parseInstance(anotherGuard).toPrintable());
+
+
+
+        System.out.println(anotherGuard.giveAccess());
     }
 }
