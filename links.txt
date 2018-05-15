@@ -1,3 +1,6 @@
+https://wiki.sei.cmu.edu/confluence/display/java/LCK07-J.+Avoid+deadlock+by+requesting+and+releasing+locks+in+the+same+order
+Coding Guidelines
+
 https://www.jetbrains.com/mps/?fromMenu
 Every company is different and has their own needs. You should build your own language to meet the demands of your business if:
 
