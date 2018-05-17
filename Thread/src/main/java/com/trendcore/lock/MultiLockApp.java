@@ -3,6 +3,9 @@ package com.trendcore.lock;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
@@ -26,7 +29,7 @@ public class MultiLockApp {
         <I,O> O execute(I i);
     }
 
-    interface Lock<T> extends OAction{
+    interface Lock<T>{
         void lock(T t);
 
         void unlock(T t);
@@ -95,14 +98,14 @@ public class MultiLockApp {
         }
 
         class LockAcquireAlgo{
-            public void performUnderLock(List list,Lock lock){
+            public void performUnderLock(List list,Lock lock,OAction action){
                 int i = 0;
                 try{
                     while(i < list.size()){
                         lock.lock(list.get(i));
                         i++;
                     }
-                    lock.execute();
+                    action.execute();
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
                 } finally {
@@ -139,16 +142,24 @@ public class MultiLockApp {
                 partitionMap.put(partitions.name,partitions);
             }
 
-            public void modifyData(Tree tree) throws Exception {
-                modifyUnderLock(tree,new IAction<Tree>(){
+            public void modifyData(final Tree tree) {
+                modifyUnderLock(tree,new OAction(){
                     @Override
-                    public void execute(Tree t) {
-                        System.out.println(Thread.currentThread().getName() + " Writing Data for partition :- " + partitionMap.get(t.name).name);
+                    public <O> O execute() {
+                        TreeTraversal treeTraversal = new TreeTraversal();
+                        treeTraversal.traverse(tree, new Visitor() {
+                            @Override
+                            public void visit(Tree t) {
+                                System.out.println(Thread.currentThread().getName() + " Modifying data on partition :- " + partitionMap.get(t.name).name);
+                                sleep(200);
+                            }
+                        });
+                        return null;
                     }
                 });
             }
 
-            private void modifyUnderLock(Tree tree, IAction iAction) {
+            private void modifyUnderLock(Tree tree, OAction iAction) {
                 TreeTraversal t = new TreeTraversal();
                 final List<String> list = new ArrayList<>();
                 t.traverse(tree, new Visitor() {
@@ -162,26 +173,18 @@ public class MultiLockApp {
 
                 int i = 0;
 
-                for(;;){
-                    try{
-                        while(i < list.size()){
-                            //System.out.println(Thread.currentThread().getName() + " Acquiring Write lock on partition :- " + list.get(i));
-                            partitionMap.get(list.get(i)).readWriteLock.writeLock().lock();
-                            i++;
-                        }
-                        iAction.execute(tree);
-                        break;
-                    } catch (Exception e) {
-                        System.out.println(e.getMessage());
-                    } finally {
-                        i--;
-                        while(i >= 0){
-                            partitionMap.get(list.get(i)).readWriteLock.writeLock().unlock();
-                            i--;
-                        }
+                LockAcquireAlgo lockAcquireAlgo = new LockAcquireAlgo();
+                lockAcquireAlgo.performUnderLock(list, new Lock() {
+                    @Override
+                    public void lock(Object o) {
+                        partitionMap.get(o).readWriteLock.writeLock().lock();
                     }
-                }
 
+                    @Override
+                    public void unlock(Object o) {
+                        partitionMap.get(o).readWriteLock.writeLock().unlock();
+                    }
+                },iAction);
 
             }
 
@@ -222,20 +225,15 @@ public class MultiLockApp {
                     @Override
                     public void lock(Object o) {
                         if(!partitionMap.get(o).readWriteLock.readLock().tryLock()){
-                            throw new RuntimeException("Could not acquire lock.");
+                            throw new RuntimeException("Could not acquire lock for partition :- " + o);
                         }
-                    }
-
-                    @Override
-                    public <O> O execute() {
-                        return action.execute();
                     }
 
                     @Override
                     public void unlock(Object o) {
                         partitionMap.get(o).readWriteLock.readLock().unlock();
                     }
-                });
+                },action);
 
             }
 
@@ -278,20 +276,22 @@ public class MultiLockApp {
         lockAcquireAlgo.performUnderLock(list, new Lock() {
             @Override
             public void lock(Object o) {
-                if("User".equals(o)){
+                if ("User".equals(o)) {
                     throw new RuntimeException("Could not acquire lock on User.");
                 }
                 System.out.println("Acquiring Lock :- " + o);
             }
 
-            @Override
-            public <O> O execute() {
-                return null;
-            }
 
             @Override
             public void unlock(Object o) {
                 System.out.println("Releasing Lock :- " + o);
+            }
+        }, new OAction() {
+            @Override
+            public <O> O execute() {
+                System.out.println("here.");
+                return null;
             }
         });
 
@@ -382,47 +382,73 @@ public class MultiLockApp {
         };
 
         new Thread(readUser).start();
-        /*new Thread(readProduct).start();
+        new Thread(readProduct).start();
         new Thread(regServices).start();
-        new Thread(stTGT).start();*/
+        new Thread(stTGT).start();
 
-        boolean flag = true;
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Options :- ");
-        while(flag){
-            switch (scanner.nextInt()) {
-                case 1:{
-                        System.out.println("Option 1 selected :- ");
-                        final Tree user = new Tree(User);
-                        user.add(new Tree(UserProfile));
-                        user.add(new Tree(UserAttribute));
-                        user.add(new Tree(Groups));
-                        Tree roles = new Tree(Roles);
-                        roles.add(new Tree(Operation));
-                        user.add(roles);
+        Thread taskSubmitterThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                ExecutorService executorService = Executors.newFixedThreadPool(10);
 
-                        commonData.modifyData(user);
-                    }
-                    break;
-                case 2:{
-                        System.out.println("Option 2 selected :- ");
-                        Tree productCallBackUrl  = new Tree(ProductCallbackUrl);
-                        productCallBackUrl.add(new Tree(Product));
-                        commonData.modifyData(productCallBackUrl);
-                    }
-                    break;
-                case 3:{
-                        System.out.println("Option 3 selected :- ");
-                        Tree roles = new Tree(Operation);
-                        roles.add(new Tree(Roles));
-                        commonData.modifyData(roles);
-                    }
-                    break;
-                case 4:
-                    flag = false;
-                    break;
+                boolean flag = true;
+
+                System.out.println("Options :- ");
+                while(flag){
+
+                    executorService.submit(new Runnable() {
+                        @Override
+                        public void run() {
+                            Tree user = new Tree(User);
+                            user.add(new Tree(UserProfile));
+                            user.add(new Tree(UserAttribute));
+                            user.add(new Tree(Groups));
+                            Tree roles = new Tree(Roles);
+                            roles.add(new Tree(Operation));
+                            user.add(roles);
+                            commonData.modifyData(user);
+                        }
+                    });
+
+                    executorService.submit(new Runnable() {
+                        @Override
+                        public void run() {
+                            Tree user = new Tree(Operation);
+                            user.add(new Tree(Roles));
+                            user.add(new Tree(Groups));
+                            user.add(new Tree(User));
+                            Tree roles = new Tree(UserProfile);
+                            roles.add(new Tree(UserAttribute));
+                            user.add(roles);
+                            commonData.modifyData(user);
+                        }
+                    });
+
+                    executorService.submit(new Runnable() {
+                        @Override
+                        public void run() {
+                            Tree productCallBackUrl  = new Tree(ProductCallbackUrl);
+                            productCallBackUrl.add(new Tree(Product));
+                            commonData.modifyData(productCallBackUrl);
+                        }
+                    });
+
+                    executorService.submit(new Runnable() {
+                        @Override
+                        public void run() {
+                            Tree roles = new Tree(Operation);
+                            roles.add(new Tree(Roles));
+                            commonData.modifyData(roles);
+                        }
+                    });
+
+                    sleep(1000);
+                }
             }
-        }
+        });
+
+        taskSubmitterThread.start();
+
 
     }
 
