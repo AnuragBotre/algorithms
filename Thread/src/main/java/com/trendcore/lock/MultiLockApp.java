@@ -107,7 +107,7 @@ public class MultiLockApp {
                     }
                     action.execute();
                 } catch (Exception e) {
-                    System.out.println(e.getMessage());
+                    System.err.println(Thread.currentThread().getName()+ " " + e.getMessage());
                 } finally {
                     i--;
                     while(i >= 0){
@@ -241,7 +241,7 @@ public class MultiLockApp {
 
                 private String name;
 
-                private ReadWriteLock readWriteLock = new ReentrantReadWriteLock();
+                private ReadWriteLock readWriteLock = new ReentrantReadWriteLock(true);
 
                 public Partitions(String name) {
                     this.name = name;
