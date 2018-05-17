@@ -386,13 +386,12 @@ public class MultiLockApp {
         new Thread(regServices).start();
         new Thread(stTGT).start();
 
+        final ExecutorService executorService = Executors.newFixedThreadPool(10);
+
         Thread taskSubmitterThread = new Thread(new Runnable() {
             @Override
             public void run() {
-                ExecutorService executorService = Executors.newFixedThreadPool(10);
-
                 boolean flag = true;
-
                 System.out.println("Options :- ");
                 while(flag){
 
