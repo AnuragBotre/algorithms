@@ -1,3 +1,7 @@
+https://github.com/boundary/high-scale-lib
+This is Boundary's fork of Cliff Click's high scale lib. We will be maintaining this fork with bug fixes, improvements and versioned builds in maven central.
+
+
 https://wiki.sei.cmu.edu/confluence/display/java/LCK07-J.+Avoid+deadlock+by+requesting+and+releasing+locks+in+the+same+order
 Coding Guidelines
 
