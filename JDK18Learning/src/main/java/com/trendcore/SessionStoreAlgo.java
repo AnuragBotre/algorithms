@@ -1,5 +1,7 @@
 package com.trendcore;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.*;
@@ -25,6 +27,12 @@ public class SessionStoreAlgo {
 
             InMemoryStore inMemoryStore;
 
+            List<Node> nodeList;
+
+            public void addNode(Node node) {
+                nodeList.add(node);
+            }
+
             class InMemoryStore extends Database{
                 @Override
                 public <T> void persist(String id, T t) {
@@ -37,6 +45,7 @@ public class SessionStoreAlgo {
             public Node(String s) {
                 this.name = s;
                 inMemoryStore = new InMemoryStore();
+                nodeList = new ArrayList<>();
             }
 
             class ServiceTicket{
@@ -62,6 +71,10 @@ public class SessionStoreAlgo {
                             database.persist(serviceTicket.getId(),serviceTicket);
                             //store it in memory
                             inMemoryStore.persist(serviceTicket.getId(),serviceTicket);
+
+                            ServiceTicket finalServiceTicket = serviceTicket;
+                            executor.submit(() -> informOtherNodes(finalServiceTicket));
+
                         }else{
                             //validate st
 
@@ -75,15 +88,26 @@ public class SessionStoreAlgo {
                     }
                 );
             }
+
+            private void informOtherNodes(ServiceTicket serviceTicket) {
+                nodeList.forEach(node -> node.addServiceTicket(serviceTicket));
+            }
+
+            private void addServiceTicket(ServiceTicket serviceTicket) {
+                executor.submit(() -> inMemoryStore.persist(serviceTicket.getId(),serviceTicket));
+            }
         }
 
 
-        Node node = new Node("Node-1");
+        Node node1 = new Node("Node-1");
+        Node node2 = new Node("Node-2");
+
+        node1.addNode(node2);
 
         Runnable client = () -> {
             try {
                 //send req to node
-                Object serviceTicket = node.processRequest(null).get();
+                Object serviceTicket = node1.processRequest(null).get();
 
 
 
