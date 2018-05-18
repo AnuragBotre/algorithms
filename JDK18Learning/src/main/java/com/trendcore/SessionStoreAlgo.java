@@ -1,5 +1,6 @@
 package com.trendcore;
 
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.*;
 
@@ -7,13 +8,35 @@ public class SessionStoreAlgo {
 
     public static void main(String[] args) {
 
+        class Database{
+            Map store = new ConcurrentHashMap();
+
+            public <T> void persist(String id,T t) {
+                store.put(id,t);
+            }
+        }
+
+        Database database = new Database();
+
         class Node{
             ExecutorService executor = Executors.newFixedThreadPool(4);
 
             String name;
 
+            InMemoryStore inMemoryStore;
+
+            class InMemoryStore extends Database{
+                @Override
+                public <T> void persist(String id, T t) {
+                    store.put(id,t);
+                }
+            }
+
+
+
             public Node(String s) {
                 this.name = s;
+                inMemoryStore = new InMemoryStore();
             }
 
             class ServiceTicket{
@@ -32,17 +55,23 @@ public class SessionStoreAlgo {
             public Future processRequest(final String serviceTicketId) {
 
                 return executor.submit(() ->{
-                    ServiceTicket serviceTicket = null;
+                        ServiceTicket serviceTicket = null;
+                        if(serviceTicketId == null){                            //create st
+                            serviceTicket = new ServiceTicket(UUID.randomUUID());
+                            //store it database
+                            database.persist(serviceTicket.getId(),serviceTicket);
+                            //store it in memory
+                            inMemoryStore.persist(serviceTicket.getId(),serviceTicket);
+                        }else{
+                            //validate st
 
-                    if(serviceTicketId == null){
-                        //create st
-                        serviceTicket = new ServiceTicket(UUID.randomUUID());
-                    }else{
-                        //validate st
+                            //get from in memory
 
-                    }
+                            //if not found then fetch from database
 
-                    return serviceTicket.getId();
+                            //validate expiration time of ticket
+                        }
+                        return serviceTicket.getId();
                     }
                 );
             }
