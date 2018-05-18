@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Anurag
@@ -79,5 +80,10 @@ public class CombinationOfIntegersTest {
             findOtherCombinations(list,ints,ints[i],noOfCombinations-1, s);
             s = s.substring(0,s.length()-1);
         }
+    }
+
+    @Test
+    public void testMins() throws Exception {
+        System.out.println(TimeUnit.MINUTES.toSeconds(30));
     }
 }

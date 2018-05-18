@@ -52,6 +52,10 @@ public class SessionStoreAlgo {
 
                 UUID uuid;
 
+                long currentTime;
+
+                final long expiryTime = TimeUnit.MINUTES.toSeconds(30);
+
                 public ServiceTicket(UUID uuid) {
                     this.uuid = uuid;
                 }
@@ -67,6 +71,7 @@ public class SessionStoreAlgo {
                         ServiceTicket serviceTicket = null;
                         if(serviceTicketId == null){                            //create st
                             serviceTicket = new ServiceTicket(UUID.randomUUID());
+                            serviceTicket.currentTime = System.currentTimeMillis();
                             //store it database
                             database.persist(serviceTicket.getId(),serviceTicket);
                             //store it in memory
@@ -101,8 +106,8 @@ public class SessionStoreAlgo {
 
         Node node1 = new Node("Node-1");
         Node node2 = new Node("Node-2");
-
         node1.addNode(node2);
+        node2.addNode(node1);
 
         Runnable client = () -> {
             try {
