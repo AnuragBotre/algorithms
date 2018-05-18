@@ -34,6 +34,10 @@ public class SessionStoreAlgo {
             public void setStatus(int i) {
 
             }
+
+            public Object getData() {
+                return data;
+            }
         }
 
         class Node{
@@ -145,6 +149,10 @@ public class SessionStoreAlgo {
 
                 System.out.println(response.data);
 
+                boolean flag = true;
+                for(int i = 0; i < 100 ; i++){
+                    node1.processRequest(((Node.ServiceTicket)response.data).getId());
+                }
 
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -152,6 +160,8 @@ public class SessionStoreAlgo {
                 e.printStackTrace();
             }
         };
+
+        Thread thread1 = new Thread(client);
 
         client.run();
 
