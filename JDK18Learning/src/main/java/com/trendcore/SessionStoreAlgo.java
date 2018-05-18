@@ -95,19 +95,6 @@ public class SessionStoreAlgo {
         };
 
 
-
-
-        try {
-            Object serviceTicket = node.processRequest(null).get();
-
-            //if()
-
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-
     }
 
 }
