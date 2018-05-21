@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.*;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class SessionStoreAlgo {
 
@@ -104,9 +106,12 @@ public class SessionStoreAlgo {
             }
 
 
-            public Future<Response> processRequest(final Request request) {
+            public Future<Response> processRequest(final Supplier<Request> requestSupplier) {
 
                 return executor.submit(() -> {
+
+                    Request request = requestSupplier.get();
+
                     Response response = new Response();
 
                     if(request.action != "/login"){
@@ -173,14 +178,23 @@ public class SessionStoreAlgo {
         Runnable client = () -> {
             try {
                 //send req to node
-                Response response = node1.processRequest(null).get();
 
-                System.out.println(response.data);
+                Response response = node1.processRequest(() -> {
+                    Request request = new Request();
+                    request.action = "/login";
+                    return request;
+                }).get();
 
-                boolean flag = true;
-                /*for(int i = 0; i < 100 ; i++){
-                    node1.processRequest(((Node.ServiceTicket)response.data).getId());
-                }*/
+                printResponse(response,res -> System.out.println(res.data + " " + res.status));
+
+                Response response1 = node1.processRequest(() -> {
+                    Request request = new Request();
+                    request.action = "/demo";
+                    request.object = response.data;
+                    return request;
+                }).get();
+
+                printResponse(response1 , res -> System.out.println(res.data + " " + res.status));
 
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -194,6 +208,10 @@ public class SessionStoreAlgo {
         thread1.start();
 
 
+    }
+
+    private static <T> void printResponse(T t,Consumer<T> consumer) {
+        consumer.accept(t);
     }
 
 }
