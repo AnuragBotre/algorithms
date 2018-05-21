@@ -1,15 +1,18 @@
 package com.trendcore;
 
-import com.sun.istack.internal.NotNull;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.*;
 
 public class SessionStoreAlgo {
 
-    class ErrorCodes{
+    class Codes {
 
         public static final int ST_EXPIRED = 400;
+        public static final int ST_NOT_PRESENT = 401;
+        public static final int OK = 200;
     }
 
     public static void main(String[] args) {
@@ -101,33 +104,29 @@ public class SessionStoreAlgo {
             }
 
 
-            public Future<Response> processRequest(@NotNull  final Request request) {
+            public Future<Response> processRequest(final Request request) {
 
                 return executor.submit(() -> {
                     Response response = new Response();
 
                     if(request.action != "/login"){
-
+                        if(request.object == null) {
+                            response.setData("Service Ticket not found.");
+                            response.setStatus(Codes.ST_NOT_PRESENT);
+                            return response;
+                        }
                     }
 
                     switch (request.action){
                         case "/demo":{
                                 String serviceTicketId = (String) request.object;
                                 ServiceTicket serviceTicket = inMemoryStore.fetch(serviceTicketId,ServiceTicket.class);
-                                if (serviceTicket == null) {
-                                    System.err.println(serviceTicketId + " not found.");
-
-                                    response.setData("Service Ticket Not found.");
-                                    response.setStatus(400);
-
-                                } else {
-                                    if (System.currentTimeMillis() > serviceTicket.lastModifiedTime + serviceTicket.expiryTime) {
+                                if (System.currentTimeMillis() > serviceTicket.lastModifiedTime + serviceTicket.expiryTime) {
                                         response.setData(serviceTicket);
-                                        response.setStatus(200);
-                                    }else{
-                                        response.setData("Service Ticket Expired.");
-                                        response.setStatus(ErrorCodes.ST_EXPIRED);
-                                    }
+                                        response.setStatus(Codes.OK);
+                                }else{
+                                    response.setData("Service Ticket Expired.");
+                                    response.setStatus(Codes.ST_EXPIRED);
                                 }
                             }
                             break;
@@ -144,7 +143,7 @@ public class SessionStoreAlgo {
                                     ServiceTicket finalServiceTicket = serviceTicket;
                                     executor.submit(() -> informOtherNodes(finalServiceTicket));
                                     response.setData(serviceTicket);
-                                    response.setStatus(200);
+                                    response.setStatus(Codes.OK);
                                 }
                             }
                             break;
