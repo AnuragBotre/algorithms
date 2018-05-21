@@ -44,7 +44,7 @@ public class SessionStoreAlgo {
             }
 
             public void setStatus(int i) {
-
+                status = i;
             }
 
             public Object getData() {
@@ -53,11 +53,8 @@ public class SessionStoreAlgo {
         }
 
         class Request{
-
             String action;
-
             Object object;
-
         }
 
         class Node{
@@ -80,8 +77,6 @@ public class SessionStoreAlgo {
                 }
             }
 
-
-
             public Node(String s) {
                 this.name = s;
                 inMemoryStore = new InMemoryStore();
@@ -94,7 +89,7 @@ public class SessionStoreAlgo {
 
                 long lastModifiedTime;
 
-                final long expiryTime = TimeUnit.MINUTES.toSeconds(30);
+                final long expiryTime = TimeUnit.MINUTES.toSeconds(2);
 
                 public ServiceTicket(UUID uuid) {
                     this.uuid = uuid;
@@ -143,8 +138,7 @@ public class SessionStoreAlgo {
 
                                 inMemoryStore.persist(serviceTicket.getId(), serviceTicket);
 
-                                ServiceTicket finalServiceTicket = serviceTicket;
-                                executor.submit(() -> informOtherNodes(finalServiceTicket));
+                                executor.submit(() -> informOtherNodes(serviceTicket));
                                 response.setData(serviceTicket);
                                 response.setStatus(Codes.OK);
                             }
@@ -181,14 +175,12 @@ public class SessionStoreAlgo {
 
                 printResponse(response,res -> System.out.println(res.data + " " + res.status));
 
-                Response response1 = node1.processRequest(() -> {
+                printResponse(node1.processRequest(() -> {
                     Request request = new Request();
                     request.action = "/demo";
                     request.object = ((Node.ServiceTicket)response.data).getId();
                     return request;
-                }).get();
-
-                printResponse(response1 , res -> System.out.println(res.data + " " + res.status));
+                }).get(), res -> System.out.println(res.data + " " + res.status));
 
             } catch (InterruptedException e) {
                 e.printStackTrace();
