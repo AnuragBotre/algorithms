@@ -136,26 +136,20 @@ public class SessionStoreAlgo {
                             }
                             break;
                         case "/login":{
-                                String serviceTicketId = (String) request.object;
-                                if (serviceTicketId == null) {
-                                    ServiceTicket serviceTicket = new ServiceTicket(UUID.randomUUID());
-                                    serviceTicket.lastModifiedTime = System.currentTimeMillis();
+                                ServiceTicket serviceTicket = new ServiceTicket(UUID.randomUUID());
+                                serviceTicket.lastModifiedTime = System.currentTimeMillis();
 
-                                    database.persist(serviceTicket.getId(), serviceTicket);
+                                database.persist(serviceTicket.getId(), serviceTicket);
 
-                                    inMemoryStore.persist(serviceTicket.getId(), serviceTicket);
+                                inMemoryStore.persist(serviceTicket.getId(), serviceTicket);
 
-                                    ServiceTicket finalServiceTicket = serviceTicket;
-                                    executor.submit(() -> informOtherNodes(finalServiceTicket));
-                                    response.setData(serviceTicket);
-                                    response.setStatus(Codes.OK);
-                                }
+                                ServiceTicket finalServiceTicket = serviceTicket;
+                                executor.submit(() -> informOtherNodes(finalServiceTicket));
+                                response.setData(serviceTicket);
+                                response.setStatus(Codes.OK);
                             }
                             break;
-
                     }
-
-
                     return response;
                 });
             }
@@ -190,7 +184,7 @@ public class SessionStoreAlgo {
                 Response response1 = node1.processRequest(() -> {
                     Request request = new Request();
                     request.action = "/demo";
-                    request.object = response.data;
+                    request.object = ((Node.ServiceTicket)response.data).getId();
                     return request;
                 }).get();
 
