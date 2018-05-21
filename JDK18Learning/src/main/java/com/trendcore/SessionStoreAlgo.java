@@ -1,9 +1,16 @@
 package com.trendcore;
 
+import com.sun.istack.internal.NotNull;
+
 import java.util.*;
 import java.util.concurrent.*;
 
 public class SessionStoreAlgo {
+
+    class ErrorCodes{
+
+        public static final int ST_EXPIRED = 400;
+    }
 
     public static void main(String[] args) {
 
@@ -14,8 +21,8 @@ public class SessionStoreAlgo {
                 store.put(id,t);
             }
 
-            public <T> T fetch(String id) {
-                return (T) store.get(id);
+            public <T> T fetch(String id,Class<T> t) {
+                return t.cast(store.get(id));
             }
         }
 
@@ -38,6 +45,14 @@ public class SessionStoreAlgo {
             public Object getData() {
                 return data;
             }
+        }
+
+        class Request{
+
+            String action;
+
+            Object object;
+
         }
 
         class Node{
@@ -86,43 +101,57 @@ public class SessionStoreAlgo {
             }
 
 
-            public Future<Response> processRequest(final String serviceTicketId) {
+            public Future<Response> processRequest(@NotNull  final Request request) {
 
                 return executor.submit(() -> {
                     Response response = new Response();
-                    ServiceTicket serviceTicket = null;
-                    if (serviceTicketId == null) {                            //create st
-                        serviceTicket = new ServiceTicket(UUID.randomUUID());
-                        serviceTicket.lastModifiedTime = System.currentTimeMillis();
-                        //store it database
-                        database.persist(serviceTicket.getId(), serviceTicket);
-                        //store it in memory
-                        inMemoryStore.persist(serviceTicket.getId(), serviceTicket);
 
-                        ServiceTicket finalServiceTicket = serviceTicket;
-                        executor.submit(() -> informOtherNodes(finalServiceTicket));
-                        response.setData(serviceTicket);
-                        response.setStatus(200);
-                    } else {
-
-                        //validate st
-
-                        //get from in memory
-                        serviceTicket = inMemoryStore.fetch(serviceTicketId);
-                        if (serviceTicket == null) {
-                            System.err.println(serviceTicketId + " not found.");
-                        } else {
-                            if (System.currentTimeMillis() > serviceTicket.lastModifiedTime + serviceTicket.expiryTime) {
-                                response.setData(serviceTicket);
-                                response.setStatus(200);
-                            }
-                        }
-
-                        //if not found then fetch from database
-
-                        //validate expiration time of ticket
+                    if(request.action != "/login"){
 
                     }
+
+                    switch (request.action){
+                        case "/demo":{
+                                String serviceTicketId = (String) request.object;
+                                ServiceTicket serviceTicket = inMemoryStore.fetch(serviceTicketId,ServiceTicket.class);
+                                if (serviceTicket == null) {
+                                    System.err.println(serviceTicketId + " not found.");
+
+                                    response.setData("Service Ticket Not found.");
+                                    response.setStatus(400);
+
+                                } else {
+                                    if (System.currentTimeMillis() > serviceTicket.lastModifiedTime + serviceTicket.expiryTime) {
+                                        response.setData(serviceTicket);
+                                        response.setStatus(200);
+                                    }else{
+                                        response.setData("Service Ticket Expired.");
+                                        response.setStatus(ErrorCodes.ST_EXPIRED);
+                                    }
+                                }
+                            }
+                            break;
+                        case "/login":{
+                                String serviceTicketId = (String) request.object;
+                                if (serviceTicketId == null) {
+                                    ServiceTicket serviceTicket = new ServiceTicket(UUID.randomUUID());
+                                    serviceTicket.lastModifiedTime = System.currentTimeMillis();
+
+                                    database.persist(serviceTicket.getId(), serviceTicket);
+
+                                    inMemoryStore.persist(serviceTicket.getId(), serviceTicket);
+
+                                    ServiceTicket finalServiceTicket = serviceTicket;
+                                    executor.submit(() -> informOtherNodes(finalServiceTicket));
+                                    response.setData(serviceTicket);
+                                    response.setStatus(200);
+                                }
+                            }
+                            break;
+
+                    }
+
+
                     return response;
                 });
             }
@@ -150,9 +179,9 @@ public class SessionStoreAlgo {
                 System.out.println(response.data);
 
                 boolean flag = true;
-                for(int i = 0; i < 100 ; i++){
+                /*for(int i = 0; i < 100 ; i++){
                     node1.processRequest(((Node.ServiceTicket)response.data).getId());
-                }
+                }*/
 
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -163,7 +192,7 @@ public class SessionStoreAlgo {
 
         Thread thread1 = new Thread(client);
 
-        client.run();
+        thread1.start();
 
 
     }
