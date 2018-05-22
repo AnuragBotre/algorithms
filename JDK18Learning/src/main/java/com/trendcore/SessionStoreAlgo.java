@@ -5,6 +5,8 @@ import java.util.concurrent.*;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+import static java.lang.Thread.sleep;
+
 public class SessionStoreAlgo {
 
     class Codes {
@@ -90,7 +92,7 @@ public class SessionStoreAlgo {
 
                 long lastModifiedTime;
 
-                final long expiryTime = TimeUnit.MINUTES.toSeconds(2);
+                final long expiryTime = TimeUnit.MINUTES.toMillis(1);
 
                 String username;
 
@@ -125,7 +127,7 @@ public class SessionStoreAlgo {
                                 String serviceTicketId = (String) request.val(ST);
                                 ServiceTicket serviceTicket = inMemoryStore.fetch(serviceTicketId,ServiceTicket.class);
 
-                                if (System.currentTimeMillis() > serviceTicket.lastModifiedTime + serviceTicket.expiryTime) {
+                                if (System.currentTimeMillis() < serviceTicket.lastModifiedTime + serviceTicket.expiryTime) {
                                         serviceTicket.lastModifiedTime = System.currentTimeMillis();
                                         response.val(RESPONSE,serviceTicket);
                                         response.setStatus(Codes.OK);
@@ -218,7 +220,15 @@ public class SessionStoreAlgo {
                     return request;
                 }).get(), res -> System.out.println(res.val(Node.RESPONSE) + " " + res.status));
 
+                sleep(TimeUnit.MINUTES.toMillis(2));
 
+                processResponse(node1.processRequest(() -> {
+                    Request request = new Request();
+                    request.action = "/demo";
+                    //request.object = ((Node.ServiceTicket)response.data).getId();
+                    request.val(Node.ST,((Node.ServiceTicket)response.val(Node.ST)).getId());
+                    return request;
+                }).get(), res -> System.out.println(res.val(Node.RESPONSE) + " " + res.status));
 
             } catch (InterruptedException e) {
                 e.printStackTrace();
