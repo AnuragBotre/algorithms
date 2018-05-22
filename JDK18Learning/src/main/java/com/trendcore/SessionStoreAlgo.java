@@ -1,9 +1,6 @@
 package com.trendcore;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -15,6 +12,7 @@ public class SessionStoreAlgo {
         public static final int ST_EXPIRED = 400;
         public static final int ST_NOT_PRESENT = 401;
         public static final int OK = 200;
+        public static final int FORCE_LOGOUT = 201;
     }
 
     public static void main(String[] args) {
@@ -33,31 +31,34 @@ public class SessionStoreAlgo {
 
         Database database = new Database();
 
-        class Response{
 
-            Object data;
+        class Request{
+            String action;
+            Map map = new HashMap();
+
+            public Object val(String key) {
+                return map.get(key);
+            }
+
+            public void val(String key, Object value) {
+                map.put(key,value);
+            }
+        }
+
+        class Response extends Request{
 
             int status;
-
-            public void setData(Object data) {
-                this.data = data;
-            }
 
             public void setStatus(int i) {
                 status = i;
             }
 
-            public Object getData() {
-                return data;
-            }
-        }
-
-        class Request{
-            String action;
-            Object object;
         }
 
         class Node{
+            static final String ST = "ST";
+            static final String USERNAME = "USERNAME";
+            public static final String RESPONSE = "response";
             ExecutorService executor = Executors.newFixedThreadPool(4);
 
             String name;
@@ -91,6 +92,8 @@ public class SessionStoreAlgo {
 
                 final long expiryTime = TimeUnit.MINUTES.toSeconds(2);
 
+                String username;
+
                 public ServiceTicket(UUID uuid) {
                     this.uuid = uuid;
                 }
@@ -110,8 +113,8 @@ public class SessionStoreAlgo {
                     Response response = new Response();
 
                     if(request.action != "/login"){
-                        if(request.object == null) {
-                            response.setData("Service Ticket not found.");
+                        if(request.val(ST) == null) {
+                            response.val(RESPONSE,"Service Ticket not found.");
                             response.setStatus(Codes.ST_NOT_PRESENT);
                             return response;
                         }
@@ -119,13 +122,15 @@ public class SessionStoreAlgo {
 
                     switch (request.action){
                         case "/demo":{
-                                String serviceTicketId = (String) request.object;
+                                String serviceTicketId = (String) request.val(ST);
                                 ServiceTicket serviceTicket = inMemoryStore.fetch(serviceTicketId,ServiceTicket.class);
+
                                 if (System.currentTimeMillis() > serviceTicket.lastModifiedTime + serviceTicket.expiryTime) {
-                                        response.setData(serviceTicket);
+                                        serviceTicket.lastModifiedTime = System.currentTimeMillis();
+                                        response.val(RESPONSE,serviceTicket);
                                         response.setStatus(Codes.OK);
                                 }else{
-                                    response.setData("Service Ticket Expired.");
+                                    response.val(RESPONSE,"Service Ticket Expired.");
                                     response.setStatus(Codes.ST_EXPIRED);
                                 }
                             }
@@ -133,19 +138,48 @@ public class SessionStoreAlgo {
                         case "/login":{
                                 ServiceTicket serviceTicket = new ServiceTicket(UUID.randomUUID());
                                 serviceTicket.lastModifiedTime = System.currentTimeMillis();
+                                serviceTicket.username = (String) request.val("username");
 
                                 database.persist(serviceTicket.getId(), serviceTicket);
 
                                 inMemoryStore.persist(serviceTicket.getId(), serviceTicket);
 
                                 executor.submit(() -> informOtherNodes(serviceTicket));
-                                response.setData(serviceTicket);
-                                response.setStatus(Codes.OK);
+
+                                //get Active Session count
+                                int activeSession = getActiveSessions((String) request.val(USERNAME));
+                                if(activeSession > 2){
+                                    response.val(RESPONSE,serviceTicket);
+                                    response.setStatus(Codes.FORCE_LOGOUT);
+                                }else{
+                                    response.val(ST,serviceTicket);
+                                    response.setStatus(Codes.OK);
+                                }
                             }
                             break;
                     }
                     return response;
                 });
+            }
+
+            private int getActiveSessions(String username) {
+
+                class Count{
+                    int count;
+
+                    public void increment() {
+                        count++;
+                    }
+                }
+
+                Count count = new Count();
+
+                inMemoryStore.store.keySet().forEach(o -> {
+                    if(username.equals(inMemoryStore.store.get(o))){
+                        count.increment();
+                    }
+                });
+                return count.count;
             }
 
             private void informOtherNodes(ServiceTicket serviceTicket) {
@@ -170,17 +204,21 @@ public class SessionStoreAlgo {
                 Response response = node1.processRequest(() -> {
                     Request request = new Request();
                     request.action = "/login";
+                    request.val(Node.USERNAME,"user1");
                     return request;
                 }).get();
 
-                printResponse(response,res -> System.out.println(res.data + " " + res.status));
+                processResponse(response, res -> System.out.println(res.val(Node.RESPONSE) + " " + res.status));
 
-                printResponse(node1.processRequest(() -> {
+                processResponse(node1.processRequest(() -> {
                     Request request = new Request();
                     request.action = "/demo";
-                    request.object = ((Node.ServiceTicket)response.data).getId();
+                    //request.object = ((Node.ServiceTicket)response.data).getId();
+                    request.val(Node.ST,((Node.ServiceTicket)response.val(Node.ST)).getId());
                     return request;
-                }).get(), res -> System.out.println(res.data + " " + res.status));
+                }).get(), res -> System.out.println(res.val(Node.RESPONSE) + " " + res.status));
+
+
 
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -196,7 +234,7 @@ public class SessionStoreAlgo {
 
     }
 
-    private static <T> void printResponse(T t,Consumer<T> consumer) {
+    private static <T> void processResponse(T t, Consumer<T> consumer) {
         consumer.accept(t);
     }
 
