@@ -1,3 +1,6 @@
+http://www.kdgregory.com/programming/java/ByteBuffer_JUG_Presentation.pdf
+Philadelphia Java Users Group
+
 https://medium.com/@esaliya/fast-inter-process-communication-over-shared-memory-for-java-big-data-applications-6f1beb81f910
 Fast Inter-Process Communication over Shared Memory for Java Big Data Applications
 
