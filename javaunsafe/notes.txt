@@ -1,3 +1,30 @@
+https://github.com/RichardWarburton/slab
+http://www.insightfullogic.com/2013/Jan/03/slab-guaranteed-heap-alignment-jvm/
+Over time CPU clockrates have gotten considerably faster, but Memory Speed has failed to catch up. In order to make good usage of modern CPUs it's important to consider data structure alignment in memory, in order to work in sympathy with the On-CPU Cache. In other words you want good Locality of Reference.
+
+If you want to store off heap this is the library
+
+       // Define your DataType
+        public interface GameEvent extends Cursor {
+          public int getId();
+          public void setId(int value);
+          public long getStrength();
+          public void setStrength(long value);
+        }
+        //This is off heap
+        // Create an allocator for your DataType
+        Allocator eventAllocator = Allocator.of(GameEvent.class);
+
+        // Allocate 100 off heap GameEvent instances - sequentially in memory
+        GameEvent event = eventAllocator.allocate(100);
+
+        // Move to the index of the instance that you want to read from or write to
+        event.move(1);
+
+        // set and get values like a normal POJO
+        event.setId(6);
+        assertEquals(6, event.getId());
+
 http://jadira.sourceforge.net/
 Usertype
 User Types and classes for use with Hibernate. Includes user types for use with the javax.time classes included in the early review class of JSR 310. Where possible these types are compatible with the equivalent Joda Time - Hibernate user types.
