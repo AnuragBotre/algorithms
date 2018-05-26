@@ -7,6 +7,7 @@ import sun.misc.Unsafe;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.util.Scanner;
 
 public class UnsafeAppTest {
 
@@ -80,12 +81,23 @@ public class UnsafeAppTest {
         unsafe.putInt(guard, unsafe.objectFieldOffset(f), 42); // memory corruption
         System.out.println(guard.giveAccess()); // true, access granted
 
+        long addressOfGuard = MemoryUtility.addressOf(guard, unsafe);
         long x = MemoryUtility.addressOf(anotherGuard, unsafe);
-        System.out.println(x);
+        System.out.println(addressOfGuard + " " + x);
         //For example, there is another Guard object in memory located next
         // to current guard object.
         // We can modify its ACCESS_ALLOWED field with the following code
         //unsafe.putInt(guard, 16 +x, 42); // memory corruption
+
+        Scanner scanner = new Scanner(System.in);
+
+        f = anotherGuard.getClass().getDeclaredField("ACCESS_ALLOWED");
+        long l = unsafe.objectFieldOffset(f);
+        System.out.println(x + " " +l);
+
+
+        unsafe.putInt(guard, scanner.nextInt(), 42);
+        //unsafe.putInt(anotherGuard, l, 42);
 
         System.out.println(
                 GraphLayout.parseInstance(anotherGuard).toPrintable());

@@ -33,6 +33,7 @@
         <module>agent</module>
         <module>Design-Patterns</module>
         <module>javaunsafe</module>
+        <module>OffHeapCache</module>
     </modules>
 
     <dependencyManagement>
