@@ -48,6 +48,9 @@ Cloning provides fast deep cloning capabilities for almost any Java object.
 http://www.kdgregory.com/programming/java/ByteBuffer_JUG_Presentation.pdf
 Philadelphia Java Users Group
 
+https://www.ashishpaliwal.com/blog/2013/02/playing-with-unsafe-object-address/
+
+
 https://medium.com/@esaliya/fast-inter-process-communication-over-shared-memory-for-java-big-data-applications-6f1beb81f910
 Fast Inter-Process Communication over Shared Memory for Java Big Data Applications
 
