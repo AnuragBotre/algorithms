@@ -1,3 +1,10 @@
+https://www.cse.iitk.ac.in/users/karkare/MTP/2013-14/vilay2014liveness.pdf
+https://github.com/JikesRVM/JikesRVM
+Jikes RVM (Research Virtual Machine) provides a flexible open testbed to prototype virtual machine technologies and experiment with a large variety of design alternatives. The system is licensed under the EPL, an OSI approved license. Jikes RVM runs on IA32 32 bit (64 bit support is work in progress) and PowerPC (big endian only).
+
+
+
+
 https://github.com/RichardWarburton/slab
 http://www.insightfullogic.com/2013/Jan/03/slab-guaranteed-heap-alignment-jvm/
 Over time CPU clockrates have gotten considerably faster, but Memory Speed has failed to catch up. In order to make good usage of modern CPUs it's important to consider data structure alignment in memory, in order to work in sympathy with the On-CPU Cache. In other words you want good Locality of Reference.
