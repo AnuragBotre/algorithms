@@ -1,6 +1,15 @@
+https://dzone.com/articles/safe-unsafe-how-to-write-portable-and-production-q
+Safe Unsafe: How to Write Portable and Production Quality Code Using Unsafe
+
+
 https://github.com/RichardWarburton/slab
 http://www.insightfullogic.com/2013/Jan/03/slab-guaranteed-heap-alignment-jvm/
-Over time CPU clockrates have gotten considerably faster, but Memory Speed has failed to catch up. In order to make good usage of modern CPUs it's important to consider data structure alignment in memory, in order to work in sympathy with the On-CPU Cache. In other words you want good Locality of Reference.
+Over time CPU clockrates have gotten considerably faster,
+    but Memory Speed has failed to catch up.
+    In order to make good usage of modern CPUs it's important to consider
+    data structure alignment in memory, in order to work in sympathy
+    with the On-CPU Cache.
+    In other words you want good Locality of Reference.
 
 If you want to store off heap this is the library
 
