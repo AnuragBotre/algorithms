@@ -1,3 +1,10 @@
+https://www.cse.iitk.ac.in/users/karkare/MTP/2013-14/vilay2014liveness.pdf
+https://github.com/JikesRVM/JikesRVM
+Jikes RVM (Research Virtual Machine) provides a flexible open testbed to prototype virtual machine technologies and experiment with a large variety of design alternatives. The system is licensed under the EPL, an OSI approved license. Jikes RVM runs on IA32 32 bit (64 bit support is work in progress) and PowerPC (big endian only).
+
+
+
+
 https://dzone.com/articles/safe-unsafe-how-to-write-portable-and-production-q
 Safe Unsafe: How to Write Portable and Production Quality Code Using Unsafe
 
