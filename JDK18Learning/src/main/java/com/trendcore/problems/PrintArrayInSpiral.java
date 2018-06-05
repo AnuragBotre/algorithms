@@ -26,7 +26,7 @@ public class PrintArrayInSpiral {
         //at the end top to bottom
         //right to left
         //bottom to top
-        //repeat the process until all nodes are visited
+        //repeat the flush until all nodes are visited
 
         Map visitedNodes = new HashMap();
 
