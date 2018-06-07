@@ -19,12 +19,21 @@ import java.util.stream.Stream;
 public class LogParser {
 
     public static void main(String[] args) throws IOException {
-        parse("D:\\Anurag\\eQSecurity\\BI-dumps\\eQube Server Logs\\sample-log-file.log");
+
+        Files.list(Paths.get("D:\\Anurag\\eQSecurity\\BI-dumps\\eQube Server Logs"))
+                .filter(path -> {
+                    return !path.getFileName().toString().contains("sample-log-file.log");
+                }).forEach(path -> {
+                    parse(path.toString());
+                });
     }
 
-    private static void parse(String logFilePath) throws IOException {
+    private static void parse(String logFilePath) {
 
-        Stream<String> lines = Files.lines(Paths.get(logFilePath));
+        Stream<String> lines = null;
+        try {
+            lines = Files.lines(Paths.get(logFilePath));
+
 
         class LogData {
             private Timestamp timestamp;
@@ -224,6 +233,9 @@ public class LogParser {
         }).forEach(a -> {
 
         });
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private static <R> R extractFields(String line, Function<Matcher, R> mapValues) {
