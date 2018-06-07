@@ -16,6 +16,12 @@
             <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.oracle</groupId>
+            <artifactId>oracle6</artifactId>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/ojdbc6_g.jar</systemPath>
+        </dependency>
     </dependencies>
 
 

@@ -4,12 +4,13 @@ package com.trendcore;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.sql.Timestamp;
+import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -18,25 +19,113 @@ import java.util.stream.Stream;
 public class LogParser {
 
     public static void main(String[] args) throws IOException {
-        String logFilePath = "D:\\Anurag\\eQSecurity\\BI-dumps\\eQube Server Logs\\sample-log-file.log";
+        parse("D:\\Anurag\\eQSecurity\\BI-dumps\\eQube Server Logs\\sample-log-file.log");
+    }
+
+    private static void parse(String logFilePath) throws IOException {
 
         Stream<String> lines = Files.lines(Paths.get(logFilePath));
 
         class LogData {
             private Timestamp timestamp;
-            private String number;
+            private String num;
             private String threadname;
             private String username;
             private String logLevel;
             private String classname;
-            private String msg;
+            private String message;
             private String exception;
 
             @Override
             public String toString() {
-                return timestamp + " " + number + " " + threadname + " " + username + " " + logLevel + " " + classname + " " + msg + "  " + exception;
+                return timestamp + " " + num + " " + threadname + " " + username + " " + logLevel + " " + classname + " " + message + "  " + exception;
             }
         }
+
+        class TransactionManager{
+
+            private String driverClass;
+            private String url;
+            private String username;
+            private String password;
+
+            private Connection connection;
+
+            private String INSERT_QUERY = "INSERT INTO SS_LOGS (TIMESTAMP,NUM,THREADNAME,USERNAME,LOGLEVEL,CLASSNAME,MESSAGE,EXCEPTION) " +
+                    "                                   VALUES (?,         ?,    ?,         ?,      ?,      ?,         ?,        ?)";
+
+            class PrepareStatementCounter{
+                int i = 1;
+
+                public int inc() {
+                    int j = i;
+                    i++;
+                    return j;
+                }
+            }
+
+
+            public TransactionManager(String driverClass,String url,String username,String password){
+                this.driverClass = driverClass;
+                this.url = url;
+                this.username = username;
+                this.password = password;
+            }
+
+            public void init(){
+                try {
+                    Class.forName(driverClass);
+                    this.connection = DriverManager.getConnection(url, username, password);
+                } catch (ClassNotFoundException e) {
+                    throw new RuntimeException("Could not initialized database connection.");
+                } catch (SQLException e) {
+                    throw new RuntimeException("Could not initialized database connection.");
+                }
+
+            }
+
+            public void insert(LogData logData) throws SQLException {
+                PreparedStatement preparedStatement = null;
+                try {
+                    preparedStatement = connection.prepareStatement(INSERT_QUERY);
+
+                    PrepareStatementCounter counter = new PrepareStatementCounter();
+                    setValuesOnPs(logData.timestamp, counter, preparedStatement);
+                    setValuesOnPs(logData.num, counter, preparedStatement);
+                    setValuesOnPs(logData.threadname, counter, preparedStatement);
+                    setValuesOnPs(logData.username, counter, preparedStatement);
+                    setValuesOnPs(logData.logLevel, counter, preparedStatement);
+                    setValuesOnPs(logData.classname, counter, preparedStatement);
+                    setValuesOnPs(logData.message, counter, preparedStatement);
+                    setValuesOnPs(logData.exception, counter, preparedStatement);
+
+                    preparedStatement.executeUpdate();
+                }finally {
+                    close(preparedStatement);
+                }
+            }
+
+            private void close(AutoCloseable c){
+                if(c != null){
+                    try {
+                        c.close();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            private void setValuesOnPs(Object obj, PrepareStatementCounter counter, PreparedStatement ps) throws SQLException {
+                if(obj != null) {
+                    ps.setObject(counter.inc(), obj);
+                }else{
+                    ps.setNull(counter.inc(),Types.VARCHAR);
+                }
+            }
+        }
+
+        TransactionManager t = new TransactionManager("oracle.jdbc.driver.OracleDriver","jdbc:oracle:thin:@localhost:1521:ORCL","EQ_SECURITY_PRODUCT","EQ_SECURITY_PRODUCT");
+        t.init();
 
         class Buffer {
 
@@ -50,21 +139,54 @@ public class LogParser {
             public void process(LogData line) {
                 if (lines.size() > 0) {
 
-                    Runnable getParsedContents = () -> {
-                        System.out.println(lines.remove(0));
+                    Consumer<LogData> getParsedContents = logData -> {
+                        //System.out.println(lines.remove(0));
+                        System.out.println(logData);
                     };
-                    getParsedContents.run();
+                    LogData dataTobeProcessed = lines.remove(0);
+                    getParsedContents.accept(dataTobeProcessed);
 
                     Runnable getExceptionStackTrace = () -> {
-                        exception.forEach(s -> {
+                        /*exception.forEach(s -> {
                             System.out.println(s);
                         });
-                        exception.clear();
+                        exception.clear();*/
+
+                        Pattern compile = Pattern.compile("^\\s+at\\s+[\\w.]+");
+                        long count = exception.stream()
+                                .limit(2)
+                                .filter(s -> {
+                                    try {
+                                        return compile.matcher(s).find();
+                                    }catch (Exception e){
+                                        return false;
+                                    }
+                                }).count();
+
+
+                        StringBuilder builder = new StringBuilder();
+                        exception.forEach(s -> {
+                            builder.append(s);
+                        });
+                        if (count > 0) {
+                            dataTobeProcessed.exception = builder.toString();
+                        } else {
+                            dataTobeProcessed.message = builder.toString();
+                        }
+
                     };
                     getExceptionStackTrace.run();
+                    exception.clear();
 
-                    System.out.println("----------------------------------------------------------------------------------------");
 
+                    Runnable addIndatabase = () -> {
+                        try {
+                            t.insert(dataTobeProcessed);
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
+                    };
+                    addIndatabase.run();
                 }
                 add(line);
             }
@@ -85,12 +207,12 @@ public class LogParser {
                     LogData logData = new LogData();
 
                     logData.timestamp = stringToDate(matcher.group(1));
-                    logData.number = matcher.group(2);
+                    logData.num = matcher.group(2);
                     logData.threadname = matcher.group(3);
                     logData.username = matcher.group(4);
                     logData.logLevel = matcher.group(5);
                     logData.classname = matcher.group(6);
-                    logData.msg = matcher.group(7);
+                    logData.message = matcher.group(7);
 
                     return logData;
                 });
@@ -98,16 +220,10 @@ public class LogParser {
             } catch (Exception e) {
                 buffer.addException(line);
             }
-
-
             return null;
         }).forEach(a -> {
 
         });
-
-
-        //buffer.flush();
-
     }
 
     private static <R> R extractFields(String line, Function<Matcher, R> mapValues) {
