@@ -2,6 +2,7 @@ package com.trendcore;
 
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.*;
@@ -18,223 +19,245 @@ import java.util.stream.Stream;
 
 public class LogParser {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
 
-        Files.list(Paths.get("D:\\Anurag\\eQSecurity\\BI-dumps\\eQube Server Logs"))
-                .filter(path -> {
-                    return !path.getFileName().toString().contains("sample-log-file.log");
-                }).forEach(path -> {
-                    parse(path.toString());
-                });
+        try {
+            Files.list(Paths.get("D:\\Anurag\\eQSecurity\\BI-dumps\\eQube Server Logs"))
+                    .filter(path -> !path.getFileName().toString().contains("sample-log-file.log"))
+                    //.filter(path -> path.getFileName().toString().contains("eQubeServerLog.12.log"))
+                    .forEach(path -> {
+                        System.out.println(path.toString());
+                        parse(path.toString());
+                    });
+        } catch (Exception e) {
+            System.out.println("Inside main");
+            e.printStackTrace();
+        }
+        //parse("D:\\Anurag\\eQSecurity\\BI-dumps\\eQube Server Logs\\sample-log-file.log");
     }
 
     private static void parse(String logFilePath) {
 
-        Stream<String> lines = null;
-        try {
-            lines = Files.lines(Paths.get(logFilePath));
+        class Sequence{
+            int count;
 
-
-        class LogData {
-            private Timestamp timestamp;
-            private String num;
-            private String threadname;
-            private String username;
-            private String logLevel;
-            private String classname;
-            private String message;
-            private String exception;
-
-            @Override
-            public String toString() {
-                return timestamp + " " + num + " " + threadname + " " + username + " " + logLevel + " " + classname + " " + message + "  " + exception;
+            public void inc() {
+                count++;
             }
         }
 
-        class TransactionManager{
+        Sequence sequence = new Sequence();
 
-            private String driverClass;
-            private String url;
-            private String username;
-            private String password;
+        Stream<String> lines = null;
+        try {
+            lines = Files.lines(Paths.get(logFilePath), StandardCharsets.ISO_8859_1);
 
-            private Connection connection;
 
-            private String INSERT_QUERY = "INSERT INTO SS_LOGS (TIMESTAMP,NUM,THREADNAME,USERNAME,LOGLEVEL,CLASSNAME,MESSAGE,EXCEPTION) " +
-                    "                                   VALUES (?,         ?,    ?,         ?,      ?,      ?,         ?,        ?)";
+            class LogData {
+                private Timestamp timestamp;
+                private String num;
+                private String threadname;
+                private String username;
+                private String logLevel;
+                private String classname;
+                private String message;
+                private String exception;
 
-            class PrepareStatementCounter{
-                int i = 1;
-
-                public int inc() {
-                    int j = i;
-                    i++;
-                    return j;
+                @Override
+                public String toString() {
+                    return timestamp + " " + num + " " + threadname + " " + username + " " + logLevel + " " + classname + " " + message + "  " + exception;
                 }
             }
 
+            class TransactionManager {
 
-            public TransactionManager(String driverClass,String url,String username,String password){
-                this.driverClass = driverClass;
-                this.url = url;
-                this.username = username;
-                this.password = password;
-            }
+                private String driverClass;
+                private String url;
+                private String username;
+                private String password;
 
-            public void init(){
-                try {
-                    Class.forName(driverClass);
-                    this.connection = DriverManager.getConnection(url, username, password);
-                } catch (ClassNotFoundException e) {
-                    throw new RuntimeException("Could not initialized database connection.");
-                } catch (SQLException e) {
-                    throw new RuntimeException("Could not initialized database connection.");
+                private Connection connection;
+
+                private String INSERT_QUERY = "INSERT INTO SS_LOGS (TIMESTAMP,NUM,THREADNAME,USERNAME,LOGLEVEL,CLASSNAME,MESSAGE,EXCEPTION) " +
+                        "                                   VALUES (?,         ?,    ?,         ?,      ?,      ?,         ?,        ?)";
+
+                class PrepareStatementCounter {
+                    int i = 1;
+
+                    public int inc() {
+                        int j = i;
+                        i++;
+                        return j;
+                    }
                 }
 
-            }
 
-            public void insert(LogData logData) throws SQLException {
-                PreparedStatement preparedStatement = null;
-                try {
-                    preparedStatement = connection.prepareStatement(INSERT_QUERY);
-
-                    PrepareStatementCounter counter = new PrepareStatementCounter();
-                    setValuesOnPs(logData.timestamp, counter, preparedStatement);
-                    setValuesOnPs(logData.num, counter, preparedStatement);
-                    setValuesOnPs(logData.threadname, counter, preparedStatement);
-                    setValuesOnPs(logData.username, counter, preparedStatement);
-                    setValuesOnPs(logData.logLevel, counter, preparedStatement);
-                    setValuesOnPs(logData.classname, counter, preparedStatement);
-                    setValuesOnPs(logData.message, counter, preparedStatement);
-                    setValuesOnPs(logData.exception, counter, preparedStatement);
-
-                    preparedStatement.executeUpdate();
-                }finally {
-                    close(preparedStatement);
+                public TransactionManager(String driverClass, String url, String username, String password) {
+                    this.driverClass = driverClass;
+                    this.url = url;
+                    this.username = username;
+                    this.password = password;
                 }
-            }
 
-            private void close(AutoCloseable c){
-                if(c != null){
+                public void init() {
                     try {
-                        c.close();
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                        Class.forName(driverClass);
+                        this.connection = DriverManager.getConnection(url, username, password);
+                    } catch (ClassNotFoundException e) {
+                        throw new RuntimeException("Could not initialized database connection.");
+                    } catch (SQLException e) {
+                        throw new RuntimeException("Could not initialized database connection.");
+                    }
+
+                }
+
+                public void insert(LogData logData) throws SQLException {
+                    PreparedStatement preparedStatement = null;
+                    try {
+                        preparedStatement = connection.prepareStatement(INSERT_QUERY);
+
+                        PrepareStatementCounter counter = new PrepareStatementCounter();
+                        setValuesOnPs(logData.timestamp, counter, preparedStatement);
+                        setValuesOnPs(logData.num, counter, preparedStatement);
+                        setValuesOnPs(logData.threadname, counter, preparedStatement);
+                        setValuesOnPs(logData.username, counter, preparedStatement);
+                        setValuesOnPs(logData.logLevel, counter, preparedStatement);
+                        setValuesOnPs(logData.classname, counter, preparedStatement);
+                        setValuesOnPs(logData.message, counter, preparedStatement);
+                        setValuesOnPs(logData.exception, counter, preparedStatement);
+
+                        preparedStatement.executeUpdate();
+                    } finally {
+                        close(preparedStatement);
+                    }
+                }
+
+                private void close(AutoCloseable c) {
+                    if (c != null) {
+                        try {
+                            c.close();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+
+                private void setValuesOnPs(Object obj, PrepareStatementCounter counter, PreparedStatement ps) throws SQLException {
+                    if (obj != null) {
+                        ps.setObject(counter.inc(), obj);
+                    } else {
+                        ps.setNull(counter.inc(), Types.VARCHAR);
                     }
                 }
             }
 
-            private void setValuesOnPs(Object obj, PrepareStatementCounter counter, PreparedStatement ps) throws SQLException {
-                if(obj != null) {
-                    ps.setObject(counter.inc(), obj);
-                }else{
-                    ps.setNull(counter.inc(),Types.VARCHAR);
+            TransactionManager t = new TransactionManager("oracle.jdbc.driver.OracleDriver", "jdbc:oracle:thin:@localhost:1521:ORCL", "EQ_SECURITY_PRODUCT", "EQ_SECURITY_PRODUCT");
+            t.init();
+
+            class Buffer {
+
+                List<LogData> lines = new ArrayList<>();
+                List<String> exception = new ArrayList<>();
+
+                public void add(LogData line) {
+                    lines.add(line);
                 }
-            }
-        }
 
-        TransactionManager t = new TransactionManager("oracle.jdbc.driver.OracleDriver","jdbc:oracle:thin:@localhost:1521:ORCL","EQ_SECURITY_PRODUCT","EQ_SECURITY_PRODUCT");
-        t.init();
+                public void process(LogData line) {
+                    if (lines.size() > 0) {
 
-        class Buffer {
+                        Consumer<LogData> getParsedContents = logData -> {
+                            //System.out.println(lines.remove(0));
+                            //System.out.println(logData);
+                        };
+                        LogData dataTobeProcessed = lines.remove(0);
+                        getParsedContents.accept(dataTobeProcessed);
 
-            List<LogData> lines = new ArrayList<>();
-            List<String> exception = new ArrayList<>();
-
-            public void add(LogData line) {
-                lines.add(line);
-            }
-
-            public void process(LogData line) {
-                if (lines.size() > 0) {
-
-                    Consumer<LogData> getParsedContents = logData -> {
-                        //System.out.println(lines.remove(0));
-                        System.out.println(logData);
-                    };
-                    LogData dataTobeProcessed = lines.remove(0);
-                    getParsedContents.accept(dataTobeProcessed);
-
-                    Runnable getExceptionStackTrace = () -> {
+                        Runnable getExceptionStackTrace = () -> {
                         /*exception.forEach(s -> {
                             System.out.println(s);
                         });
                         exception.clear();*/
 
-                        Pattern compile = Pattern.compile("^\\s+at\\s+[\\w.]+");
-                        long count = exception.stream()
-                                .limit(2)
-                                .filter(s -> {
-                                    try {
-                                        return compile.matcher(s).find();
-                                    }catch (Exception e){
-                                        return false;
-                                    }
-                                }).count();
+                            Pattern compile = Pattern.compile("^\\s+at\\s+[\\w.]+");
+                            long count = exception.stream()
+                                    .limit(2)
+                                    .filter(s -> {
+                                        try {
+                                            return compile.matcher(s).find();
+                                        } catch (Exception e) {
+                                            return false;
+                                        }
+                                    }).count();
 
 
-                        StringBuilder builder = new StringBuilder();
-                        exception.forEach(s -> {
-                            builder.append(s);
-                        });
-                        if (count > 0) {
-                            dataTobeProcessed.exception = builder.toString();
-                        } else {
-                            dataTobeProcessed.message = builder.toString();
-                        }
+                            StringBuilder builder = new StringBuilder();
+                            exception.forEach(s -> {
+                                builder.append(s);
+                            });
+                            if (count > 0) {
+                                dataTobeProcessed.exception = builder.toString();
+                            } else {
+                                dataTobeProcessed.message = dataTobeProcessed.message + builder.toString();
+                            }
 
-                    };
-                    getExceptionStackTrace.run();
-                    exception.clear();
+                        };
+                        getExceptionStackTrace.run();
+                        exception.clear();
 
 
-                    Runnable addIndatabase = () -> {
-                        try {
-                            t.insert(dataTobeProcessed);
-                        } catch (SQLException e) {
-                            e.printStackTrace();
-                        }
-                    };
-                    addIndatabase.run();
+                        Runnable addIndatabase = () -> {
+                            try {
+                                t.insert(dataTobeProcessed);
+                            } catch (SQLException e) {
+                                e.printStackTrace();
+                            }
+                        };
+                        addIndatabase.run();
+                    }
+                    add(line);
                 }
-                add(line);
+
+                public void addException(String line) {
+                    exception.add(line);
+                }
             }
 
-            public void addException(String line) {
-                exception.add(line);
-            }
-        }
+
+            Buffer buffer = new Buffer();
 
 
-        Buffer buffer = new Buffer();
 
-        lines.map(line -> {
+            lines.map(line -> {
 
-            try {
-                LogData logData1 = extractFields(line, matcher -> {
+                try {
+                    LogData logData1 = extractFields(line, matcher -> {
 
-                    LogData logData = new LogData();
+                        LogData logData = new LogData();
 
-                    logData.timestamp = stringToDate(matcher.group(1));
-                    logData.num = matcher.group(2);
-                    logData.threadname = matcher.group(3);
-                    logData.username = matcher.group(4);
-                    logData.logLevel = matcher.group(5);
-                    logData.classname = matcher.group(6);
-                    logData.message = matcher.group(7);
+                        logData.timestamp = stringToDate(matcher.group(1));
+                        logData.num = matcher.group(2);
+                        logData.threadname = matcher.group(3);
+                        logData.username = matcher.group(4);
+                        logData.logLevel = matcher.group(5);
+                        logData.classname = matcher.group(6);
+                        logData.message = matcher.group(7);
 
-                    return logData;
-                });
-                buffer.process(logData1);
-            } catch (Exception e) {
-                buffer.addException(line);
-            }
-            return null;
-        }).forEach(a -> {
-
-        });
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+                        return logData;
+                    });
+                    buffer.process(logData1);
+                } catch (Exception e) {
+                    buffer.addException(line);
+                }
+                return null;
+            }).forEach(a -> {
+                sequence.inc();
+            });
+        } catch (Exception e) {
+            //Log Exception
+            System.out.println("No of lines processed :- " + sequence.count);
+            e.printStackTrace();
+            //throw new RuntimeException(e);
         }
     }
 
