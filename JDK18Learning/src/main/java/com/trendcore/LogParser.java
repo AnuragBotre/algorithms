@@ -24,7 +24,6 @@ public class LogParser {
         try {
             Files.list(Paths.get("D:\\Anurag\\eQSecurity\\BI-dumps\\eQube Server Logs"))
                     .filter(path -> !path.getFileName().toString().contains("sample-log-file.log"))
-                    //.filter(path -> path.getFileName().toString().contains("eQubeServerLog.12.log"))
                     .forEach(path -> {
                         System.out.println(path.toString());
                         parse(path.toString());
