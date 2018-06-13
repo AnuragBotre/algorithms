@@ -1,3 +1,18 @@
+http://druid.io/druid.html
+
+http://vldb.org/pvldb/vol5/p1436_alexanderhall_vldb2012.pdf
+        Processing a Trillion Cells per Mouse Click
+        Alexander Hall, Olaf Bachmann, Robert Bussow, Silviu G ¨ anceanu, Marc Nunkesser ˘
+        Google, Inc.
+        {alexhall, olafb, buessow, silviu, marcnunkesser}@google.com
+
+http://static.googleusercontent.com/media/research.google.com/en/us/pubs/archive/36632.pdf
+        Dremel: Interactive Analysis of Web-Scale Datasets
+        Sergey Melnik, Andrey Gubarev, Jing Jing Long, Geoffrey Romer,
+        Shiva Shivakumar, Matt Tolton, Theo Vassilakis
+        Google, Inc.
+        {melnik,andrey,jlong,gromer,shiva,mtolton,theov}@google.com
+
 http://www.javamadesoeasy.com/2016/12/how-to-monitor-and-analyze-garbage.html
 
 
