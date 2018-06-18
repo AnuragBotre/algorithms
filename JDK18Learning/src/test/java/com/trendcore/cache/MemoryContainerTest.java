@@ -35,6 +35,18 @@ public class MemoryContainerTest {
         User user;
     }
 
+    class OnetoOne{
+
+    }
+
+    class OneToMany{
+
+    }
+
+    class ManyToMany{
+
+    }
+
     class User implements Cacheable{
         Integer id;
         String loginId;
@@ -44,6 +56,12 @@ public class MemoryContainerTest {
         UserProfile userProfile = new UserProfile();
         Set<Role> roles = new HashSet<>();
         Set<Group> groups = new HashSet<>();
+
+        class RelationShips{
+            OnetoOne userProfile;
+            ManyToMany roles;
+            ManyToMany groups;
+        }
 
         @Override
         public Object getPrimaryKey() {

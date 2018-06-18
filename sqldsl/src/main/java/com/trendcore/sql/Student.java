@@ -9,6 +9,10 @@ public class Student implements Row{
     public static Column<String> NAME = new Column<>("NAME");
     public static Column<Date> BIRTHDATE = new Column<>("BIRTHDATE");
 
+    public static Column<Integer> USER_DETAILS = new Column<>("USERDETAILS");
+
+    public static Relation<Column> FOREIGN_KEY = new Relation<>();
+
     Object obj[];
 
     public <T> void val(Column<T> col,T t) {
@@ -31,8 +35,10 @@ public class Student implements Row{
         Arrays.asList(currentClass.getFields()).stream().filter(field -> field.getType().isAssignableFrom(Column.class))
                 .forEach(field -> {
                     try {
-                        Column o = (Column) field.get(this);
-                        o.setIndex(seq.next());
+                        if(field.get(this) instanceof Column) {
+                            Column o = (Column) field.get(this);
+                            o.setIndex(seq.next());
+                        }
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
