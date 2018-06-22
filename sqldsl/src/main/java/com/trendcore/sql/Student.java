@@ -3,7 +3,7 @@ package com.trendcore.sql;
 import java.util.Arrays;
 import java.util.Date;
 
-public class Student implements Row{
+public class Student implements Table{
 
     public static Column<Integer> ID = new Column<>("ID");
     public static Column<String> NAME = new Column<>("NAME");
@@ -23,7 +23,7 @@ public class Student implements Row{
         return (T) obj[col.getIndex()];
     }
 
-    @Override
+
     public <T> T get(int index) {
         return (T) obj[index];
     }
@@ -82,9 +82,10 @@ public class Student implements Row{
         String val1 = s.val(Student.NAME);
 
 
-        Integer val2 = s.ID.val(s);
+        //Integer val2 = s.ID.val(s);
 
-        System.out.println(val + " " + birthdate + " " + val1 +" - "+ val2);
+        //System.out.println(val + " " + birthdate + " " + val1 +" - "+ val2);
+        System.out.println(val + " " + birthdate + " " + val1);
     }
 
     private void someMethod(SomeInterface a) {

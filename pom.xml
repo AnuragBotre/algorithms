@@ -34,6 +34,7 @@
         <module>Design-Patterns</module>
         <module>javaunsafe</module>
         <module>OffHeapCache</module>
+        <module>kryo-study</module>
     </modules>
 
     <dependencyManagement>
