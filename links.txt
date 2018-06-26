@@ -1,3 +1,25 @@
+Line Spacing - 1.2
+Font Size - 14
+
+https://github.com/jankotek/JDBM3
+    -
+
+https://github.com/lmdbjava/lmdbjava
+    -
+
+
+https://github.com/kamranahmedse/design-patterns-for-humans
+    - Ultra-simplified explanation to design patterns!
+
+https://github.com/linkedin/PalDB
+    In Memory Database
+    Very Less code easy to study.
+
+https://refactoring.guru/refactoring/how-to
+
+
+https://www.hackerrank.com/challenges/the-power-sum
+
 http://druid.io/druid.html
 
 http://vldb.org/pvldb/vol5/p1436_alexanderhall_vldb2012.pdf
@@ -21,11 +43,14 @@ Understanding Thread Interruption in Java
 
 
 https://github.com/boundary/high-scale-lib
-This is Boundary's fork of Cliff Click's high scale lib. We will be maintaining this fork with bug fixes, improvements and versioned builds in maven central.
+    This is Boundary's fork of Cliff Click's high scale lib.
+    We will be maintaining this fork with bug fixes, improvements and versioned builds in maven central.
+    They contain datastructers for high concurrency.
 
 
 https://wiki.sei.cmu.edu/confluence/display/java/LCK07-J.+Avoid+deadlock+by+requesting+and+releasing+locks+in+the+same+order
-Coding Guidelines
+    - Coding Guidelines
+    - Avoid Deadlocks in case of multiple locks.
 
 https://www.jetbrains.com/mps/?fromMenu
 Every company is different and has their own needs. You should build your own language to meet the demands of your business if:
