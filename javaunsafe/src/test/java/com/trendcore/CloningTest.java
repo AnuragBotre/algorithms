@@ -15,8 +15,11 @@ public class CloningTest {
 
             public Object b;
 
+            public Object a;
+
             public B(Object a) {
                 b = new Object();
+                this.a = a;
             }
 
             @Override
@@ -33,7 +36,6 @@ public class CloningTest {
 
             A(){
                 a = 10;
-                b = new B(this);
             }
 
             @Override
@@ -48,11 +50,13 @@ public class CloningTest {
         }
 
         A a = new A();
+        A a2 = new A();
+        a.b= new B(a2);
 
         A a1 = (A) a.clone();
 
-        System.out.println(a1.hashCode() + " " + a.hashCode());
-        System.out.println(a1.b.hashCode() + " " + a.b.hashCode());
+        /*System.out.println(a1.hashCode() + " " + a.hashCode());
+        System.out.println(a1.b.hashCode() + " " + a.b.hashCode());*/
 
         traverse(a);
 
@@ -70,9 +74,12 @@ public class CloningTest {
         Field[] fields = a.getClass().getFields();
         for(int i = 0 ; i < fields.length ; i++){
 
-            if(!map.containsKey(fields[i].get(a)) && isNotPrimitive(fields[i])) {
-                map.put(fields[i].get(a), fields[i].get(a));
-                traverseInternal(fields[i].get(a),map);
+            Object field = fields[i].get(a);
+            if(field != null) {
+                if (!map.containsKey(field) && isNotPrimitive(fields[i])) {
+                    map.put(field, field);
+                    traverseInternal(field, map);
+                }
             }
         }
     }
