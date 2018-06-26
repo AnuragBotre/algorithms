@@ -1,3 +1,6 @@
+Line Spacing - 1.2
+Font Size - 14
+
 https://github.com/jankotek/JDBM3
     -
 
