@@ -1,3 +1,10 @@
+https://andrewbridge.wordpress.com/2013/01/28/refactoring-code-in-to-an-object-oriented-paradigm/
+http://pl.cs.jhu.edu/oose/lectures/refactoring.shtml
+
+http://www.laputan.org/pub/papers/opdyke-thesis.pdf
+- Refactoring to Object Oriented Frameworks
+
+IDEA Font settings
 Line Spacing - 1.2
 Font Size - 14
 
