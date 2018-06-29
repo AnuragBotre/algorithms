@@ -1,3 +1,13 @@
+https://ac.els-cdn.com/S1571066105002264/1-s2.0-S1571066105002264-main.pdf?_tid=866b6b55-ffd1-43c4-b1af-ec274c395f4f&acdnat=1530186473_f57269d0eaf605b15dc0e9a2dcecd790
+Refactoring Towards a Layered Architecture
+        In this paper we present how refactoring of object-oriented programs can be accomplished by
+        using formal refinement. Our approach is based on the use of refactoring rules designed for a
+        sequential object-oriented language of refinement (rool) similar to Java. We define a strategy
+        that aims at structuring programs according to a layered architecture that involves the application
+        of refactoring rules, object-oriented programming laws, and data and algorithm refinement. As the
+        laws are proved in a weakest precondition semantics of rool, correctness of refactoring is ensured
+        by construction.
+
 https://andrewbridge.wordpress.com/2013/01/28/refactoring-code-in-to-an-object-oriented-paradigm/
 http://pl.cs.jhu.edu/oose/lectures/refactoring.shtml
 
