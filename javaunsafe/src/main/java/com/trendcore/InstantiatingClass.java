@@ -3,6 +3,7 @@ package com.trendcore;
 import sun.misc.Unsafe;
 
 import java.lang.reflect.Field;
+import java.util.Scanner;
 
 public class InstantiatingClass {
 
@@ -27,11 +28,16 @@ public class InstantiatingClass {
             }
         };
 
-        A a = new A();
+        Scanner scanner = new Scanner(System.in);
+        String s = null;
+        while(!(s = scanner.next()) .equals("exit")){
+            A a = new A();
 
-        A o = (A) unsafe.allocateInstance(A.class);
+            A o = (A) unsafe.allocateInstance(A.class);
 
-        System.out.println(a.getA() + " " + o.getA());
+            System.out.println(a.getA() + " " + o.getA());
+        }
+
     }
 
 }

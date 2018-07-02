@@ -1,3 +1,9 @@
+https://blogs.oracle.com/sundararajan/querying-java-heap-with-oql
+http://cr.openjdk.java.net/~sundar/8022483/webrev.01/raw_files/new/src/share/classes/com/sun/tools/hat/resources/oqlhelp.html
+    Querying Java heap with OQL
+    Querying langauge for Heap
+
+
 https://ac.els-cdn.com/S1571066105002264/1-s2.0-S1571066105002264-main.pdf?_tid=866b6b55-ffd1-43c4-b1af-ec274c395f4f&acdnat=1530186473_f57269d0eaf605b15dc0e9a2dcecd790
 Refactoring Towards a Layered Architecture
         In this paper we present how refactoring of object-oriented programs can be accomplished by
