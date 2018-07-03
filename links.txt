@@ -1,3 +1,9 @@
+https://dev.to/lovis/gang-of-four-patterns-in-kotlin
+https://www.voxxed.com/2016/04/gang-four-patterns-functional-light-part-1/
+    Mario Fusco's Talk/Blog posts/Repository "From GoF to lambda"
+
+
+
 https://blogs.oracle.com/sundararajan/querying-java-heap-with-oql
 http://cr.openjdk.java.net/~sundar/8022483/webrev.01/raw_files/new/src/share/classes/com/sun/tools/hat/resources/oqlhelp.html
     Querying Java heap with OQL
