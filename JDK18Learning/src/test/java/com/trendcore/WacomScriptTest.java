@@ -19,4 +19,10 @@ public class WacomScriptTest {
         String x = resolution.split("x")[1];
         System.out.println(" " + x);
     }
+
+    @Test
+    public void executeBCCommand() throws IOException {
+        String output = executeCommand("bc","<<<","\"12+5\"");
+        System.out.println(output);
+    }
 }
