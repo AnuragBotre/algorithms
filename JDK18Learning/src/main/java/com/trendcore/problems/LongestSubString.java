@@ -1,7 +1,7 @@
 package com.trendcore.problems;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Given a string, find the length of the longest substring without repeating characters.
@@ -23,6 +23,7 @@ public class LongestSubString {
 
     public static void main(String[] args) {
         String inputs[] = new String[]{"abcabcbb", "bbbbb", "pwwkew", "c", "au", "dvdf"};
+        //String inputs[] = new String[]{"abcabcbb"};
 
         for (int i = 0; i < inputs.length; i++) {
             int lengthOfLongestSubstring = lengthOfLongestSubstring(inputs[i]);
@@ -37,31 +38,38 @@ public class LongestSubString {
 
         String s;
 
-        int max = 1;
+        int max = 0;
 
+        int start = 0;
+
+        Map characters = new HashMap();
 
         for (int i = 0; i < input.length(); i++) {
 
-            s = ""+input.charAt(i);
+            char c = input.charAt(i);
+            Integer position = (Integer) characters.get(input.charAt(i));
+            if(position != null && start <= position){
 
-            for (int j = i + 1; j < input.length(); j++) {
-
-                if (s.contains("" + input.charAt(j))) {
-                    if (max < s.length()) {
-                        max = s.length();
-                    }
-                    s = "" + input.charAt(j);
-                } else {
-                    s = s + input.charAt(j);
+                int len = getLength(start, i);
+                if(max < len){
+                    max = len;
                 }
-            }
 
-            if (max < s.length()) {
-                max = s.length();
+                start = position+1;
             }
+            characters.put(input.charAt(i),i);
+        }
+
+        int len = getLength(start, input.length());
+        if(max < len){
+            max = len;
         }
 
         return max;
+    }
+
+    private static int getLength(int start, int currentPos) {
+        return currentPos - start;
     }
 
 
