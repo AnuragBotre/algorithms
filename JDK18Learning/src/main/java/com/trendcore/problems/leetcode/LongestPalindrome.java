@@ -1,9 +1,6 @@
 package com.trendcore.problems.leetcode;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * https://leetcode.com/problems/longest-palindromic-substring/description/
@@ -24,13 +21,86 @@ public class LongestPalindrome {
 
     public static void main(String[] args) {
         LongestPalindrome l = new LongestPalindrome();
-        String s = l.longestPalindrome("cbbd");
+        String s = l.longestPalindrome("aaaabaaa");
         System.out.println(s);
     }
 
     public String longestPalindrome(String s) {
 
-        return approach1(s);
+        //aba
+
+        //stack approach
+        Stack<Character> stack = new Stack();
+
+        for(int i = 0 ; i < s.length() ; i++){
+            if(stack.empty()){
+                //then push
+                stack.push(s.charAt(i));
+            }else{
+                if(stack.peek().equals(s.charAt(i))  ){
+                    //palindrome
+
+                    //case for aa or bb like strings
+
+                    //when palindrome string is hit
+                    //then start traversing elements to get max palindrome.
+                    //when we dont get element then empty stack
+                    //bcoz prev elements are not useful.
+                }else if(isPalindromeForStack(stack,s.charAt(i))){
+                    //case for
+                    //aba strings
+                }
+
+
+            }
+        }
+
+        return "";
+    }
+
+    private boolean isPalindromeForStack(Stack<Character> stack, char c) {
+        if(stack.size() == 1){
+            return false;
+        }else{
+            Character pop = stack.pop();
+            if(stack.peek() == c){
+                stack.push(pop);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private String approach2(String s) {
+        if(s.length() == 0 || s.length() == 1)
+            return s;
+
+        String longestPalindrome = "";
+
+        for(int forward = 0 ; forward < s.length() ; forward++){
+            for(int reverse = s.length() - 1 ; reverse > forward ; reverse--){
+                if(isPalindrome(s,forward,reverse)){
+                    String currentPalindrome = s.substring(forward,reverse+1);
+
+                    if(longestPalindrome.length() < currentPalindrome.length()){
+                        longestPalindrome = currentPalindrome;
+                    }
+
+                    if(reverse == s.length()){
+                        forward = reverse;
+                    }
+
+                    //forward = reverse;
+                    break;
+                }
+            }
+        }
+
+        if(longestPalindrome.length() == 0){
+            longestPalindrome = s.substring(0,1);
+        }
+
+        return longestPalindrome;
     }
 
     private String approach1(String s) {
