@@ -21,54 +21,17 @@ public class LongestPalindrome {
 
     public static void main(String[] args) {
         LongestPalindrome l = new LongestPalindrome();
-        String s = l.longestPalindrome("aaaabaaa");
+        //String s = l.longestPalindrome("aaaabaaa");
+        String s = l.longestPalindrome("baaaab");
         System.out.println(s);
     }
 
     public String longestPalindrome(String s) {
 
-        //aba
-
-        //stack approach
-        Stack<Character> stack = new Stack();
-
-        for(int i = 0 ; i < s.length() ; i++){
-            if(stack.empty()){
-                //then push
-                stack.push(s.charAt(i));
-            }else{
-                if(stack.peek().equals(s.charAt(i))  ){
-                    //palindrome
-
-                    //case for aa or bb like strings
-
-                    //when palindrome string is hit
-                    //then start traversing elements to get max palindrome.
-                    //when we dont get element then empty stack
-                    //bcoz prev elements are not useful.
-                }else if(isPalindromeForStack(stack,s.charAt(i))){
-                    //case for
-                    //aba strings
-                }
-
-
-            }
-        }
+        //Hint
+        //How can we reuse a previously computed palindrome to compute a larger palindrome?
 
         return "";
-    }
-
-    private boolean isPalindromeForStack(Stack<Character> stack, char c) {
-        if(stack.size() == 1){
-            return false;
-        }else{
-            Character pop = stack.pop();
-            if(stack.peek() == c){
-                stack.push(pop);
-                return true;
-            }
-        }
-        return false;
     }
 
     private String approach2(String s) {
