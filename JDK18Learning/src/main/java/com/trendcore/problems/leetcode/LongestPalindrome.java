@@ -26,10 +26,11 @@ public class LongestPalindrome {
 
         //Hint
         //How can we reuse a previously computed palindrome to compute a larger palindrome?
-        String s1 = l.longestPalindrome("bananas");
+        String s1 = l.longestPalindrome("aaabaaaa");
         System.out.println(s1);
 
-        /*String s[] = {"a", "aa", "aba", "aaa", "abba", "aaaa", "abcba", "abccba", "abcdcba","abcaba" , "babad" , "bananas" , "babad"};
+        /*String s[] = {"a", "aa", "aba", "aaa", "abba", "aaaa", "abcba", "abccba", "abcdcba","abcaba" , "babad" ,
+                        "bananas" , "babad" , "xabbabba" , "abbabban" , "xabbabban" , "aaabaaaa"};
         for (int i = 0; i < s.length; i++) {
             System.out.println(l.longestPalindrome(s[i]));
         }*/
@@ -76,12 +77,44 @@ public class LongestPalindrome {
 
                 } else if (palindrome.length() > 2) {
 
+                    //TODO This condition is wrong fix this
                     if (palindrome.charAt(0) == s.charAt(i)) {
                         palindrome = palindrome + s.charAt(i);
                     } else if (backPointer - 1 >= 0 && s.charAt(backPointer - 1) == s.charAt(i)) {
                         palindrome = s.charAt(backPointer - 1) + palindrome + s.charAt(i);
                         backPointer--;
-                    } else {
+                    } else if(palindrome.charAt(palindrome.length() - 2) == s.charAt(i)){
+                        int b;
+                        int j;
+                        String charSeq = "";
+                        for(b = palindrome.length() - 3 , j = i+1 ; j < s.length() && b >= 0 ; j++,b--){
+
+                            if(j >= s.length()){
+                                charSeq = "";
+                                break;
+                            }
+
+                            if(palindrome.charAt(b) == s.charAt(j)){
+                                charSeq = charSeq + s.charAt(j);
+                            }else{
+                                charSeq = "";
+                                break;
+                            }
+                        }
+
+
+                        if(charSeq.length() > 0) {
+                            palindrome = palindrome + s.charAt(i) + charSeq;
+                            i = j;
+                            backPointer = i;
+                        }else{
+                            i = j;
+                            palindrome = "" + s.charAt(i);
+                            backPointer = i;
+                        }
+                        // to counter act i++ of for loop
+                        i--;
+                    }else {
                         palindrome = "" + s.charAt(i);
                         backPointer = i;
                     }
