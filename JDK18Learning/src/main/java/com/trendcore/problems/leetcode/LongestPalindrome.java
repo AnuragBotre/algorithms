@@ -26,101 +26,44 @@ public class LongestPalindrome {
 
         //Hint
         //How can we reuse a previously computed palindrome to compute a larger palindrome?
-        String s1 = l.longestPalindrome("aaabaaaa");
-        System.out.println(s1);
+        //solve this
+        //aabbaa
+        /*String s1 = l.longestPalindrome("aabbaa");
+        System.out.println(s1);*/
 
-        /*String s[] = {"a", "aa", "aba", "aaa", "abba", "aaaa", "abcba", "abccba", "abcdcba","abcaba" , "babad" ,
-                        "bananas" , "babad" , "xabbabba" , "abbabban" , "xabbabban" , "aaabaaaa"};
+        String s[] = {"a", "aa", "aba", "aaa", "abba", "aaaa", "abcba", "abccba", "abcdcba","abcaba" , "babad" ,
+                        "bananas" , "babad" , "xabbabba" , "abbabban" , "xabbabban" , "aaabaaaa" , "aabbaa"};
         for (int i = 0; i < s.length; i++) {
             System.out.println(l.longestPalindrome(s[i]));
-        }*/
+        }
 
     }
 
     public String longestPalindrome(String s) {
         String biggestPalindrome = "";
         int backPointer = 0;
+        int frontPointer = 0;
 
         String palindrome = "";
 
+        //aabbaa
+
         for (int i = 0; i < s.length(); i++) {
-            if (palindrome.equals("")) {
-                palindrome = "" + s.charAt(i);
+            if(palindrome.equals("")){
+                palindrome = ""+s.charAt(i);
                 backPointer = i;
-            } else {
-                if (palindrome.length() == 1) {
-                    if (palindrome.charAt(0) == s.charAt(i)) {
-                        palindrome = palindrome + s.charAt(i);
-                        backPointer = i - 1;
-                    } else if (i - 2 >= 0 && s.charAt(i - 2) == s.charAt(i)) {
-                        palindrome = s.charAt(i - 2) + palindrome + s.charAt(i);
-                        backPointer = i - 2;
-                    } else if (i - 1 >= 0 && i + 1 < s.length() && s.charAt(i - 1) == s.charAt(i + 1)) {
-                        palindrome = "" + s.charAt(i - 1) + s.charAt(i) + s.charAt(i + 1);
-                        backPointer = i - 1;
-                        i++;
-                    } else {
-                        palindrome = "" + s.charAt(i);
-                        backPointer = i;
-                    }
-                } else if (palindrome.length() == 2) {
-
-                    if (palindrome.charAt(0) == s.charAt(i)) {
-                        palindrome = palindrome + s.charAt(i);
-                    } else if (backPointer - 1 >= 0 && s.charAt(backPointer - 1) == s.charAt(i)) {
-                        palindrome = s.charAt(backPointer - 1) + palindrome + s.charAt(i);
-                        backPointer--;
-                    } else {
-                        palindrome = "" + s.charAt(i);
-                        backPointer = i;
-                    }
-
-                } else if (palindrome.length() > 2) {
-
-                    //TODO This condition is wrong fix this
-                    if (palindrome.charAt(0) == s.charAt(i)) {
-                        palindrome = palindrome + s.charAt(i);
-                    } else if (backPointer - 1 >= 0 && s.charAt(backPointer - 1) == s.charAt(i)) {
-                        palindrome = s.charAt(backPointer - 1) + palindrome + s.charAt(i);
-                        backPointer--;
-                    } else if(palindrome.charAt(palindrome.length() - 2) == s.charAt(i)){
-                        int b;
-                        int j;
-                        String charSeq = "";
-                        for(b = palindrome.length() - 3 , j = i+1 ; j < s.length() && b >= 0 ; j++,b--){
-
-                            if(j >= s.length()){
-                                charSeq = "";
-                                break;
-                            }
-
-                            if(palindrome.charAt(b) == s.charAt(j)){
-                                charSeq = charSeq + s.charAt(j);
-                            }else{
-                                charSeq = "";
-                                break;
-                            }
-                        }
-
-
-                        if(charSeq.length() > 0) {
-                            palindrome = palindrome + s.charAt(i) + charSeq;
-                            i = j;
-                            backPointer = i;
-                        }else{
-                            i = j;
-                            palindrome = "" + s.charAt(i);
-                            backPointer = i;
-                        }
-                        // to counter act i++ of for loop
-                        i--;
-                    }else {
-                        palindrome = "" + s.charAt(i);
-                        backPointer = i;
-                    }
-                    //backPointer-1 char and current char should be same
-                } else {
-                    palindrome = "" + s.charAt(i);
+                frontPointer = i;
+            }else{
+                if((frontPointer+1) < s.length() && palindrome.charAt(palindrome.length() - 1) == s.charAt(frontPointer+1)){
+                    palindrome = palindrome + s.charAt(frontPointer+1);
+                    frontPointer++;
+                }else if(backPointer-1 >= 0 &&  (frontPointer+1) < s.length() && s.charAt(backPointer - 1) == s.charAt(frontPointer+1)){
+                    palindrome = s.charAt(backPointer - 1) + palindrome + s.charAt(frontPointer+1);
+                    frontPointer++;
+                    backPointer--;
+                }else{
+                    palindrome = ""+s.charAt(i);
+                    frontPointer = i;
                     backPointer = i;
                 }
             }
