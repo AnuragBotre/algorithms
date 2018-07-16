@@ -28,17 +28,22 @@ public class LongestPalindrome {
         //How can we reuse a previously computed palindrome to compute a larger palindrome?
         //solve this
         //aabbaa
-        String s1 = l.longestPalindrome("abba");
+        String s1 = l.longestPalindrome("xabbabba");
         System.out.println(s1);
         /*String s1 = l.longestPalindrome("eeeeeeeee");
         System.out.println(s1);*/
 
-        /*String s[] = {"a", "aa", "aba", "aaa", "abba", "aaaa", "abcba", "abccba", "abcdcba", "abcaba", "babad",
+        String s[] = {"a", "aa", "aba", "aaa", "abba", "aaaa", "abcba", "abccba", "abcdcba", "abcaba", "babad",
                 "bananas", "babad", "xabbabba", "abbabban", "xabbabban", "aaabaaaa", "aabbaa"
                 , "eeeeeeeee", "eeeeeeee"};
         for (int i = 0; i < s.length; i++) {
-            System.out.println(s[i] + " " + l.longestPalindrome(s[i]) + " - " + l.approach2(s[i]) + " " + l.longestPalindrome(s[i]).equals(l.approach2(s[i])));
-        }*/
+            try{
+                System.out.println(s[i] + " " + l.longestPalindrome(s[i]) + " - " + l.approach2(s[i]) + " " + l.longestPalindrome(s[i]).equals(l.approach2(s[i])));
+            }catch (Exception e){
+                System.out.println(s[i]);
+            }
+
+        }
 
     }
 
@@ -63,75 +68,114 @@ public class LongestPalindrome {
                 if (palindrome.length() == 1 && palindrome.charAt(palindrome.length() - 1) == s.charAt(i)) {
                     int backTraverse;
                     int frontTraverse;
-                    for (backTraverse = backPointer-1; backTraverse >= 0; backTraverse--) {
-                        if (palindrome.charAt(palindrome.length() - 1) == s.charAt(backTraverse)) {
-                            palindrome = s.charAt(backTraverse) + palindrome;
-                            palindromeFound = true;
-                        } else {
-                            backTraverse--;
-                            break;
-                        }
-                    }
-                    backPointer = backTraverse+1;
-
-                    for (frontTraverse = frontPointer+1; frontTraverse < s.length(); frontTraverse++) {
-                        if (palindrome.charAt(palindrome.length() - 1) == s.charAt(frontTraverse)) {
-                            palindrome = s.charAt(frontTraverse) + palindrome;
-                            palindromeFound = true;
-                        } else {
-                            frontTraverse++;
-                            break;
-                        }
-                    }
-                    frontPointer = frontTraverse-1;
-                    i=frontTraverse;
-
                     String c = "";
-                    for (backTraverse = backPointer, frontTraverse = frontPointer; ; backTraverse--, frontTraverse++) {
-                        if (backTraverse < 0 ) {
-                            c = "";
-                            break;
-                        }
-
-                        if(frontTraverse >= s.length()){
-                            c = "";
-                            break;
-                        }
-
-
-                        if (s.charAt(backTraverse) == s.charAt(frontTraverse)) {
-                            palindrome = s.charAt(backTraverse) + palindrome + s.charAt(frontTraverse);
+                    for (backTraverse = backPointer - 1; backTraverse >= 0; backTraverse--) {
+                        if (palindrome.charAt(palindrome.length() - 1) == s.charAt(backTraverse)) {
+                            c = s.charAt(backTraverse) + c;
                             palindromeFound = true;
                         } else {
-                            c = "";
-                            frontTraverse++;
-                            backTraverse--;
                             break;
                         }
                     }
+                    if (c.length() > 0) {
+                        backPointer = backTraverse;
+                        palindrome = c + palindrome;
+                    }
 
-                    backPointer = backTraverse+1;
-                    frontPointer = frontTraverse-1;
-                    i = frontTraverse;
+                    c = "";
+                    for (frontTraverse = frontPointer + 1; frontTraverse < s.length(); frontTraverse++) {
+                        if (palindrome.charAt(palindrome.length() - 1) == s.charAt(frontTraverse)) {
+                            c = s.charAt(frontTraverse) + c;
+                            palindromeFound = true;
+                        } else {
+                            //TODO : need to check
+                            //frontTraverse++;
+                            break;
+                        }
+                    }
+                    if (c.length() > 0) {
+                        frontPointer = frontTraverse - 1;
+                        i = frontTraverse;
+                        palindrome = palindrome + c;
+                    }
+
                 }
 
                 //forward lookup
-                if(i < s.length() && palindrome.charAt(palindrome.length()-1) == s.charAt(i)){
+                if (i < s.length() && palindrome.charAt(palindrome.length() - 1) == s.charAt(i)) {
                     int backTraverse;
                     int frontTraverse;
 
                     String c = "";
-                    for(backTraverse = palindrome.length()-1,frontTraverse = i ; backTraverse >= 0 ; backTraverse--,frontTraverse++){
-                        if(palindrome.charAt(backTraverse) == s.charAt(frontTraverse)){
+                    for (backTraverse = palindrome.length() - 1, frontTraverse = i; backTraverse >= 0; backTraverse--, frontTraverse++) {
+                        if (palindrome.charAt(backTraverse) == s.charAt(frontTraverse)) {
                             c = c + s.charAt(frontTraverse);
+                        } else {
+                            c="";
+                            break;
                         }
                     }
 
+                    if (c.length() > 0) {
+                        palindrome = palindrome + c;
+                        frontPointer = frontTraverse - 1;
+                        i = frontTraverse;
+                        palindromeFound = true;
+                    }
                 }
 
+                if (i < s.length() && palindrome.length() >= 2 && palindrome.charAt(palindrome.length() - 2) == s.charAt(i)) {
+                    int backTraverse;
+                    int frontTraverse;
 
+                    String c = "";
+                    for (backTraverse = palindrome.length() - 2, frontTraverse = i; backTraverse >= 0; backTraverse--, frontTraverse++) {
+                        if (palindrome.charAt(backTraverse) == s.charAt(frontTraverse)) {
+                            c = c + s.charAt(frontTraverse);
+                        } else {
+                            c="";
+                            break;
+                        }
+                    }
 
-                if (!palindromeFound) {
+                    if (c.length() > 0) {
+                        palindrome = palindrome + c;
+                        frontPointer = frontTraverse - 1;
+                        i = frontTraverse;
+                        palindromeFound = true;
+                    }
+                }
+
+                if (backPointer - 1 >= 0 && frontPointer + 1 < s.length() && s.charAt(backPointer - 1) == s.charAt(frontPointer + 1)) {
+                    int backTraverse;
+                    int frontTraverse;
+                    String p = "";
+                    String n = "";
+                    for (backTraverse = backPointer - 1, frontTraverse = frontPointer + 1; ; backTraverse--, frontTraverse++) {
+                        if (backTraverse < 0) {
+                            break;
+                        }
+                        if (frontTraverse >= s.length()) {
+                            break;
+                        }
+                        if (s.charAt(backTraverse) == s.charAt(frontTraverse)) {
+                            p = s.charAt(backTraverse) + p;
+                            n = n + s.charAt(backTraverse);
+                        } else {
+                            break;
+                        }
+                    }
+
+                    if (p.length() > 0) {
+                        backPointer = backTraverse + 1;
+                        frontPointer = frontTraverse - 1;
+                        i = frontTraverse;
+                        palindromeFound = true;
+                        palindrome = p + palindrome + n;
+                    }
+                }
+
+                if (!palindromeFound && i < s.length()) {
                     palindrome = "" + s.charAt(i);
                     backPointer = i;
                     frontPointer = i;
