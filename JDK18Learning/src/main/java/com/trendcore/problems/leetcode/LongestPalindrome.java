@@ -28,15 +28,17 @@ public class LongestPalindrome {
         //How can we reuse a previously computed palindrome to compute a larger palindrome?
         //solve this
         //aabbaa
-        String s1 = l.longestPalindrome("eeeeeeeee");
+        String s1 = l.longestPalindrome("abba");
         System.out.println(s1);
+        /*String s1 = l.longestPalindrome("eeeeeeeee");
+        System.out.println(s1);*/
 
-        String s[] = {"a", "aa", "aba", "aaa", "abba", "aaaa", "abcba", "abccba", "abcdcba","abcaba" , "babad" ,
-                        "bananas" , "babad" , "xabbabba" , "abbabban" , "xabbabban" , "aaabaaaa" , "aabbaa"
-                        ,"eeeeeeeee" , "eeeeeeee"};
+        /*String s[] = {"a", "aa", "aba", "aaa", "abba", "aaaa", "abcba", "abccba", "abcdcba", "abcaba", "babad",
+                "bananas", "babad", "xabbabba", "abbabban", "xabbabban", "aaabaaaa", "aabbaa"
+                , "eeeeeeeee", "eeeeeeee"};
         for (int i = 0; i < s.length; i++) {
             System.out.println(s[i] + " " + l.longestPalindrome(s[i]) + " - " + l.approach2(s[i]) + " " + l.longestPalindrome(s[i]).equals(l.approach2(s[i])));
-        }
+        }*/
 
     }
 
@@ -50,109 +52,89 @@ public class LongestPalindrome {
         //aabbaa
 
         for (int i = 0; i < s.length(); i++) {
-            if(palindrome.equals("")){
-                palindrome = ""+s.charAt(i);
+            if (palindrome.equals("")) {
+                palindrome = "" + s.charAt(i);
                 backPointer = i;
                 frontPointer = i;
-            }else{
+            } else {
 
-                //int lastPointer = backPointer - 1 >= 0 ? backPointer - 1 : backPointer;
-                int lastPointer = backPointer - 1;
+                boolean palindromeFound = false;
 
-                if( lastPointer >= 0 && (frontPointer+1) < s.length() && s.charAt(lastPointer) == s.charAt(frontPointer+1) ){
-                    palindrome = s.charAt(lastPointer) + palindrome + s.charAt(frontPointer+1);
-                    backPointer--;
-                    frontPointer++;
-                }else if(palindrome.charAt(palindrome.length() - 1) == s.charAt(i)){
+                if (palindrome.length() == 1 && palindrome.charAt(palindrome.length() - 1) == s.charAt(i)) {
+                    int backTraverse;
+                    int frontTraverse;
+                    for (backTraverse = backPointer-1; backTraverse >= 0; backTraverse--) {
+                        if (palindrome.charAt(palindrome.length() - 1) == s.charAt(backTraverse)) {
+                            palindrome = s.charAt(backTraverse) + palindrome;
+                            palindromeFound = true;
+                        } else {
+                            backTraverse--;
+                            break;
+                        }
+                    }
+                    backPointer = backTraverse+1;
+
+                    for (frontTraverse = frontPointer+1; frontTraverse < s.length(); frontTraverse++) {
+                        if (palindrome.charAt(palindrome.length() - 1) == s.charAt(frontTraverse)) {
+                            palindrome = s.charAt(frontTraverse) + palindrome;
+                            palindromeFound = true;
+                        } else {
+                            frontTraverse++;
+                            break;
+                        }
+                    }
+                    frontPointer = frontTraverse-1;
+                    i=frontTraverse;
+
                     String c = "";
-                    int forwardTraversalPtr;
-                    int backTravesalPtr;
-                    for(backTravesalPtr = palindrome.length() - 1 , forwardTraversalPtr = i; backTravesalPtr >= 0;backTravesalPtr--,forwardTraversalPtr++){
-
-                        if(forwardTraversalPtr >= s.length()){
+                    for (backTraverse = backPointer, frontTraverse = frontPointer; ; backTraverse--, frontTraverse++) {
+                        if (backTraverse < 0 ) {
                             c = "";
                             break;
                         }
 
-                        if(palindrome.charAt(backTravesalPtr) == s.charAt(forwardTraversalPtr)){
-                            c = c + s.charAt(forwardTraversalPtr);
-                        }else{
+                        if(frontTraverse >= s.length()){
                             c = "";
+                            break;
+                        }
+
+
+                        if (s.charAt(backTraverse) == s.charAt(frontTraverse)) {
+                            palindrome = s.charAt(backTraverse) + palindrome + s.charAt(frontTraverse);
+                            palindromeFound = true;
+                        } else {
+                            c = "";
+                            frontTraverse++;
+                            backTraverse--;
                             break;
                         }
                     }
 
-                    if(c.length() > 0){
-                        i = forwardTraversalPtr - 1;
-                        palindrome = palindrome + c;
-                        frontPointer = i;
-                        if (biggestPalindrome.length() < palindrome.length()) {
-                            biggestPalindrome = palindrome;
-                        }
-                        continue;
-                    }else{
+                    backPointer = backTraverse+1;
+                    frontPointer = frontTraverse-1;
+                    i = frontTraverse;
+                }
 
-                        if(palindrome.length() >= 2 && palindrome.charAt(palindrome.length() - 2) == s.charAt(i)){
-                            c = "";
-                            for(backTravesalPtr = palindrome.length() - 2 , forwardTraversalPtr = i; backTravesalPtr >= 0;backTravesalPtr--,forwardTraversalPtr++){
+                //forward lookup
+                if(palindrome.charAt(palindrome.length()-1) == s.charAt(i)){
+                    int backTraverse;
+                    int frontTraverse;
 
-                                if(forwardTraversalPtr >= s.length()){
-                                    c = "";
-                                    break;
-                                }
-
-                                if(palindrome.charAt(backTravesalPtr) == s.charAt(forwardTraversalPtr)){
-                                    c = c + s.charAt(forwardTraversalPtr);
-                                }else{
-                                    c = "";
-                                    break;
-                                }
-                            }
-
-                            if(c.length() > 0){
-                                i = forwardTraversalPtr - 1;
-                                palindrome = palindrome + c;
-                                frontPointer = i;
-                                if (biggestPalindrome.length() < palindrome.length()) {
-                                    biggestPalindrome = palindrome;
-                                }
-                                continue;
-                            }
-                        }
-                    }
-
-                }else if(palindrome.length() >= 2 && palindrome.charAt(palindrome.length() - 2) == s.charAt(i)){
                     String c = "";
-                    int forwardTraversalPtr;
-                    int backTravesalPtr;
-                    for(backTravesalPtr = palindrome.length() - 2 , forwardTraversalPtr = i; backTravesalPtr >= 0;backTravesalPtr--,forwardTraversalPtr++){
-
-                        if(forwardTraversalPtr >= s.length()){
-                            c = "";
-                            break;
-                        }
-
-                        if(palindrome.charAt(backTravesalPtr) == s.charAt(forwardTraversalPtr)){
-                            c = c + s.charAt(forwardTraversalPtr);
-                        }else{
-                            c = "";
-                            break;
+                    for(backTraverse = palindrome.length()-1,frontTraverse = i ; backTraverse >= 0 ; backTraverse--,frontTraverse++){
+                        if(palindrome.charAt(backTraverse) == s.charAt(frontTraverse)){
+                            c = c + s.charAt(frontTraverse);
                         }
                     }
 
-                    if(c.length() > 0){
-                        i = forwardTraversalPtr - 1;
-                        palindrome = palindrome + c;
-                        frontPointer = i;
-                        if (biggestPalindrome.length() < palindrome.length()) {
-                            biggestPalindrome = palindrome;
-                        }
-                        continue;
-                    }
-                }else{
-                    palindrome = ""+s.charAt(i);
-                    frontPointer = i;
+                }
+
+
+
+                if (!palindromeFound) {
+                    palindrome = "" + s.charAt(i);
                     backPointer = i;
+                    frontPointer = i;
                 }
             }
 
