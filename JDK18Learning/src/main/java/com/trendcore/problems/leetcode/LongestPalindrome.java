@@ -116,7 +116,7 @@ public class LongestPalindrome {
                 }
 
                 //forward lookup
-                if(palindrome.charAt(palindrome.length()-1) == s.charAt(i)){
+                if(i < s.length() && palindrome.charAt(palindrome.length()-1) == s.charAt(i)){
                     int backTraverse;
                     int frontTraverse;
 
