@@ -48,6 +48,47 @@ public class LongestPalindrome {
     }
 
     public String longestPalindrome(String s) {
+        s = preProcess(s);
+        int centre = 0,right=0;
+        int p[] = new int[s.length()];
+
+        //Map p = new HashMap();
+
+        for(int i = 1 ; i < s.length()-1 ; i++){
+            int mirror = 2*centre-i;
+
+            //p.put(i,);
+            p[i] = right > i ? Math.min(right-i,p[mirror]) : 0;
+
+            // Attempt to expand palindrome centered at i
+            while (s.charAt(i + 1 + p[i]) == s.charAt(i - 1 - p[i]))
+                p[i]++;
+
+
+            // If palindrome centered at i expand past R,
+            // adjust center based on expanded palindrome.
+            if (i + p[i] > right) {
+                centre = i;
+                right = i + p[i];
+            }
+        }
+
+
+        // Find the maximum element in P.
+        int maxLen = 0;
+        int centerIndex = 0;
+        for (int i = 1; i < p.length; i++) {
+            if (p[i] > maxLen) {
+                maxLen = p[i];
+                centerIndex = i;
+            }
+        }
+
+        return s.substring((centerIndex - 1 - maxLen)/2, maxLen);
+
+    }
+
+    private String approach3(String s) {
         String biggestPalindrome = "";
         s = preProcess(s);
 
@@ -72,11 +113,22 @@ public class LongestPalindrome {
     }
 
     private String preProcess(String s) {
-        String result = "";
+        /*String result = "";
         for(int i = 0 ; i < s.length() ; i++) {
             result = result + "$" + s.charAt(i);
         }
-        return result + "$";
+        return result + "$";*/
+
+        int n = s.length();
+        if (n == 0) return "^$";
+        String ret = "^";
+        for (int i = 0; i < n; i++)
+            ret += "#" + s.charAt(i);
+
+        ret += "#$";
+        return ret;
+
+
     }
 
     private boolean isPalindrome(String palindrome, char c) {
