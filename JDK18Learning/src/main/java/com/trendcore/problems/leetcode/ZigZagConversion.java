@@ -1,5 +1,8 @@
 package com.trendcore.problems.leetcode;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * https://leetcode.com/problems/zigzag-conversion/description/
  * 6. ZigZag Conversion
@@ -33,30 +36,40 @@ public class ZigZagConversion {
 
     public static void main(String[] args) {
         ZigZagConversion z = new ZigZagConversion();
-        System.out.println(z.convert("PAYPALISHIRING",3));
+        System.out.println(z.convert("PAYPALISHIRING",4));
     }
 
     public String convert(String s, int numRows) {
 
-        char c[]=new char[numRows];
+        int j=0;
+        List c[]=new List[numRows];
 
         boolean zig=true;
 
         for(int i = 0 ; i < s.length() ; i++){
-            int j;
 
             if(zig) {
-                for (j = 0; j < numRows; j++) {
-                    c[j] = s.charAt(j);
+                int a;
+                for (j = 0 ,a=i; j < numRows && a < s.length(); a++,j++) {
+                    if(c[j] == null){
+                        c[j] = new ArrayList();
+                    }
+                    c[j].add(s.charAt(a));
                     //System.out.println(s.charAt(j));
                 }
                 zig = false;
-                i=j;
+                i=a-1;
+                j--;
             }else{
-                System.out.print(s.charAt(i));
-                zig=true;
-            }
+                j--;
+                if(j==0){
+                    i--;
+                    zig=true;
+                    continue;
+                }
+                c[j].add(s.charAt(i));
 
+            }
         }
 
         return "";
