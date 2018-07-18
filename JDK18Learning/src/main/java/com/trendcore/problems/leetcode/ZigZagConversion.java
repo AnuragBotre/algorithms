@@ -46,6 +46,8 @@ public class ZigZagConversion {
 
         boolean zig=true;
 
+        String r1="";
+
         for(int i = 0 ; i < s.length() ; i++){
 
             if(zig) {
@@ -62,7 +64,7 @@ public class ZigZagConversion {
                 j--;
             }else{
                 j--;
-                if(j==0){
+                if(j<=0){
                     i--;
                     zig=true;
                     continue;
@@ -72,7 +74,14 @@ public class ZigZagConversion {
             }
         }
 
-        return "";
+        String r = "";
+        for(int i = 0 ; i < c.length ; i++){
+            for(int k = 0 ; k < c[i].size() ; k++){
+                r = r + c[i].get(k);
+            }
+        }
+
+        return r;
     }
 
 }
