@@ -34,24 +34,27 @@ public class ReversingInteger {
     }
 
     public int reverse(int x) {
-        lengthOfInteger(x);
+        reverseApproach1(x);
         return 0;
     }
 
-    private void lengthOfInteger(int x) {
+    private void reverseApproach1(int x) {
         int number = x;
         int length = 0;
         int divisor = 10;
+
+        int result=0;
+
         while(number > 0){
 
-            System.out.println(number + " " + number%10 + " ");
+            result = result*10 + number%10;
 
             number = x / divisor;
             divisor = divisor*10;
             length++;
 
         }
-        System.out.println(length);
+        System.out.println(length + " "+ result);
     }
 
 }
