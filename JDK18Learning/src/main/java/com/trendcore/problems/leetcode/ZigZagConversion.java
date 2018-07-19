@@ -47,7 +47,26 @@ public class ZigZagConversion {
 
         }
 
-        return approach1(s,numRows);
+        return leetcodeApproach(s,numRows);
+    }
+
+    public String leetcodeApproach(String s, int numRows) {
+
+        if (numRows == 1)
+            return s;
+
+        StringBuilder ret = new StringBuilder();
+        int n = s.length();
+        int cycleLen = 2 * numRows - 2;
+
+        for (int i = 0; i < numRows; i++) {
+            for (int j = 0; j + i < n; j += cycleLen) {
+                ret.append(s.charAt(j + i));
+                if (i != 0 && i != numRows - 1 && j + cycleLen - i < n)
+                    ret.append(s.charAt(j + cycleLen - i));
+            }
+        }
+        return ret.toString();
     }
 
     private String approach1(String s, int numRows) {
