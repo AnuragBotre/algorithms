@@ -47,12 +47,13 @@ public class ZigZagConversion {
 
         }
 
-        return "";
+        return approach1(s,numRows);
     }
 
     private String approach1(String s, int numRows) {
-        if(s.length() == 0)
-            return "";
+        if (numRows > s.length() || numRows <= 1) {
+            return s;
+        }
 
         int j = 0;
         String c[] = new String[numRows];
@@ -71,11 +72,10 @@ public class ZigZagConversion {
                 int a;
                 for (j = 0, a = i; j < numRows && a < s.length(); a++, j++) {
                     if (c[j] == null) {
-                        c[j] = "";
+                        c[j] = ""+s.charAt(a);
+                    }else{
+                        c[j] = c[j] + s.charAt(a);
                     }
-                    //c[j].add(s.charAt(a));
-                    c[j] = c[j] + s.charAt(a);
-                    //System.out.println(s.charAt(j));
                 }
                 zig = false;
                 i = a - 1;
@@ -87,7 +87,6 @@ public class ZigZagConversion {
                     zig = true;
                     continue;
                 }
-
                 c[j] = c[j] + s.charAt(i);
             }
         }
