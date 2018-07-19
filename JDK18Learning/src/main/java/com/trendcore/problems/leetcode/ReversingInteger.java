@@ -34,7 +34,7 @@ public class ReversingInteger {
     }
 
     public int reverse(int x) {
-
+        lengthOfInteger(x);
         return 0;
     }
 
@@ -43,9 +43,13 @@ public class ReversingInteger {
         int length = 0;
         int divisor = 10;
         while(number > 0){
+
+            System.out.println(number + " " + number%10 + " ");
+
             number = x / divisor;
             divisor = divisor*10;
             length++;
+
         }
         System.out.println(length);
     }
