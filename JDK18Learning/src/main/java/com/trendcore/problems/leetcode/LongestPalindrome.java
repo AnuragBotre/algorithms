@@ -48,9 +48,14 @@ public class LongestPalindrome {
     }
 
     public String longestPalindrome(String s) {
+        return machnerAlgo(s);
+
+    }
+
+    private String machnerAlgo(String s) {
         s = preProcess(s);
         int centre = 0,right=0;
-        int p[] = new int[s.length()];
+        int palinedromeLengths[] = new int[s.length()];
 
         //Map p = new HashMap();
 
@@ -58,18 +63,18 @@ public class LongestPalindrome {
             int mirror = 2*centre-i;
 
             //p.put(i,);
-            p[i] = right > i ? Math.min(right-i,p[mirror]) : 0;
+            palinedromeLengths[i] = right > i ? Math.min(right-i,palinedromeLengths[mirror]) : 0;
 
             // Attempt to expand palindrome centered at i
-            while (s.charAt(i + 1 + p[i]) == s.charAt(i - 1 - p[i]))
-                p[i]++;
+            while (s.charAt(i + 1 + palinedromeLengths[i]) == s.charAt(i - 1 - palinedromeLengths[i]))
+                palinedromeLengths[i]++;
 
 
             // If palindrome centered at i expand past R,
             // adjust center based on expanded palindrome.
-            if (i + p[i] > right) {
+            if (i + palinedromeLengths[i] > right) {
                 centre = i;
-                right = i + p[i];
+                right = i + palinedromeLengths[i];
             }
         }
 
@@ -77,15 +82,14 @@ public class LongestPalindrome {
         // Find the maximum element in P.
         int maxLen = 0;
         int centerIndex = 0;
-        for (int i = 1; i < p.length; i++) {
-            if (p[i] > maxLen) {
-                maxLen = p[i];
+        for (int i = 1; i < palinedromeLengths.length; i++) {
+            if (palinedromeLengths[i] > maxLen) {
+                maxLen = palinedromeLengths[i];
                 centerIndex = i;
             }
         }
 
         return s.substring((centerIndex - 1 - maxLen)/2, maxLen);
-
     }
 
     private String approach3(String s) {
