@@ -27,34 +27,46 @@ public class ReversingInteger {
 
     public static void main(String[] args) {
         ReversingInteger r = new ReversingInteger();
-        r.reverse(123);
-        r.reverse(1234);
-        r.reverse(12345);
-        r.reverse(123456);
+        /*System.out.println(r.reverse(123));
+        System.out.println(r.reverse(1234));
+        System.out.println(r.reverse(12345));
+        System.out.println(r.reverse(123456));
+
+        System.out.println(r.reverse(1));*/
+        /*System.out.println(r.reverse(-1));
+        System.out.println(r.reverse(120));*/
+        System.out.println(r.reverse(12));
     }
 
     public int reverse(int x) {
-        reverseApproach1(x);
-        return 0;
+        return reverseApproach1(x);
     }
 
-    private void reverseApproach1(int x) {
+    private int reverseApproach1(int x) {
         int number = x;
+        int newX = x;
+        if(number < 0){
+            number = number*-1;
+            newX = newX*-1;
+        }
+
+
         int length = 0;
         int divisor = 10;
 
         int result=0;
 
         while(number > 0){
-
             result = result*10 + number%10;
-
-            number = x / divisor;
+            number = newX / divisor;
             divisor = divisor*10;
             length++;
-
         }
-        System.out.println(length + " "+ result);
+
+        if(x < 0){
+            result = result*-1;
+        }
+        return result;
     }
 
 }
