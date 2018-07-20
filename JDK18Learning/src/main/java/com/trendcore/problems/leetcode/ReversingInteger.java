@@ -27,19 +27,21 @@ public class ReversingInteger {
 
     public static void main(String[] args) {
         ReversingInteger r = new ReversingInteger();
-        System.out.println(r.reverse(123));
+        /*System.out.println(r.reverse(123));
         System.out.println(r.reverse(1234));
         System.out.println(r.reverse(12345));
         System.out.println(r.reverse(123456));
 
         System.out.println(r.reverse(1));
         System.out.println(r.reverse(-1));
-        System.out.println(r.reverse(120));
-        System.out.println(r.reverse(-2147483412));
-        System.out.println(r.reverse(-120));
+        System.out.println(r.reverse(120));*/
+        System.out.println(r.reverse(-2147483648));
+        /*System.out.println(r.reverse(-120));
         System.out.println(r.reverse(-123));
         System.out.println(r.reverse(-1234));
         System.out.println(r.reverse(-12345));
+        System.out.println(r.reverse(1534236469));*/
+
 
     }
 
@@ -49,17 +51,24 @@ public class ReversingInteger {
 
     private int reverseApproach1(int x) {
 
+        if(x >= Integer.MAX_VALUE)
+            return 0;
+
         int number = x;
         int newX = x;
 
-        int divisor = 10;
+        long divisor = 10;
 
-        int result=0;
+        long result=0;
+        long tempResult;
 
         while(number != 0){
-            result = result*10 + number%10;
-            number = newX / divisor;
-            divisor = divisor*10;
+            tempResult = result * 10 + number % 10;
+            if(tempResult >= Integer.MAX_VALUE)
+                return 0;
+
+            result = tempResult;
+            number = (int) (number / divisor);
         }
 
         /*if(x < 0){
@@ -67,7 +76,7 @@ public class ReversingInteger {
         }else if(x > 0 && result < 0){
             return 0;
         }*/
-        return result;
+        return (int) result;
     }
 
 }
