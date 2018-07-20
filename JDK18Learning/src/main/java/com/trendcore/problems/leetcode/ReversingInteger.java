@@ -49,6 +49,24 @@ public class ReversingInteger {
         return reverseApproach1(x);
     }
 
+    private int anotherApproach(int x){
+        long tempResult = 0;
+
+        long divisor = 10;
+        long carry = x;
+
+        while(carry != 0){
+            tempResult = tempResult*10+carry%10;
+            carry = x/divisor;
+            divisor = divisor*10;
+        }
+
+        if(tempResult >= Integer.MAX_VALUE || tempResult <= Integer.MIN_VALUE)
+            return 0;
+
+        return (int) tempResult;
+    }
+
     private int reverseApproach1(int number) {
 
         if(number >= Integer.MAX_VALUE || number <= Integer.MIN_VALUE)
