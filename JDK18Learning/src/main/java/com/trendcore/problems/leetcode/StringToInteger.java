@@ -62,10 +62,30 @@ public class StringToInteger {
         System.out.println(s.myAtoi("--42"));
         System.out.println(s.myAtoi("    -42"));
         System.out.println(s.myAtoi("word 42"));
+        System.out.println(s.myAtoi("4 2"));
     }
 
     public int myAtoi(String str) {
 
+        //using tokenizer approach
+        for(int i = 0 ; i < str.length() ; i++){
+            //locate + or - or 0-9
+            //then parse till 0-9
+            if((str.charAt(i) >= '0' && str.charAt(i) <= '9') || str.charAt(i) == '+' || str.charAt(i) == '-'){
+                for(int pointer = i ; pointer < str.length() ; pointer++){
+                    if(!((str.charAt(pointer) >= '0' && str.charAt(pointer) <= '9') || str.charAt(pointer) == '+' || str.charAt(pointer) == '-')){
+                        System.out.println(str.charAt(pointer));
+                        break;
+                    }
+                }
+                break;
+            }
+        }
+
+        return skelaton(str);
+    }
+
+    private int skelaton(String str) {
         int charPointer = -1;
 
         long result = 0;
@@ -73,7 +93,7 @@ public class StringToInteger {
 
         for(int i = 0 ; i < str.length() ; i++){
 
-            if((str.charAt(i) <= '0' || str.charAt(i) >= '9') && str.charAt(i) != '-' && str.charAt(i) == ' ' && result == 0){
+            if((str.charAt(i) <= '0' || str.charAt(i) >= '9') && str.charAt(i) != '-' && str.charAt(i) != ' ' && result == 0){
                 break;
             }
 
@@ -103,8 +123,6 @@ public class StringToInteger {
 
         return (int) result;
     }
-
-
 
 
 }
