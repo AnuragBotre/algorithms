@@ -65,6 +65,11 @@ public class StringToInteger {
         System.out.println(s.myAtoi("4 2"));
         System.out.println(s.myAtoi("-91283472332"));
         System.out.println(s.myAtoi("+-2"));
+        System.out.println(s.myAtoi("+1"));
+        System.out.println(s.myAtoi("-2147483647"));
+        System.out.println(s.myAtoi("9223372036854775808"));
+        System.out.println(s.myAtoi("-9223372036854775808"));
+        System.out.println(s.myAtoi("0-1"));
     }
 
     public int myAtoi(String str) {
@@ -88,7 +93,7 @@ public class StringToInteger {
                         break;
                     }
 
-                    if (repeated && str.charAt(pointer) == '-' || str.charAt(pointer) == '+') {
+                    if (repeated && (str.charAt(pointer) == '-' || str.charAt(pointer) == '+')) {
                         break;
                     }
 
@@ -104,7 +109,32 @@ public class StringToInteger {
                     }
 
                     if (str.charAt(pointer) >= '0' && str.charAt(pointer) <= '9') {
-                        result = result * 10 + (str.charAt(pointer) - 48);
+
+                        for(;pointer < str.length() ; pointer++){
+
+                            if(!(str.charAt(pointer) >= '0' && str.charAt(pointer) <= '9')){
+                                break;
+                            }
+
+                            result = result * 10 + (str.charAt(pointer) - 48);
+
+
+                            if (result <= Integer.MIN_VALUE || result >= Integer.MAX_VALUE) {
+                                if(negativeSign) {
+                                    result = result * -1;
+                                }
+                                if(result <= Integer.MIN_VALUE){
+                                    return Integer.MIN_VALUE;
+                                }else if(result >= Integer.MAX_VALUE){
+                                    return Integer.MAX_VALUE;
+                                }else{
+                                    return (int) result;
+                                }
+                            }
+                        }
+
+                        break;
+
                     } else {
                         break;
                     }
