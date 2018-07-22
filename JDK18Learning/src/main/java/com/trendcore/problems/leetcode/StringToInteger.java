@@ -67,14 +67,40 @@ public class StringToInteger {
 
     public int myAtoi(String str) {
 
+        boolean negativeSign = false;
+        long result = 0;
+
         //using tokenizer approach
-        for(int i = 0 ; i < str.length() ; i++){
+        for (int i = 0; i < str.length(); i++) {
             //locate + or - or 0-9
             //then parse till 0-9
-            if((str.charAt(i) >= '0' && str.charAt(i) <= '9') || str.charAt(i) == '+' || str.charAt(i) == '-'){
-                for(int pointer = i ; pointer < str.length() ; pointer++){
-                    if(!((str.charAt(pointer) >= '0' && str.charAt(pointer) <= '9') || str.charAt(pointer) == '+' || str.charAt(pointer) == '-')){
-                        System.out.println(str.charAt(pointer));
+            if(!((str.charAt(i) >= '0' && str.charAt(i) <= '9') || str.charAt(i) == '+' || str.charAt(i) == '-') && str.charAt(i) != ' '){
+                break;
+            }
+
+
+            if ((str.charAt(i) >= '0' && str.charAt(i) <= '9') || str.charAt(i) == '+' || str.charAt(i) == '-') {
+                for (int pointer = i; pointer < str.length(); pointer++) {
+                    if (!((str.charAt(pointer) >= '0' && str.charAt(pointer) <= '9') || str.charAt(pointer) == '+' || str.charAt(pointer) == '-')) {
+                        break;
+                    }
+
+                    if (negativeSign && str.charAt(pointer) == '-') {
+                        break;
+                    }
+
+                    if (str.charAt(pointer) == '-' && !negativeSign) {
+                        negativeSign = true;
+                        continue;
+                    }
+
+                    if (str.charAt(pointer) == '+') {
+                        continue;
+                    }
+
+                    if (str.charAt(pointer) >= '0' && str.charAt(pointer) <= '9') {
+                        result = result * 10 + (str.charAt(pointer) - 48);
+                    } else {
                         break;
                     }
                 }
@@ -82,7 +108,17 @@ public class StringToInteger {
             }
         }
 
-        return skelaton(str);
+        if (result <= Integer.MIN_VALUE) {
+            return Integer.MIN_VALUE;
+        } else if (result >= Integer.MAX_VALUE) {
+            return Integer.MAX_VALUE;
+        }
+
+        if (negativeSign) {
+            result = result * -1;
+        }
+
+        return (int) result;
     }
 
     private int skelaton(String str) {
@@ -91,33 +127,33 @@ public class StringToInteger {
         long result = 0;
         boolean negativeSign = false;
 
-        for(int i = 0 ; i < str.length() ; i++){
+        for (int i = 0; i < str.length(); i++) {
 
-            if((str.charAt(i) <= '0' || str.charAt(i) >= '9') && str.charAt(i) != '-' && str.charAt(i) != ' ' && result == 0){
+            if ((str.charAt(i) <= '0' || str.charAt(i) >= '9') && str.charAt(i) != '-' && str.charAt(i) != ' ' && result == 0) {
                 break;
             }
 
-            if(negativeSign && str.charAt(i) == '-'){
+            if (negativeSign && str.charAt(i) == '-') {
                 break;
             }
 
-            if(str.charAt(i) == '-' && !negativeSign){
+            if (str.charAt(i) == '-' && !negativeSign) {
                 negativeSign = true;
             }
 
-            if(str.charAt(i) >= '0' && str.charAt(i) <= '9' && charPointer+1 == i){
-                result = result*10+(str.charAt(i)-48);
+            if (str.charAt(i) >= '0' && str.charAt(i) <= '9' && charPointer + 1 == i) {
+                result = result * 10 + (str.charAt(i) - 48);
             }
             charPointer = i;
         }
 
-        if(negativeSign){
-            result = result*-1;
+        if (negativeSign) {
+            result = result * -1;
         }
 
-        if(result <= Integer.MIN_VALUE){
+        if (result <= Integer.MIN_VALUE) {
             return Integer.MIN_VALUE;
-        }else if(result >= Integer.MAX_VALUE){
+        } else if (result >= Integer.MAX_VALUE) {
             return Integer.MAX_VALUE;
         }
 
