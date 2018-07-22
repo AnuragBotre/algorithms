@@ -63,6 +63,8 @@ public class StringToInteger {
         System.out.println(s.myAtoi("    -42"));
         System.out.println(s.myAtoi("word 42"));
         System.out.println(s.myAtoi("4 2"));
+        System.out.println(s.myAtoi("-91283472332"));
+        System.out.println(s.myAtoi("+-2"));
     }
 
     public int myAtoi(String str) {
@@ -108,14 +110,14 @@ public class StringToInteger {
             }
         }
 
+        if (negativeSign) {
+            result = result * -1;
+        }
+
         if (result <= Integer.MIN_VALUE) {
             return Integer.MIN_VALUE;
         } else if (result >= Integer.MAX_VALUE) {
             return Integer.MAX_VALUE;
-        }
-
-        if (negativeSign) {
-            result = result * -1;
         }
 
         return (int) result;
