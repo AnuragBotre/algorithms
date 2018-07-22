@@ -26,7 +26,29 @@ package com.trendcore.problems.leetcode;
 public class PalindromeNumber {
 
     public static void main(String[] args) {
+        PalindromeNumber p = new PalindromeNumber();
+        System.out.println(p.isPalindrome(-12));
+        System.out.println(p.isPalindrome(123));
+        System.out.println(p.isPalindrome(121));
+        System.out.println(p.isPalindrome(1221));
+        System.out.println(p.isPalindrome(1212));
+    }
 
+    public boolean isPalindrome(int x) {
+        if(x < 0)
+            return false;
+
+
+        int reverse = x;
+
+        int result = 0;
+
+        while(reverse != 0){
+            result = result*10+reverse % 10;
+            reverse = reverse / 10;
+        }
+
+        return x == result;
     }
 
 }
