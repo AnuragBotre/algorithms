@@ -70,6 +70,7 @@ public class StringToInteger {
     public int myAtoi(String str) {
 
         boolean negativeSign = false;
+        boolean repeated=false;
         long result = 0;
 
         //using tokenizer approach
@@ -87,16 +88,18 @@ public class StringToInteger {
                         break;
                     }
 
-                    if (negativeSign && str.charAt(pointer) == '-') {
+                    if (repeated && str.charAt(pointer) == '-' || str.charAt(pointer) == '+') {
                         break;
                     }
 
                     if (str.charAt(pointer) == '-' && !negativeSign) {
                         negativeSign = true;
+                        repeated=true;
                         continue;
                     }
 
                     if (str.charAt(pointer) == '+') {
+                        repeated=true;
                         continue;
                     }
 
