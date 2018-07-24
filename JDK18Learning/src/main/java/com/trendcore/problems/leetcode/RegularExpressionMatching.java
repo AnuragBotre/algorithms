@@ -77,6 +77,8 @@ public class RegularExpressionMatching {
 
         //This is the best input to test which will invalidate below algo
         System.out.println(r.formatResult("mississippi", "mis*is*ip*."));
+        System.out.println(r.formatResult("aaa", "ab*a"));
+        System.out.println(r.formatResult("a", "ab*a"));
     }
 
     public String formatResult(String s, String p) {
@@ -84,11 +86,19 @@ public class RegularExpressionMatching {
     }
 
     public boolean isMatch(String s, String p) {
+        return modifiedApproach1(s, p);
 
+
+    }
+
+    private boolean modifiedApproach1(String s, String p) {
+        //This strategy is not working
         int stringPointer = 0;
         int patternPointer = 0;
 
         boolean flag = true;
+
+        boolean tokenIsProcessedPrev = false;
 
         for (; flag; ) {
 
@@ -100,16 +110,14 @@ public class RegularExpressionMatching {
                     for (int k = patternPointer; k < p.length(); k++) {
                         if (p.charAt(k) == '*') {
                             continue;
-                        }else{
-                            if(stringPointer-1 >= 0 && k-1 >= 0 && p.charAt(k) == s.charAt(stringPointer-1) && p.charAt(k-1) == '*'){
-                                continue;
-                            }else{
-                                if(k+1 < p.length() && p.charAt(k+1) == '*'){
-                                    continue;
-                                }else{
-                                    return false;
-                                }
-                            }
+                        }
+
+                        if(k+1 < p.length() && p.charAt(k+1) == '*'){
+                            continue;
+                        }
+
+                        if(tokenIsProcessedPrev){
+                            return false;
                         }
                     }
                 }
@@ -122,8 +130,10 @@ public class RegularExpressionMatching {
 
             if (s.charAt(stringPointer) == p.charAt(patternPointer) && (p.charAt(patternPointer) != '.' || p.charAt(patternPointer) != '*')) {
                 patternPointer++;
+                tokenIsProcessedPrev = true;
             } else if (p.charAt(patternPointer) == '.') {
                 patternPointer++;
+                tokenIsProcessedPrev = true;
             } else if (p.charAt(patternPointer) == '*') {
                 if (patternPointer - 1 >= 0) {
                     char prevChar = p.charAt(patternPointer - 1);
@@ -138,6 +148,9 @@ public class RegularExpressionMatching {
                 if(patternPointer+1 < p.length()){
                     if(p.charAt(patternPointer+1) == '*'){
                         patternPointer = patternPointer + 2;
+                        stringPointer--;
+                    }else{
+                        tokenIsProcessedPrev = false;
                     }
                 }else{
                     return false;
