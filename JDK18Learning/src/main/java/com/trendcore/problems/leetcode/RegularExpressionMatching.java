@@ -68,7 +68,7 @@ public class RegularExpressionMatching {
     }
 
     public String formatResult(String s, String p) {
-        return s + " " + p + " " + isMatch(s,p);
+        return s + " " + p + " " + isMatch(s, p);
     }
 
     public boolean isMatch(String s, String p) {
@@ -86,7 +86,7 @@ public class RegularExpressionMatching {
                 return true;
             } else if (stringPointer < s.length() && patternPointer == p.length()) {
                 return false;
-            } else if(stringPointer == s.length()){
+            } else if (stringPointer == s.length()) {
 
                 //We are at the end of string and pattern length is not finished yet.
                 //hence analyzing pattern length
@@ -108,19 +108,19 @@ public class RegularExpressionMatching {
             } else if (p.charAt(patternPointer) == '.') {
                 patternPointer++;
             } else if (p.charAt(patternPointer) == '*') {
-                if(patternPointer - 1 >= 0){
+                if (patternPointer - 1 >= 0) {
                     prevChar = p.charAt(patternPointer - 1);
-                    if(prevChar != '.' && prevChar != s.charAt(stringPointer)){
+                    if (prevChar != '.' && prevChar != s.charAt(stringPointer)) {
                         //stringPointer--;
                         patternPointer++;
                     }
                 }
             } else {
-                if(patternPointer+1 < p.length()){
-                    if(p.charAt(patternPointer+1) == '*'){
+                if (patternPointer + 1 < p.length()) {
+                    if (p.charAt(patternPointer + 1) == '*') {
                         patternPointer = patternPointer + 2;
                     }
-                }else{
+                } else {
                     return false;
                 }
 
