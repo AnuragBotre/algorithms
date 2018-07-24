@@ -86,7 +86,32 @@ public class RegularExpressionMatching {
     }
 
     public boolean isMatch(String s, String p) {
-        return modifiedApproach1(s, p);
+
+        int stringPointer = 0;
+        int patternPointer = 0;
+
+        boolean flag = false;
+
+
+
+
+        for (; flag; ) {
+
+            /*if(remainingLengthOfPattern > remainingLengthOfString){
+                //we might have to skip certain tokens
+            }else{
+
+            }*/
+
+            /*if((s.charAt(stringPointer) == p.charAt(patternPointer)) || p.charAt(patternPointer) == '.'){
+                stringPointer++;
+                patternPointer++;
+            }else if(patternPointer+1 < ){
+
+            }*/
+        }
+
+        return true;
 
 
     }
@@ -112,11 +137,11 @@ public class RegularExpressionMatching {
                             continue;
                         }
 
-                        if(k+1 < p.length() && p.charAt(k+1) == '*'){
+                        if (k + 1 < p.length() && p.charAt(k + 1) == '*') {
                             continue;
                         }
 
-                        if(tokenIsProcessedPrev){
+                        if (tokenIsProcessedPrev) {
                             return false;
                         }
                     }
@@ -145,14 +170,14 @@ public class RegularExpressionMatching {
             } else {
                 //when nothing matched then next char should be *
                 //return false;
-                if(patternPointer+1 < p.length()){
-                    if(p.charAt(patternPointer+1) == '*'){
+                if (patternPointer + 1 < p.length()) {
+                    if (p.charAt(patternPointer + 1) == '*') {
                         patternPointer = patternPointer + 2;
                         stringPointer--;
-                    }else{
+                    } else {
                         tokenIsProcessedPrev = false;
                     }
-                }else{
+                } else {
                     return false;
                 }
 
