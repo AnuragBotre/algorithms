@@ -55,7 +55,7 @@ public class RegularExpressionMatching {
 
     public static void main(String[] args) {
         RegularExpressionMatching r = new RegularExpressionMatching();
-        /*System.out.println(r.formatResult("aaa", "a"));
+        System.out.println(r.formatResult("aaa", "a"));
         System.out.println(r.formatResult("aaa", "aa."));
         System.out.println(r.formatResult("aaa", "a*"));
         System.out.println(r.formatResult("aaab", "a*b"));
@@ -63,13 +63,19 @@ public class RegularExpressionMatching {
 
         System.out.println(r.formatResult("mississippi", "mis*is*p*."));
 
-        System.out.println(r.formatResult("aab", "c*a*b*"));*/
+        System.out.println(r.formatResult("aab", "c*a*b*"));
 
-        /*System.out.println(r.formatResult("a", "a*"));
+        System.out.println(r.formatResult("a", "a*"));
         System.out.println(r.formatResult("a", "aa*"));
-        System.out.println(r.formatResult("aaa", "a*a*a*"));*/
+        System.out.println(r.formatResult("aaa", "a*a*a*"));
         System.out.println(r.formatResult("aaa", "c*d*a*"));
 
+        System.out.println(r.formatResult("aa", "a"));
+
+        System.out.println(r.formatResult("", "bab"));
+
+        //This is the best input to test which will invalidate below algo
+        System.out.println(r.formatResult("mississippi", "mis*is*ip*."));
     }
 
     public String formatResult(String s, String p) {
@@ -91,13 +97,17 @@ public class RegularExpressionMatching {
                     return true;
                 } else {
                     for (int k = patternPointer + 1; k < p.length(); k++) {
-                        if (p.charAt(k) != '*') {
-                            if (k + 1 < p.length()) {
-                                if (p.charAt(k + 1) != '*') {
+                        if (p.charAt(k) == '*') {
+                            continue;
+                        }else{
+                            if(stringPointer-1 >= 0 && p.charAt(k) == s.charAt(stringPointer-1)){
+                                continue;
+                            }else{
+                                if(k+1 < p.length() && p.charAt(k+1) == '*'){
+                                    continue;
+                                }else{
                                     return false;
                                 }
-                            } else {
-                                return false;
                             }
                         }
                     }
@@ -105,10 +115,8 @@ public class RegularExpressionMatching {
 
                 return true;
             } else if (patternPointer == p.length()) {
-                if (stringPointer < s.length() - 1) {
-                    return false;
-                }
-                return true;
+
+                return false;
             }
 
             if (s.charAt(stringPointer) == p.charAt(patternPointer) && (p.charAt(patternPointer) != '.' || p.charAt(patternPointer) != '*')) {
