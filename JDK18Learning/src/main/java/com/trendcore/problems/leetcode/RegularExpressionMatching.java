@@ -123,6 +123,9 @@ public class RegularExpressionMatching {
 
         boolean flag = true;
 
+        //In this Approach need to remember position of the the last processed character
+        //If it  is * or *-1 char then do it accordingly
+
         boolean tokenIsProcessedPrev = false;
 
         for (; flag; ) {
