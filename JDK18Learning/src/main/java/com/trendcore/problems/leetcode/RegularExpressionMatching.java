@@ -55,16 +55,20 @@ public class RegularExpressionMatching {
 
     public static void main(String[] args) {
         RegularExpressionMatching r = new RegularExpressionMatching();
-        /*System.out.println(r.isMatch("aaa", "a"));
-        System.out.println(r.isMatch("aaa", "aa."));
-        System.out.println(r.isMatch("aaa", "a*"));
-        System.out.println(r.isMatch("aaab", "a*b"));
-        System.out.println(r.isMatch("aaab", ".*b"));
+        System.out.println(r.formatResult("aaa", "a"));
+        System.out.println(r.formatResult("aaa", "aa."));
+        System.out.println(r.formatResult("aaa", "a*"));
+        System.out.println(r.formatResult("aaab", "a*b"));
+        System.out.println(r.formatResult("aaab", ".*b"));
 
-        System.out.println(r.isMatch("mississippi", "mis*is*p*."));*/
+        System.out.println(r.formatResult("mississippi", "mis*is*p*."));
 
-        System.out.println(r.isMatch("aab", "c*a*b*"));
+        System.out.println(r.formatResult("aab", "c*a*b*"));
 
+    }
+
+    public String formatResult(String s, String p) {
+        return s + " " + p + " " + isMatch(s,p);
     }
 
     public boolean isMatch(String s, String p) {
@@ -82,8 +86,21 @@ public class RegularExpressionMatching {
                 return true;
             } else if (stringPointer < s.length() && patternPointer == p.length()) {
                 return false;
-            } else if(stringPointer == s.length() || patternPointer == p.length()){
-                return false;
+            } else if(stringPointer == s.length()){
+
+                //We are at the end of string and pattern length is not finished yet.
+                //hence analyzing pattern length
+
+                for(int c = patternPointer+1 ; c < p.length() ; c++){
+                    if(p.charAt(c) != '*'){
+                        return false;
+                    }
+                }
+
+                return true;
+                /*}else{
+                    return false;
+                }*/
             }
 
             if (s.charAt(stringPointer) == p.charAt(patternPointer) && (p.charAt(patternPointer) != '.' || p.charAt(patternPointer) != '*')) {
@@ -94,12 +111,19 @@ public class RegularExpressionMatching {
                 if(patternPointer - 1 >= 0){
                     prevChar = p.charAt(patternPointer - 1);
                     if(prevChar != '.' && prevChar != s.charAt(stringPointer)){
-                        stringPointer--;
+                        //stringPointer--;
                         patternPointer++;
                     }
                 }
             } else {
-                return false;
+                if(patternPointer+1 < p.length()){
+                    if(p.charAt(patternPointer+1) == '*'){
+                        patternPointer = patternPointer + 2;
+                    }
+                }else{
+                    return false;
+                }
+
             }
 
 
