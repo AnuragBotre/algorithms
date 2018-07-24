@@ -97,7 +97,7 @@ public class RegularExpressionMatching {
                     }
                 }
             } else {
-                break;
+                return false;
             }
 
 
