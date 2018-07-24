@@ -57,6 +57,12 @@ public class RegularExpressionMatching {
         RegularExpressionMatching r = new RegularExpressionMatching();
         System.out.println(r.isMatch("aaa", "a"));
         System.out.println(r.isMatch("aaa", "aa."));
+        System.out.println(r.isMatch("aaa", "a*"));
+        System.out.println(r.isMatch("aaab", "a*b"));
+        System.out.println(r.isMatch("aaab", ".*b"));
+
+        System.out.println(r.isMatch("mississippi", "mis*is*p*."));
+
     }
 
     public boolean isMatch(String s, String p) {
@@ -66,11 +72,15 @@ public class RegularExpressionMatching {
 
         boolean flag = true;
 
+        char prevChar = 0;
+
         for (; flag; ) {
 
             if ((stringPointer == s.length() && patternPointer == p.length()) || (stringPointer == s.length() && patternPointer == p.length() - 1)) {
                 return true;
             } else if (stringPointer < s.length() && patternPointer == p.length()) {
+                return false;
+            } else if(stringPointer == s.length() || patternPointer == p.length()){
                 return false;
             }
 
@@ -78,8 +88,16 @@ public class RegularExpressionMatching {
                 patternPointer++;
             } else if (p.charAt(patternPointer) == '.') {
                 patternPointer++;
-            }else if(p.charAt(patternPointer) == '*'){
-
+            } else if (p.charAt(patternPointer) == '*') {
+                if(patternPointer - 1 >= 0){
+                    prevChar = p.charAt(patternPointer - 1);
+                    if(prevChar != '.' && prevChar != s.charAt(stringPointer)){
+                        stringPointer--;
+                        patternPointer++;
+                    }
+                }
+            } else {
+                break;
             }
 
 
