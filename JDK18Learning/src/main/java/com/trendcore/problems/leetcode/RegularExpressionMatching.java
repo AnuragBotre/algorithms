@@ -78,6 +78,26 @@ public class RegularExpressionMatching {
 
         boolean flag = true;
 
+        for(;flag;){
+            if(s.charAt(stringPointer) == s.charAt(patternPointer)){
+                stringPointer++;
+                patternPointer++;
+            }else{
+                if(s.length()-stringPointer != p.length()-patternPointer){
+
+                }
+            }
+        }
+
+        return true;
+    }
+
+    private boolean approach1(String s, String p) {
+        int stringPointer = 0;
+        int patternPointer = 0;
+
+        boolean flag = true;
+
         char prevChar = 0;
 
         for (; flag; ) {
