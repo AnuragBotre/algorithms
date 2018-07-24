@@ -55,13 +55,15 @@ public class RegularExpressionMatching {
 
     public static void main(String[] args) {
         RegularExpressionMatching r = new RegularExpressionMatching();
-        System.out.println(r.isMatch("aaa", "a"));
+        /*System.out.println(r.isMatch("aaa", "a"));
         System.out.println(r.isMatch("aaa", "aa."));
         System.out.println(r.isMatch("aaa", "a*"));
         System.out.println(r.isMatch("aaab", "a*b"));
         System.out.println(r.isMatch("aaab", ".*b"));
 
-        System.out.println(r.isMatch("mississippi", "mis*is*p*."));
+        System.out.println(r.isMatch("mississippi", "mis*is*p*."));*/
+
+        System.out.println(r.isMatch("aab", "c*a*b*"));
 
     }
 
