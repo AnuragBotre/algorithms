@@ -64,6 +64,7 @@ public class RegularExpressionMatching {
         System.out.println(r.formatResult("mississippi", "mis*is*p*."));
 
         System.out.println(r.formatResult("aab", "c*a*b*"));
+        System.out.println(r.formatResult("aab", "c*a*bb"));
 
         System.out.println(r.formatResult("a", "a*"));
         System.out.println(r.formatResult("a", "aa*"));
@@ -96,11 +97,11 @@ public class RegularExpressionMatching {
                 if (patternPointer == p.length()) {
                     return true;
                 } else {
-                    for (int k = patternPointer + 1; k < p.length(); k++) {
+                    for (int k = patternPointer; k < p.length(); k++) {
                         if (p.charAt(k) == '*') {
                             continue;
                         }else{
-                            if(stringPointer-1 >= 0 && p.charAt(k) == s.charAt(stringPointer-1)){
+                            if(stringPointer-1 >= 0 && k-1 >= 0 && p.charAt(k) == s.charAt(stringPointer-1) && p.charAt(k-1) == '*'){
                                 continue;
                             }else{
                                 if(k+1 < p.length() && p.charAt(k+1) == '*'){
@@ -127,10 +128,21 @@ public class RegularExpressionMatching {
                 if (patternPointer - 1 >= 0) {
                     char prevChar = p.charAt(patternPointer - 1);
                     if (prevChar != '.' && prevChar != s.charAt(stringPointer)) {
-                        //stringPointer--;
+                        stringPointer--;
                         patternPointer++;
                     }
                 }
+            } else {
+                //when nothing matched then next char should be *
+                //return false;
+                if(patternPointer+1 < p.length()){
+                    if(p.charAt(patternPointer+1) == '*'){
+                        patternPointer = patternPointer + 2;
+                    }
+                }else{
+                    return false;
+                }
+
             }
             stringPointer++;
         }
