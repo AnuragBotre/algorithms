@@ -77,12 +77,24 @@ public class RegularExpressionMatching {
 
         //This is the best input to test which will invalidate below algo
         System.out.println(r.formatResult("mississippi", "mis*is*ip*."));
+
+        //TODO : This input is not working with new algo.
         System.out.println(r.formatResult("aaa", "ab*a"));
+
         System.out.println(r.formatResult("a", "ab*a"));
+        System.out.println(r.formatResult("aa", "ab*a"));
+        System.out.println(r.formatResult("", "."));
+        System.out.println(r.formatResult("a", ".*..a*"));
+        System.out.println(r.formatResult("ab", ".*.."));
     }
 
     public String formatResult(String s, String p) {
         return s + " " + p + " " + isMatch(s, p);
+    }
+
+    class Struct {
+        char c;
+        boolean oneOrMoreOccurance;
     }
 
     public boolean isMatch(String s, String p) {
@@ -90,18 +102,54 @@ public class RegularExpressionMatching {
         int stringPointer = 0;
         int patternPointer = 0;
 
-        boolean flag = false;
+        boolean flag = true;
 
-
-
+        Struct[] s1 = getStructs(p);
 
         for (; flag; ) {
 
-            /*if(remainingLengthOfPattern > remainingLengthOfString){
-                //we might have to skip certain tokens
-            }else{
 
-            }*/
+            if (remainingLengthOfPattern(s1, patternPointer) > remainingLengthOfString(s, stringPointer)) {
+                //we might have to skip certain tokens
+
+                if(stringPointer < s.length()){
+                    //if((s1[patternPointer].c == s.charAt(stringPointer) || s1[patternPointer].c == '.') && s1[patternPointer].oneOrMoreOccurance)
+                        patternPointer++;
+                }else{
+                    //remaing chars are zero or more seq then return true or return false
+                    for(int k = patternPointer ; k < s1.length ; k++){
+                        if(!s1[k].oneOrMoreOccurance){
+                            return false;
+                        }
+                    }
+                    return true;
+                }
+            } else {
+
+                if(s1.length == patternPointer && s.length() == stringPointer){
+                    return true;
+                }else if(s.length() == stringPointer){
+                    //remaing chars are zero or more seq then return true or return false
+                    for(int k = patternPointer ; k < s1.length ; k++){
+                        if(!s1[k].oneOrMoreOccurance){
+                            return false;
+                        }
+                    }
+                    return true;
+                }
+                else if(s1.length == patternPointer){
+                    return false;
+                }
+
+                if(s1[patternPointer].c == s.charAt(stringPointer) || s1[patternPointer].c == '.'){
+                    stringPointer++;
+                    if(!s1[patternPointer].oneOrMoreOccurance){
+                        patternPointer++;
+                    }
+                }else{
+                    patternPointer++;
+                }
+            }
 
             /*if((s.charAt(stringPointer) == p.charAt(patternPointer)) || p.charAt(patternPointer) == '.'){
                 stringPointer++;
@@ -112,8 +160,37 @@ public class RegularExpressionMatching {
         }
 
         return true;
+        //return modifiedApproach1(s, p);
+    }
 
+    private Struct[] getStructs(String p) {
+        Struct s2[] = new Struct[p.length()];
+        int s1Pointer = 0;
+        for (int i = 0; i < p.length(); i++) {
+            if(p.charAt(i) == '*'){
+                s2[s1Pointer-1].oneOrMoreOccurance = true;
+            }else{
+                s2[s1Pointer] = new Struct();
+                s2[s1Pointer].c = p.charAt(i);
+                s1Pointer++;
+            }
+        }
 
+        Struct s1[] = new Struct[s1Pointer];
+        System.arraycopy(s2,0,s1,0,s1Pointer);
+        return s1;
+    }
+
+    private boolean isCharacterEqual(String s, String p, int stringPointer, int patternPointer) {
+        return s.charAt(stringPointer) == p.charAt(patternPointer) || p.charAt(patternPointer) == '.';
+    }
+
+    private int remainingLengthOfString(String s, int stringPointer) {
+        return s.length() - stringPointer + 1;
+    }
+
+    private int remainingLengthOfPattern(Struct[] p, int patternPointer) {
+        return p.length - patternPointer+1;
     }
 
     private boolean modifiedApproach1(String s, String p) {
@@ -126,7 +203,7 @@ public class RegularExpressionMatching {
         //In this Approach need to remember position of the the last processed character
         //If it  is * or *-1 char then do it accordingly
 
-        boolean tokenIsProcessedPrev = false;
+        int lastCharProcessedPosition = 0;
 
         for (; flag; ) {
 
@@ -144,7 +221,15 @@ public class RegularExpressionMatching {
                             continue;
                         }
 
-                        if (tokenIsProcessedPrev) {
+                        if (s.length() - 1 >= 0 && p.charAt(k) == s.charAt(s.length() - 1) || p.charAt(k) == '.') {
+                            //if that char was processed using * then we can remove
+                            if (lastCharProcessedPosition + 1 < p.length() && p.charAt(lastCharProcessedPosition + 1) == '*') {
+                                lastCharProcessedPosition = lastCharProcessedPosition + 1;
+                                continue;
+                            } else {
+                                return false;
+                            }
+                        } else {
                             return false;
                         }
                     }
@@ -157,11 +242,11 @@ public class RegularExpressionMatching {
             }
 
             if (s.charAt(stringPointer) == p.charAt(patternPointer) && (p.charAt(patternPointer) != '.' || p.charAt(patternPointer) != '*')) {
+                lastCharProcessedPosition = patternPointer;
                 patternPointer++;
-                tokenIsProcessedPrev = true;
             } else if (p.charAt(patternPointer) == '.') {
+                lastCharProcessedPosition = patternPointer;
                 patternPointer++;
-                tokenIsProcessedPrev = true;
             } else if (p.charAt(patternPointer) == '*') {
                 if (patternPointer - 1 >= 0) {
                     char prevChar = p.charAt(patternPointer - 1);
@@ -178,7 +263,7 @@ public class RegularExpressionMatching {
                         patternPointer = patternPointer + 2;
                         stringPointer--;
                     } else {
-                        tokenIsProcessedPrev = false;
+
                     }
                 } else {
                     return false;
