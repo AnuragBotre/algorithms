@@ -109,7 +109,7 @@ public class RegularExpressionMatching {
 
                 if(stringPointer < s.length()){
                     //if((s1[patternPointer].c == s.charAt(stringPointer) || s1[patternPointer].c == '.') && s1[patternPointer].oneOrMoreOccurance)
-                        patternPointer++;
+                    patternPointer++;
                 }else{
                     //remaing chars are zero or more seq then return true or return false
                     for(int k = patternPointer ; k < s1.length ; k++){
