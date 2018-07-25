@@ -70,17 +70,12 @@ public class RegularExpressionMatching {
         System.out.println(r.formatResult("a", "aa*"));
         System.out.println(r.formatResult("aaa", "a*a*a*"));
         System.out.println(r.formatResult("aaa", "c*d*a*"));
-
         System.out.println(r.formatResult("aa", "a"));
-
         System.out.println(r.formatResult("", "bab"));
-
-        //This is the best input to test which will invalidate below algo
         System.out.println(r.formatResult("mississippi", "mis*is*ip*."));
-
-        //TODO : This input is not working with new algo.
         System.out.println(r.formatResult("aaa", "ab*a"));
 
+        //TODO : This input is not working with new algo.
         System.out.println(r.formatResult("a", "ab*a"));
         System.out.println(r.formatResult("aa", "ab*a"));
         System.out.println(r.formatResult("", "."));
