@@ -107,13 +107,13 @@ public class RegularExpressionMatching {
             if (remainingLengthOfPattern(s1, patternPointer) > remainingLengthOfString(s, stringPointer)) {
                 //we might have to skip certain tokens
 
-                if(stringPointer < s.length()){
+                if (stringPointer < s.length()) {
                     //if((s1[patternPointer].c == s.charAt(stringPointer) || s1[patternPointer].c == '.') && s1[patternPointer].oneOrMoreOccurance)
                     patternPointer++;
-                }else{
+                } else {
                     //remaing chars are zero or more seq then return true or return false
-                    for(int k = patternPointer ; k < s1.length ; k++){
-                        if(!s1[k].oneOrMoreOccurance){
+                    for (int k = patternPointer; k < s1.length; k++) {
+                        if (!s1[k].oneOrMoreOccurance) {
                             return false;
                         }
                     }
@@ -121,27 +121,26 @@ public class RegularExpressionMatching {
                 }
             } else {
 
-                if(s1.length == patternPointer && s.length() == stringPointer){
+                if (s1.length == patternPointer && s.length() == stringPointer) {
                     return true;
-                }else if(s.length() == stringPointer){
+                } else if (s.length() == stringPointer) {
                     //remaing chars are zero or more seq then return true or return false
-                    for(int k = patternPointer ; k < s1.length ; k++){
-                        if(!s1[k].oneOrMoreOccurance){
+                    for (int k = patternPointer; k < s1.length; k++) {
+                        if (!s1[k].oneOrMoreOccurance) {
                             return false;
                         }
                     }
                     return true;
-                }
-                else if(s1.length == patternPointer){
+                } else if (s1.length == patternPointer) {
                     return false;
                 }
 
-                if(s1[patternPointer].c == s.charAt(stringPointer) || s1[patternPointer].c == '.'){
+                if (s1[patternPointer].c == s.charAt(stringPointer) || s1[patternPointer].c == '.') {
                     stringPointer++;
-                    if(!s1[patternPointer].oneOrMoreOccurance){
+                    if (!s1[patternPointer].oneOrMoreOccurance) {
                         patternPointer++;
                     }
-                }else{
+                } else {
                     patternPointer++;
                 }
             }
@@ -162,9 +161,9 @@ public class RegularExpressionMatching {
         Struct s2[] = new Struct[p.length()];
         int s1Pointer = 0;
         for (int i = 0; i < p.length(); i++) {
-            if(p.charAt(i) == '*'){
-                s2[s1Pointer-1].oneOrMoreOccurance = true;
-            }else{
+            if (p.charAt(i) == '*') {
+                s2[s1Pointer - 1].oneOrMoreOccurance = true;
+            } else {
                 s2[s1Pointer] = new Struct();
                 s2[s1Pointer].c = p.charAt(i);
                 s1Pointer++;
@@ -172,7 +171,7 @@ public class RegularExpressionMatching {
         }
 
         Struct s1[] = new Struct[s1Pointer];
-        System.arraycopy(s2,0,s1,0,s1Pointer);
+        System.arraycopy(s2, 0, s1, 0, s1Pointer);
         return s1;
     }
 
@@ -185,7 +184,7 @@ public class RegularExpressionMatching {
     }
 
     private int remainingLengthOfPattern(Struct[] p, int patternPointer) {
-        return p.length - patternPointer+1;
+        return p.length - patternPointer + 1;
     }
 
     private boolean modifiedApproach1(String s, String p) {
