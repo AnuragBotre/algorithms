@@ -81,6 +81,7 @@ public class RegularExpressionMatching {
         System.out.println(r.formatResult("", "."));
         System.out.println(r.formatResult("a", ".*..a*"));
         System.out.println(r.formatResult("ab", ".*.."));
+        System.out.println(r.formatResult("aaa", "ab*a*c*a"));
     }
 
     public String formatResult(String s, String p) {
@@ -101,33 +102,20 @@ public class RegularExpressionMatching {
 
         Struct[] s1 = getStructs(p);
 
+        boolean process = false;
+
         for (; flag; ) {
 
 
-            if (remainingLengthOfPattern(s1, patternPointer) > remainingLengthOfString(s, stringPointer)) {
+            if (remainingLengthOfPattern(s1, patternPointer) > remainingLengthOfString(s, stringPointer) && !process) {
                 //we might have to skip certain tokens
 
-                if (stringPointer < s.length()) {
-                    //if((s1[patternPointer].c == s.charAt(stringPointer) || s1[patternPointer].c == '.') && s1[patternPointer].oneOrMoreOccurance)
-
-                    if (s1[patternPointer].oneOrMoreOccurance) {
-                        patternPointer++;
-                    } else {
-                        if (s1[patternPointer].c == s.charAt(stringPointer) || s1[patternPointer].c == '.') {
-                            stringPointer++;
-                            patternPointer++;
-                        }
-                    }
-
-                } else {
-                    //remaing chars are zero or more seq then return true or return false
-                    for (int k = patternPointer; k < s1.length; k++) {
-                        if (!s1[k].oneOrMoreOccurance) {
-                            return false;
-                        }
-                    }
-                    return true;
+                if(s1[patternPointer].oneOrMoreOccurance){
+                    patternPointer++;
+                }else{
+                    process = true;
                 }
+
             } else {
 
                 if (s1.length == patternPointer && s.length() == stringPointer) {
@@ -148,9 +136,11 @@ public class RegularExpressionMatching {
                     stringPointer++;
                     if (!s1[patternPointer].oneOrMoreOccurance) {
                         patternPointer++;
+                        process = false;
                     }
                 } else {
                     patternPointer++;
+                    process = false;
                 }
             }
 
