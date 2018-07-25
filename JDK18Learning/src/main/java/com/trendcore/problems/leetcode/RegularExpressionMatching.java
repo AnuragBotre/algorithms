@@ -109,7 +109,16 @@ public class RegularExpressionMatching {
 
                 if (stringPointer < s.length()) {
                     //if((s1[patternPointer].c == s.charAt(stringPointer) || s1[patternPointer].c == '.') && s1[patternPointer].oneOrMoreOccurance)
-                    patternPointer++;
+
+                    if (s1[patternPointer].oneOrMoreOccurance) {
+                        patternPointer++;
+                    } else {
+                        if (s1[patternPointer].c == s.charAt(stringPointer) || s1[patternPointer].c == '.') {
+                            stringPointer++;
+                            patternPointer++;
+                        }
+                    }
+
                 } else {
                     //remaing chars are zero or more seq then return true or return false
                     for (int k = patternPointer; k < s1.length; k++) {
@@ -145,16 +154,10 @@ public class RegularExpressionMatching {
                 }
             }
 
-            /*if((s.charAt(stringPointer) == p.charAt(patternPointer)) || p.charAt(patternPointer) == '.'){
-                stringPointer++;
-                patternPointer++;
-            }else if(patternPointer+1 < ){
 
-            }*/
         }
 
         return true;
-        //return modifiedApproach1(s, p);
     }
 
     private Struct[] getStructs(String p) {
@@ -175,16 +178,16 @@ public class RegularExpressionMatching {
         return s1;
     }
 
-    private boolean isCharacterEqual(String s, String p, int stringPointer, int patternPointer) {
-        return s.charAt(stringPointer) == p.charAt(patternPointer) || p.charAt(patternPointer) == '.';
-    }
-
     private int remainingLengthOfString(String s, int stringPointer) {
         return s.length() - stringPointer + 1;
     }
 
     private int remainingLengthOfPattern(Struct[] p, int patternPointer) {
         return p.length - patternPointer + 1;
+    }
+
+    private boolean isCharacterEqual(String s, String p, int stringPointer, int patternPointer) {
+        return s.charAt(stringPointer) == p.charAt(patternPointer) || p.charAt(patternPointer) == '.';
     }
 
     private boolean modifiedApproach1(String s, String p) {
