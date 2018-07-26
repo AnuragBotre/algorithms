@@ -87,6 +87,7 @@ public class RegularExpressionMatching {
         System.out.println(r.formatResult("a", ".*..a*"));
         System.out.println(r.formatResult("ab", ".*.."));
         System.out.println(r.formatResult("aaa", "ab*a*c*a"));
+        System.out.println(r.formatResult("ab", ".*c"));
     }
 
     public String formatResult(String s, String p) {
@@ -125,12 +126,44 @@ public class RegularExpressionMatching {
                         //what needs to do with these characters
                         //here we can use those counters which are added by *
 
-                        Integer cnt = noOfCharacterInserted.get(s1[k].c) != null ? noOfCharacterInserted.get(s1[k].c) : noOfCharacterInserted.get('.');
-                        if(cnt != null && cnt > 0){
-                            cnt--;
-                            noOfCharacterInserted.put(s1[k].c,cnt);
+                        //s1[k].c == '.'
+                        //then one logic
+
+                        //s[k].c == other char then need to process in other way
+
+                        if(s1[k].c == '.'){
+                            //this is tricky case
+                            Iterator<Character> iterator = noOfCharacterInserted.keySet().iterator();
+                            if(iterator.hasNext()){
+                                Character next = iterator.next();
+                                Integer cnt = noOfCharacterInserted.get(next);
+                                if(cnt != null && cnt > 0){
+                                    cnt--;
+                                    if(cnt == 0){
+                                        noOfCharacterInserted.remove(next);
+                                    }else{
+                                        noOfCharacterInserted.put(next,cnt);
+                                    }
+
+                                }else{
+                                    return false;
+                                }
+                            }else{
+                                return false;
+                            }
                         }else{
-                            return false;
+                            Integer cnt = noOfCharacterInserted.get(s1[k].c);
+                            if(cnt != null && cnt > 0){
+                                cnt--;
+
+                                if(cnt == 0){
+                                    noOfCharacterInserted.remove(s1[k].c);
+                                }else{
+                                    noOfCharacterInserted.put(s1[k].c,cnt);
+                                }
+                            }else{
+                                return false;
+                            }
                         }
                     }
                 }
@@ -139,18 +172,18 @@ public class RegularExpressionMatching {
             }
 
             if (s1[patternPointer].c == s.charAt(stringPointer) || s1[patternPointer].c == '.') {
-                stringPointer++;
                 if (!s1[patternPointer].oneOrMoreOccurance) {
                     patternPointer++;
                 }else{
-                    Integer cnt = noOfCharacterInserted.get(s1[patternPointer].c);
+                    Integer cnt = noOfCharacterInserted.get(s.charAt(stringPointer));
                     if(cnt != null){
                         cnt++;
-                        noOfCharacterInserted.put(s1[patternPointer].c,cnt);
+                        noOfCharacterInserted.put(s.charAt(stringPointer),cnt);
                     }else{
-                        noOfCharacterInserted.put(s1[patternPointer].c,1);
+                        noOfCharacterInserted.put(s.charAt(stringPointer),1);
                     }
                 }
+                stringPointer++;
             }else{
                 if(!s1[patternPointer].oneOrMoreOccurance){
                     return false;
