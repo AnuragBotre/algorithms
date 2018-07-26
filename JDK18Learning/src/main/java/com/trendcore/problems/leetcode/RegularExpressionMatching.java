@@ -1,6 +1,8 @@
 package com.trendcore.problems.leetcode;
 
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -107,7 +109,7 @@ public class RegularExpressionMatching {
 
         boolean process = false;
 
-        Map<Character, Integer> noOfCharacterInserted = new HashMap<>();
+        Map<Character, Integer> noOfCharacterInserted = new LinkedHashMap<>();
 
         for (; flag; ) {
 
@@ -123,7 +125,17 @@ public class RegularExpressionMatching {
                         //what needs to do with these characters
                         //here we can use those counters which are added by *
 
-                        return false;
+                        //TODO : In this if condition handle condition for . as well.
+
+                        Character c = null;
+
+                        Integer cnt = noOfCharacterInserted.get(s1[k].c);
+                        if(cnt != null && cnt > 0){
+                            cnt--;
+                            noOfCharacterInserted.put(s1[k].c,cnt);
+                        }else{
+                            return false;
+                        }
                     }
                 }
 
@@ -137,7 +149,8 @@ public class RegularExpressionMatching {
                 }else{
                     Integer cnt = noOfCharacterInserted.get(s1[patternPointer].c);
                     if(cnt != null){
-                        noOfCharacterInserted.put(s1[patternPointer].c,cnt++);
+                        cnt++;
+                        noOfCharacterInserted.put(s1[patternPointer].c,cnt);
                     }else{
                         noOfCharacterInserted.put(s1[patternPointer].c,1);
                     }
