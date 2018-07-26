@@ -88,6 +88,7 @@ public class RegularExpressionMatching {
         System.out.println(r.formatResult("ab", ".*.."));
         System.out.println(r.formatResult("aaa", "ab*a*c*a"));
         System.out.println(r.formatResult("ab", ".*c"));
+        System.out.println(r.formatResult("abbbcd", "ab*bbbcd"));
     }
 
     public String formatResult(String s, String p) {
@@ -186,7 +187,42 @@ public class RegularExpressionMatching {
                 stringPointer++;
             }else{
                 if(!s1[patternPointer].oneOrMoreOccurance){
-                    return false;
+
+                    if(s1[patternPointer].c == '.'){
+                        //this is tricky case
+                        Iterator<Character> iterator = noOfCharacterInserted.keySet().iterator();
+                        if(iterator.hasNext()){
+                            Character next = iterator.next();
+                            Integer cnt = noOfCharacterInserted.get(next);
+                            if(cnt != null && cnt > 0){
+                                cnt--;
+                                if(cnt == 0){
+                                    noOfCharacterInserted.remove(next);
+                                }else{
+                                    noOfCharacterInserted.put(next,cnt);
+                                }
+
+                            }else{
+                                return false;
+                            }
+                        }else{
+                            return false;
+                        }
+                    }else{
+                        Integer cnt = noOfCharacterInserted.get(s1[patternPointer].c);
+                        if(cnt != null && cnt > 0){
+                            cnt--;
+
+                            if(cnt == 0){
+                                noOfCharacterInserted.remove(s1[patternPointer].c);
+                            }else{
+                                noOfCharacterInserted.put(s1[patternPointer].c,cnt);
+                            }
+                        }else{
+                            return false;
+                        }
+                    }
+                    patternPointer++;
                 }else{
                     patternPointer++;
                 }
