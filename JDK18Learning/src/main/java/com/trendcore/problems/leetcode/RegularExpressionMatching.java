@@ -119,10 +119,11 @@ public class RegularExpressionMatching {
                 //check if remaining charaters are *
                 for(int k=patternPointer ; k < s1.length ; k++ ){
                     if(!s1[k].oneOrMoreOccurance){
-                        return false;
-                    }else{
+
                         //what needs to do with these characters
                         //here we can use those counters which are added by *
+
+                        return false;
                     }
                 }
 
