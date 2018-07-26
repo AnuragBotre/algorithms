@@ -89,6 +89,9 @@ public class RegularExpressionMatching {
         System.out.println(r.formatResult("aaa", "ab*a*c*a"));
         System.out.println(r.formatResult("ab", ".*c"));
         System.out.println(r.formatResult("abbbcd", "ab*bbbcd"));
+
+        //not working for this input
+        System.out.println(r.formatResult("bbba", ".*b"));
     }
 
     public String formatResult(String s, String p) {
