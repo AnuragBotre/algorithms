@@ -1,5 +1,8 @@
 package com.trendcore.problems.leetcode;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * https://leetcode.com/problems/regular-expression-matching/description/
  * 10. Regular Expression Matching
@@ -75,7 +78,7 @@ public class RegularExpressionMatching {
         System.out.println(r.formatResult("mississippi", "mis*is*ip*."));
         System.out.println(r.formatResult("aaa", "ab*a"));
 
-        //TODO : This input is not working with new algo.
+
         System.out.println(r.formatResult("a", "ab*a"));
         System.out.println(r.formatResult("aa", "ab*a"));
         System.out.println(r.formatResult("", "."));
@@ -104,15 +107,63 @@ public class RegularExpressionMatching {
 
         boolean process = false;
 
+        Map<Character, Integer> noOfCharacterInserted = new HashMap<>();
+
+        for (; flag; ) {
+
+            if(stringPointer == s.length() && patternPointer == s1.length){
+                return true;
+            }else if(stringPointer < s.length() && patternPointer == s1.length){
+                return false;
+            }else if(stringPointer == s.length() && patternPointer < s1.length){
+                //check if remaining charaters are *
+                for(int k=patternPointer ; k < s1.length ; k++ ){
+                    if(!s1[k].oneOrMoreOccurance){
+                        return false;
+                    }else{
+                        //what needs to do with these characters
+                        //here we can use those counters which are added by *
+                    }
+                }
+
+                return true;
+            }
+
+            if (s1[patternPointer].c == s.charAt(stringPointer) || s1[patternPointer].c == '.') {
+                stringPointer++;
+                if (!s1[patternPointer].oneOrMoreOccurance) {
+                    patternPointer++;
+                }else{
+                    Integer cnt = noOfCharacterInserted.get(s1[patternPointer].c);
+                    if(cnt != null){
+                        noOfCharacterInserted.put(s1[patternPointer].c,cnt++);
+                    }else{
+                        noOfCharacterInserted.put(s1[patternPointer].c,1);
+                    }
+                }
+            }else{
+                if(!s1[patternPointer].oneOrMoreOccurance){
+                    return false;
+                }else{
+                    patternPointer++;
+                }
+            }
+
+        }
+
+        return true;
+    }
+
+    private boolean approach2(String s, int stringPointer, int patternPointer, boolean flag, Struct[] s1, boolean process) {
         for (; flag; ) {
 
 
             if (remainingLengthOfPattern(s1, patternPointer) > remainingLengthOfString(s, stringPointer) && !process) {
                 //we might have to skip certain tokens
 
-                if(s1[patternPointer].oneOrMoreOccurance){
+                if (s1[patternPointer].oneOrMoreOccurance) {
                     patternPointer++;
-                }else{
+                } else {
                     process = true;
                 }
 
