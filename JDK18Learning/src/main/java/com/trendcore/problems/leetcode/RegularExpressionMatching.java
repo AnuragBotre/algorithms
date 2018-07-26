@@ -125,11 +125,7 @@ public class RegularExpressionMatching {
                         //what needs to do with these characters
                         //here we can use those counters which are added by *
 
-                        //TODO : In this if condition handle condition for . as well.
-
-                        Character c = null;
-
-                        Integer cnt = noOfCharacterInserted.get(s1[k].c);
+                        Integer cnt = noOfCharacterInserted.get(s1[k].c) != null ? noOfCharacterInserted.get(s1[k].c) : noOfCharacterInserted.get('.');
                         if(cnt != null && cnt > 0){
                             cnt--;
                             noOfCharacterInserted.put(s1[k].c,cnt);
