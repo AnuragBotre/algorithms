@@ -105,6 +105,12 @@ public class RegularExpressionMatching {
 
     public boolean isMatch(String s, String p) {
 
+
+
+        return approach3(s, p);
+    }
+
+    private boolean approach3(String s, String p) {
         int stringPointer = 0;
         int patternPointer = 0;
 
@@ -453,5 +459,53 @@ public class RegularExpressionMatching {
             stringPointer++;
         }
         return true;
+    }
+
+    private boolean validate(String value,String pattern){
+        if (value == null || pattern == null) {
+            return false;
+        }
+        if ((value.isEmpty() && !pattern.isEmpty()) || (!value.isEmpty() && pattern.isEmpty())) {
+            return false;
+        }
+        if (value.isEmpty() && pattern.isEmpty()) {
+            return true;
+        }
+
+        int valCharIndex = 0;
+        int patternCharIndex = 0;
+        char patternCharStar = '*', patternCharDot = '.';
+        boolean result = true;
+        char valChar, patterChar, prevChar = '*';
+        while (valCharIndex < value.length() && patternCharIndex < pattern.length() && result) {
+            valChar = value.charAt(valCharIndex);
+            patterChar = pattern.charAt(patternCharIndex);
+            if (patterChar == patternCharDot) {
+                prevChar = patternCharDot;
+                patternCharIndex++;
+                valCharIndex++;
+                continue;
+            }
+            if (patterChar == valChar) {
+                prevChar = valChar;
+                patternCharIndex++;
+                valCharIndex++;
+                continue;
+            }
+            if (patterChar == patternCharStar && (valChar == prevChar || prevChar == patternCharDot)) {
+                prevChar = valChar;
+                valCharIndex++;
+                continue;
+            }
+            if (patterChar == patternCharStar && valChar != prevChar) {
+                patternCharIndex++;
+                continue;
+            }
+            result = false;
+        }
+        if(valCharIndex != value.length()){
+            return false;
+        }
+        return result;
     }
 }
