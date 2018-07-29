@@ -105,6 +105,10 @@ public class RegularExpressionMatching {
     }
 
     public boolean isMatch(String s, String p) {
+        return approach4(s, p);
+    }
+
+    private boolean approach4(String s, String p) {
         int patternPointer = 0;
         int stringPointer = 0;
 
