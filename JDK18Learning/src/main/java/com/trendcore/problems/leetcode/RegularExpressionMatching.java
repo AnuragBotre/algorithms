@@ -93,6 +93,11 @@ public class RegularExpressionMatching {
 
         //not working for this input
         System.out.println(r.formatResult("bbba", ".*b"));
+
+
+        System.out.println(r.formatResult("a","c*a*a"));
+        System.out.println(r.formatResult("a","c*.*a"));
+        System.out.println(r.formatResult("a","c*.*a*"));
     }
 
     public String formatResult(String s, String p) {
@@ -105,6 +110,9 @@ public class RegularExpressionMatching {
     }
 
     public boolean isMatch(String s, String p) {
+
+
+
         return approach4(s, p);
     }
 
@@ -125,6 +133,14 @@ public class RegularExpressionMatching {
                 return true;
             } else if (stringPointer >= s.length() && patternPointer < structs.length) {
                 //need to take care of this part
+                for(int k=patternPointer+1;k < structs.length;k++){
+                    if(!structs[k].oneOrMoreOccurance){
+                        return false;
+                    }
+                }
+
+                return true;
+
             } else if (stringPointer < s.length() && patternPointer >= structs.length) {
                 return false;
             }
@@ -138,9 +154,14 @@ public class RegularExpressionMatching {
             }
 
             if (isCharacterEqual(s, stringPointer, structs, patternPointer)) {
-                resultString = resultString + s.charAt(stringPointer);
-                stringPointer++;
-                continue;
+                if(structs.length - patternPointer <= s.length()-stringPointer){
+                    resultString = resultString + s.charAt(stringPointer);
+                    stringPointer++;
+                    continue;
+                }else{
+                    patternPointer++;
+                    continue;
+                }
             }
 
             if (!isCharacterEqual(s, stringPointer, structs, patternPointer)) {
