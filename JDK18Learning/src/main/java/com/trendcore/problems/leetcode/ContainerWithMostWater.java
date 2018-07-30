@@ -16,11 +16,30 @@ public class ContainerWithMostWater {
     public static void main(String[] args) {
         ContainerWithMostWater c = new ContainerWithMostWater();
         int c1[] = {1,8,6,2,5,4,8,3,7};
-        c.maxArea(c1);
+        System.out.println(c.maxArea(c1));
     }
 
     public int maxArea(int[] height) {
-        return 0;
+
+        return bruteForceApproach(height);
+    }
+
+    private int bruteForceApproach(int[] height) {
+        int maxArea = 0;
+
+        for(int i = 0 ; i < height.length ; i++){
+            for(int j=i+1;j < height.length ; j++){
+                //calculate area for all the inouts
+                int lenth = Math.min(height[i],height[j]);
+                int width = j-i;
+                int area = lenth*width;
+                if(maxArea < area){
+                    maxArea = area;
+                }
+            }
+        }
+
+        return maxArea;
     }
 
 }
