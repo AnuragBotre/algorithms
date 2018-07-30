@@ -1,6 +1,5 @@
 package com.trendcore.problems.leetcode;
 
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -122,7 +121,9 @@ public class RegularExpressionMatching {
 
         String resultString = "";
 
-        Struct[] structs = getStructs(p);
+        Object[] objs = getStructs(p);
+        Struct structs[] = (Struct[]) objs[0];
+        int remaininglegthOfPatternWithoutZeroOrMoreOccurance = (int) objs[1];
 
         boolean flag = true;
         int pointOfStrictMatch = 0;
@@ -150,11 +151,12 @@ public class RegularExpressionMatching {
                 stringPointer++;
                 pointOfStrictMatch++;
                 patternPointer++;
+                remaininglegthOfPatternWithoutZeroOrMoreOccurance--;
                 continue;
             }
 
             if (isCharacterEqual(s, stringPointer, structs, patternPointer)) {
-                if(structs.length - patternPointer <= s.length()-stringPointer){
+                if(remaininglegthOfPatternWithoutZeroOrMoreOccurance <= s.length()-stringPointer){
                     resultString = resultString + s.charAt(stringPointer);
                     stringPointer++;
                     continue;
@@ -199,7 +201,7 @@ public class RegularExpressionMatching {
 
         boolean flag = true;
 
-        Struct[] s1 = getStructs(p);
+        Struct[] s1 = (Struct[]) getStructs(p)[0];
 
         boolean process = false;
 
@@ -372,22 +374,27 @@ public class RegularExpressionMatching {
         return true;
     }
 
-    private Struct[] getStructs(String p) {
+    private Object[] getStructs(String p) {
         Struct s2[] = new Struct[p.length()];
         int s1Pointer = 0;
+
+        int lengthOfPattern = 0;
+
         for (int i = 0; i < p.length(); i++) {
             if (p.charAt(i) == '*') {
                 s2[s1Pointer - 1].oneOrMoreOccurance = true;
+                lengthOfPattern--;
             } else {
                 s2[s1Pointer] = new Struct();
                 s2[s1Pointer].c = p.charAt(i);
                 s1Pointer++;
+                lengthOfPattern++;
             }
         }
 
         Struct s1[] = new Struct[s1Pointer];
         System.arraycopy(s2, 0, s1, 0, s1Pointer);
-        return s1;
+        return new Object[]{s1,lengthOfPattern};
     }
 
     private int remainingLengthOfString(String s, int stringPointer) {
