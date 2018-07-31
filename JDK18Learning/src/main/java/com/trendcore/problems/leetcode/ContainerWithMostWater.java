@@ -17,8 +17,9 @@ public class ContainerWithMostWater {
     public static void main(String[] args) {
         ContainerWithMostWater c = new ContainerWithMostWater();
         //int c1[] = {1, 8, 6, 2, 5, 4, 8, 3, 7};
-        int c1[] = {1, 2, 1};
-        System.out.println(c.maxArea(c1));
+        System.out.println(c.maxArea(new int[]{1, 8, 6, 2, 5, 4, 8, 3, 7}));
+        System.out.println(c.maxArea(new int[]{1, 2, 1}));
+        System.out.println(c.maxArea(new int[]{2,3,4,5,18,17,6}));
 
         //TODO : Need to optimize this solution.
 
@@ -26,29 +27,29 @@ public class ContainerWithMostWater {
 
     public int maxArea(int[] height) {
 
+        System.out.println(height.length);
+
         //May be sliding window may work
 
         int maxArea = 0;
         int startPointer = 0;
-        int endPointer = 0;
+        int endPointer = height.length - 1;
         boolean flag = true;
-        for (; startPointer < height.length; startPointer++) {
 
-            if (startPointer == 0) {
-                continue;
-            }
+        for (; startPointer < endPointer; ) {
 
-            int length = Math.min(height[startPointer], height[endPointer]);
-            int width = startPointer - endPointer;
-            int area = length * width;
+            int l = endPointer - startPointer;
+            int h = Math.min(height[endPointer], height[startPointer]);
+            int area = l * h;
 
             if (maxArea < area) {
                 maxArea = area;
             }
 
-            if (height[startPointer] > height[endPointer]) {
-                //shift end pointer
-                endPointer = startPointer;
+            if(height[endPointer] > height[startPointer]){
+                startPointer++;
+            }else{
+                endPointer--;
             }
 
         }
