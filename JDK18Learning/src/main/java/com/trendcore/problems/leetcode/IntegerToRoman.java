@@ -158,6 +158,16 @@ public class IntegerToRoman {
         //case for values greater than 1000
         //as the loop will only handle situation below 1000
 
+        if(num / (temp / 10) < 5) {
+
+            String pEntry = map.get(temp/10);
+
+            String s = "";
+            for (int k = 0; k < num / (temp / 10); k++) {
+                s = s + pEntry;
+            }
+            return s;
+        }
 
         return prevEntry;
     }
