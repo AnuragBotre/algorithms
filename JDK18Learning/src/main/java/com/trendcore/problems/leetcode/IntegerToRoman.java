@@ -121,7 +121,7 @@ public class IntegerToRoman {
                 if (diff == 0) {
                     //then return key
                     return entry.getValue();
-                } else if (diff / (temp / 10) == 1) {
+                } else if (diff == 1) {
                     String s = map.get(temp / 10);
                     return s + entry.getValue();
                 } else {
