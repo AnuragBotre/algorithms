@@ -57,7 +57,11 @@ import java.util.Map;
 public class IntegerToRoman {
 
     public static void main(String[] args) {
+
+        System.out.println(123 / 10);
+
         IntegerToRoman i = new IntegerToRoman();
+        System.out.println(i.intToRoman(123));
         System.out.println(i.intToRoman(3));
         System.out.println(i.intToRoman(4));
         System.out.println(i.intToRoman(9));
@@ -68,14 +72,27 @@ public class IntegerToRoman {
 
     public String intToRoman(int num) {
 
-        Map<String,Integer> map = new HashMap();
-        map.put("I",1);
-        map.put("V",5);
-        map.put("X",10);
-        map.put("L",50);
-        map.put("C",100);
-        map.put("D",500);
-        map.put("M",1000);
+        Map<String, Integer> map = new HashMap();
+        map.put("I", 1);
+        map.put("V", 5);
+        map.put("X", 10);
+        map.put("L", 50);
+        map.put("C", 100);
+        map.put("D", 500);
+        map.put("M", 1000);
+
+        int result = 0;
+
+        int temp = 1;
+        int counter = 0;
+
+        while (num > 0) {
+            result=num%10*temp+result;
+            num = num / 10;
+            temp = temp*10;
+        }
+
+        System.out.println(result);
 
         return "";
     }
