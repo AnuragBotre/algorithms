@@ -72,10 +72,9 @@ public class IntegerToRoman {
         System.out.println(i.intToRoman(2000));
     }
 
-
-    public String intToRoman(int num) {
-
-        Map<Integer, String> map = new LinkedHashMap<>();
+    private static Map<Integer, String> map = new LinkedHashMap<>();
+    static
+    {
         putInMap(map, "I", 1);
         putInMap(map, "V", 5);
         putInMap(map, "X", 10);
@@ -83,6 +82,13 @@ public class IntegerToRoman {
         putInMap(map, "C", 100);
         putInMap(map, "D", 500);
         putInMap(map, "M", 1000);
+    }
+
+
+    public String intToRoman(int num) {
+
+
+
 
         int result = 0;
 
@@ -102,7 +108,7 @@ public class IntegerToRoman {
         return s;
     }
 
-    private void putInMap(Map<Integer, String> map, String str, int number) {
+    private static void putInMap(Map<Integer, String> map, String str, int number) {
         map.put(number, str);
     }
 
@@ -113,6 +119,7 @@ public class IntegerToRoman {
         }
 
         //analyze no
+        //TODO This for loop is not required.
         String prevEntry = null;
         for (Map.Entry<Integer, String> entry : map.entrySet()) {
             if (entry.getKey() >= num) {
