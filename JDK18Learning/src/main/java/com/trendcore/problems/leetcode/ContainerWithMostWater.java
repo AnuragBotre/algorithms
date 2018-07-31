@@ -28,16 +28,27 @@ public class ContainerWithMostWater {
 
         int maxArea = 0;
         int startPointer = 0;
-        int endPointer = height.length - 1;
+        int endPointer = 0;
         boolean flag = true;
         for (; startPointer < height.length; startPointer++) {
+
+            if(startPointer == 0){
+                continue;
+            }
+
             int length = Math.min(height[startPointer], height[endPointer]);
-            int width = endPointer - startPointer;
+            int width = startPointer - endPointer;
             int area = length * width;
 
             if (maxArea < area) {
                 maxArea = area;
             }
+
+            if(height[startPointer] > height[endPointer]){
+                //shift end pointer
+                endPointer = startPointer;
+            }
+
         }
 
         return maxArea;
