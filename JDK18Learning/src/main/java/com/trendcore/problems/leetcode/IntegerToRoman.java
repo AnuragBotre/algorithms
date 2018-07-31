@@ -69,6 +69,9 @@ public class IntegerToRoman {
         System.out.println(i.intToRoman(58));
         System.out.println(i.intToRoman(90));
         System.out.println(i.intToRoman(1994));
+
+        //TODO - Fix me
+        System.out.println(i.intToRoman(2000));
     }
 
 
@@ -151,6 +154,11 @@ public class IntegerToRoman {
             }
             prevEntry = entry.getValue();
         }
+
+        //case for values greater than 1000
+        //as the loop will only handle situation below 1000
+
+
         return prevEntry;
     }
 }
