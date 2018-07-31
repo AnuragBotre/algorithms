@@ -81,6 +81,10 @@ public class IntegerToRoman {
         putInMap(map, "D", 500);
         putInMap(map, "M", 1000);
 
+        if(map.get(num) != null){
+            return map.get(num);
+        }
+
         int result = 0;
 
         int temp = 1;
