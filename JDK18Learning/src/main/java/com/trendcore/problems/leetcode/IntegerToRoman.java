@@ -125,9 +125,6 @@ public class IntegerToRoman {
                     String s = map.get(temp / 10);
                     return s + entry.getValue();
                 } else {
-
-
-
                     if(num / (temp / 10) < 5) {
 
                         String pEntry = map.get(temp/10);
@@ -138,14 +135,13 @@ public class IntegerToRoman {
                         }
                         return s;
                     }else{
-                        String s = "";
-
-                        String pEntry = map.get(5*temp/10);
+                        String s = map.get(5*temp/10);
+                        String y = map.get(temp/10);
 
                         int n = num / (temp / 10) - 5;
 
                         for (int k = 0; k < n; k++) {
-                            s = s + pEntry;
+                            s = s + y;
                         }
                         return s;
                     }
