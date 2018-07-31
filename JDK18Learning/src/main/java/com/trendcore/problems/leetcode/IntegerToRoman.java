@@ -105,11 +105,28 @@ public class IntegerToRoman {
 
     private void convertNumber(Map<Integer, String> map, int num, int temp) {
         //analyze no
+        String prevEntry = null;
         for(Map.Entry<Integer,String> entry : map.entrySet()){
             if(entry.getKey() >= num){
-                System.out.println(entry.getKey() + " "+entry.getValue() + " " + num);
+                int diff = entry.getKey() - num;
+                System.out.println(entry.getKey() + " "+entry.getValue() + " " + num + " " + temp + " " + diff);
+
+                int t = diff/(temp/10);
+
+                if(diff == 0){
+                    //then return key
+                    System.out.println(entry.getValue());
+                }else if(diff/(temp/10) > 3){
+                    System.out.println(prevEntry+entry.getValue());
+                }else{
+                    for(int k = 0 ; k < num/(temp/10); k++){
+                        System.out.println(prevEntry);
+                    }
+                }
+
                 break;
             }
+            prevEntry = entry.getValue();
         }
     }
 }
