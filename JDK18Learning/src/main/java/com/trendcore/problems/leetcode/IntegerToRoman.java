@@ -61,7 +61,8 @@ public class IntegerToRoman {
         System.out.println(i.intToRoman(123));
         System.out.println(i.intToRoman(3));
         System.out.println(i.intToRoman(4));
-        System.out.println(i.intToRoman(8));
+        System.out.println(i.intToRoman(88));
+        System.out.println(i.intToRoman(188));
         System.out.println(i.intToRoman(9));
         System.out.println(i.intToRoman(10));
         System.out.println(i.intToRoman(11));
@@ -112,8 +113,10 @@ public class IntegerToRoman {
         String prevEntry = null;
         for (Map.Entry<Integer, String> entry : map.entrySet()) {
             if (entry.getKey() >= num) {
-                int diff = entry.getKey() - num;
+                int diff = (entry.getKey() - num)/(temp/10);
                 int t = diff / (temp / 10);
+
+                //TODO need to fix this part
 
                 if (diff == 0) {
                     //then return key
@@ -123,18 +126,26 @@ public class IntegerToRoman {
                     return s + entry.getValue();
                 } else {
 
-                    //TODO need to fix this part
+
 
                     if(num / (temp / 10) < 5) {
+
+                        String pEntry = map.get(temp/10);
+
                         String s = "";
                         for (int k = 0; k < num / (temp / 10); k++) {
-                            s = s + prevEntry;
+                            s = s + pEntry;
                         }
                         return s;
                     }else{
                         String s = "";
-                        for (int k = 0; k < num / (temp / 10); k++) {
-                            s = s + prevEntry;
+
+                        String pEntry = map.get(5*temp/10);
+
+                        int n = num / (temp / 10) - 5;
+
+                        for (int k = 0; k < n; k++) {
+                            s = s + pEntry;
                         }
                         return s;
                     }
