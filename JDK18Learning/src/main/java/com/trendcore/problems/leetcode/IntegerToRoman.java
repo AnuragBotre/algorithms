@@ -69,8 +69,6 @@ public class IntegerToRoman {
         System.out.println(i.intToRoman(58));
         System.out.println(i.intToRoman(90));
         System.out.println(i.intToRoman(1994));
-
-        //TODO - Fix me
         System.out.println(i.intToRoman(2000));
     }
 
