@@ -67,6 +67,7 @@ public class IntegerToRoman {
         System.out.println(i.intToRoman(10));
         System.out.println(i.intToRoman(11));
         System.out.println(i.intToRoman(58));
+        System.out.println(i.intToRoman(90));
         System.out.println(i.intToRoman(1994));
     }
 
@@ -81,10 +82,6 @@ public class IntegerToRoman {
         putInMap(map, "C", 100);
         putInMap(map, "D", 500);
         putInMap(map, "M", 1000);
-
-        if(map.get(num) != null){
-            return map.get(num);
-        }
 
         int result = 0;
 
@@ -109,6 +106,11 @@ public class IntegerToRoman {
     }
 
     private String convertNumber(Map<Integer, String> map, int num, int temp) {
+
+        if(num == 0){
+            return "";
+        }
+
         //analyze no
         String prevEntry = null;
         for (Map.Entry<Integer, String> entry : map.entrySet()) {
