@@ -1,6 +1,7 @@
 package com.trendcore.problems.leetcode;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -57,29 +58,26 @@ import java.util.Map;
 public class IntegerToRoman {
 
     public static void main(String[] args) {
-
-        System.out.println(123 / 10);
-
         IntegerToRoman i = new IntegerToRoman();
         System.out.println(i.intToRoman(123));
-        System.out.println(i.intToRoman(3));
+        /*System.out.println(i.intToRoman(3));
         System.out.println(i.intToRoman(4));
         System.out.println(i.intToRoman(9));
         System.out.println(i.intToRoman(58));
-        System.out.println(i.intToRoman(1994));
+        System.out.println(i.intToRoman(1994));*/
     }
 
 
     public String intToRoman(int num) {
 
-        Map<String, Integer> map = new HashMap();
-        map.put("I", 1);
-        map.put("V", 5);
-        map.put("X", 10);
-        map.put("L", 50);
-        map.put("C", 100);
-        map.put("D", 500);
-        map.put("M", 1000);
+        Map<Integer, String> map = new LinkedHashMap<>();
+        putInMap(map, "I", 1);
+        putInMap(map, "V", 5);
+        putInMap(map, "X", 10);
+        putInMap(map, "L", 50);
+        putInMap(map, "C", 100);
+        putInMap(map, "D", 500);
+        putInMap(map, "M", 1000);
 
         int result = 0;
 
@@ -87,13 +85,31 @@ public class IntegerToRoman {
         int counter = 0;
 
         while (num > 0) {
-            result=num%10*temp+result;
+            int i = num % 10 * temp;
+            result= i +result;
             num = num / 10;
             temp = temp*10;
+
+            convertNumber(map,i,temp);
+
         }
 
         System.out.println(result);
 
         return "";
+    }
+
+    private void putInMap(Map<Integer, String> map, String str, int number) {
+        map.put(number,str);
+    }
+
+    private void convertNumber(Map<Integer, String> map, int num, int temp) {
+        //analyze no
+        for(Map.Entry<Integer,String> entry : map.entrySet()){
+            if(entry.getKey() >= num){
+                System.out.println(entry.getKey() + " "+entry.getValue() + " " + num);
+                break;
+            }
+        }
     }
 }
