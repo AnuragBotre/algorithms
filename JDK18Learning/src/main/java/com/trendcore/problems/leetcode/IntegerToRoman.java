@@ -1,6 +1,5 @@
 package com.trendcore.problems.leetcode;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -60,11 +59,11 @@ public class IntegerToRoman {
     public static void main(String[] args) {
         IntegerToRoman i = new IntegerToRoman();
         System.out.println(i.intToRoman(123));
-        /*System.out.println(i.intToRoman(3));
+        System.out.println(i.intToRoman(3));
         System.out.println(i.intToRoman(4));
         System.out.println(i.intToRoman(9));
         System.out.println(i.intToRoman(58));
-        System.out.println(i.intToRoman(1994));*/
+        System.out.println(i.intToRoman(1994));
     }
 
 
@@ -84,49 +83,46 @@ public class IntegerToRoman {
         int temp = 1;
         int counter = 0;
 
+        String s = "";
+
         while (num > 0) {
             int i = num % 10 * temp;
-            result= i +result;
+            result = i + result;
             num = num / 10;
-            temp = temp*10;
+            temp = temp * 10;
 
-            convertNumber(map,i,temp);
-
+            s = convertNumber(map, i, temp) + s;
         }
-
-        System.out.println(result);
-
-        return "";
+        return s;
     }
 
     private void putInMap(Map<Integer, String> map, String str, int number) {
-        map.put(number,str);
+        map.put(number, str);
     }
 
-    private void convertNumber(Map<Integer, String> map, int num, int temp) {
+    private String convertNumber(Map<Integer, String> map, int num, int temp) {
         //analyze no
         String prevEntry = null;
-        for(Map.Entry<Integer,String> entry : map.entrySet()){
-            if(entry.getKey() >= num){
+        for (Map.Entry<Integer, String> entry : map.entrySet()) {
+            if (entry.getKey() >= num) {
                 int diff = entry.getKey() - num;
-                System.out.println(entry.getKey() + " "+entry.getValue() + " " + num + " " + temp + " " + diff);
+                int t = diff / (temp / 10);
 
-                int t = diff/(temp/10);
-
-                if(diff == 0){
+                if (diff == 0) {
                     //then return key
-                    System.out.println(entry.getValue());
-                }else if(diff/(temp/10) > 3){
-                    System.out.println(prevEntry+entry.getValue());
-                }else{
-                    for(int k = 0 ; k < num/(temp/10); k++){
-                        System.out.println(prevEntry);
+                    return entry.getValue();
+                } else if (diff / (temp / 10) > 3) {
+                    return prevEntry + entry.getValue();
+                } else {
+                    String s = "";
+                    for (int k = 0; k < num / (temp / 10); k++) {
+                        s = s + prevEntry;
                     }
+                    return s;
                 }
-
-                break;
             }
             prevEntry = entry.getValue();
         }
+        return prevEntry;
     }
 }
