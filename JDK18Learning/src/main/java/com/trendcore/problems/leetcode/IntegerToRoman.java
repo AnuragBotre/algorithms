@@ -61,6 +61,12 @@ public class IntegerToRoman {
         System.out.println(i.intToRoman(123));
         System.out.println(i.intToRoman(3));
         System.out.println(i.intToRoman(4));
+        System.out.println(i.intToRoman(5));
+        System.out.println(i.intToRoman(15));
+        System.out.println(i.intToRoman(50));
+        System.out.println(i.intToRoman(40));
+        System.out.println(i.intToRoman(60));
+        System.out.println(i.intToRoman(150));
         System.out.println(i.intToRoman(88));
         System.out.println(i.intToRoman(188));
         System.out.println(i.intToRoman(9));
@@ -73,8 +79,8 @@ public class IntegerToRoman {
     }
 
     private static Map<Integer, String> map = new LinkedHashMap<>();
-    static
-    {
+
+    static {
         putInMap(map, "I", 1);
         putInMap(map, "V", 5);
         putInMap(map, "X", 10);
@@ -86,8 +92,6 @@ public class IntegerToRoman {
 
 
     public String intToRoman(int num) {
-
-
 
 
         int result = 0;
@@ -113,88 +117,50 @@ public class IntegerToRoman {
     }
 
     private String convertNumber(Map<Integer, String> map, int num, int temp) {
-
-        if(num == 0){
+        if (num == 0) {
             return "";
         }
 
         int i = num / (temp / 10);
-        int a = i;
-
-        //analyze no
-        //TODO This for loop is not required.
-        String prevEntry = null;
-        /*for (Map.Entry<Integer, String> entry : map.entrySet()) {
-            if (entry.getKey() >= num) {
-                int diff = (entry.getKey() - num)/(temp/10);
-                int t = diff / (temp / 10);
-
-                //TODO need to fix this part
-
-                if (diff == 0) {
-                    //then return key
-                    return entry.getValue();
-                } else if (diff == 1) {
-                    String s = map.get(temp / 10);
-                    return s + entry.getValue();
-                } else {
-                    if(num / (temp / 10) < 5) {
-
-                        String pEntry = map.get(temp/10);
-
-                        String s = "";
-                        for (int k = 0; k < num / (temp / 10); k++) {
-                            s = s + pEntry;
-                        }
-                        return s;
-                    }else{
-                        String s = map.get(5*temp/10);
-                        String y = map.get(temp/10);
-
-                        int n = num / (temp / 10) - 5;
-
-                        for (int k = 0; k < n; k++) {
-                            s = s + y;
-                        }
-                        return s;
-                    }
+        int r = i < 5 ? 5 - i : i - 5;
+        if (r > 1 && r < 4) {
+            String pEntry = map.get(temp / 10);
+            int aa = i < 5 ? 1 : 5;
+            String s = "";
+            int cnt;
+            if (i < 5) {
+                cnt = i;
+                if (temp / 10 == 1) {
+                    s = "";
                 }
+            } else {
+                s = map.get(aa * (temp / 10));
+                cnt = i - 5;
             }
-            prevEntry = entry.getValue();
-        }*/
 
-        //case for values greater than 1000
-        //as the loop will only handle situation below 1000
-        /*if(i == 0){
+            for (int k = 0; k < cnt; k++) {
+                s = s + pEntry;
+            }
+            return s;
+        } else {
+            String s = map.get(temp / 10);
 
-        }else if(i == 1){
+            if(temp/10 == 1){
+                s = "";
+            }
 
-        }else {*/
-        int r = i < 5 ? 5-i : i-5;
+            String y;
 
-
-            if(r > 1) {
-
-                String pEntry = map.get(temp/10);
-
-                String s = "";
-                for (int k = 0; k < i; k++) {
-                    s = s + pEntry;
-                }
+            if (i == 1) {
                 return s;
+            } else if(i == 5) {
+                return map.get(5 * temp / 10);
             }else{
-                String s = map.get(5*temp/10);
-                String y = map.get(temp/10);
-
-                int n = i - 5;
-
-                for (int k = 0; k < r; k++) {
-                    s = s + y;
-                }
-                return s;
+                y = map.get(5 * temp / 10);
             }
-        //}
 
-        //return prevEntry;
+            return i < 5 ? s + y : y+s;
+        }
+
     }
 }
