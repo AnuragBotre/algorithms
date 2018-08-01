@@ -118,10 +118,13 @@ public class IntegerToRoman {
             return "";
         }
 
+        int i = num / (temp / 10);
+        int a = i;
+
         //analyze no
         //TODO This for loop is not required.
         String prevEntry = null;
-        for (Map.Entry<Integer, String> entry : map.entrySet()) {
+        /*for (Map.Entry<Integer, String> entry : map.entrySet()) {
             if (entry.getKey() >= num) {
                 int diff = (entry.getKey() - num)/(temp/10);
                 int t = diff / (temp / 10);
@@ -158,22 +161,40 @@ public class IntegerToRoman {
                 }
             }
             prevEntry = entry.getValue();
-        }
+        }*/
 
         //case for values greater than 1000
         //as the loop will only handle situation below 1000
+        /*if(i == 0){
 
-        if(num / (temp / 10) < 5) {
+        }else if(i == 1){
 
-            String pEntry = map.get(temp/10);
+        }else {*/
+        int r = i < 5 ? 5-i : i-5;
 
-            String s = "";
-            for (int k = 0; k < num / (temp / 10); k++) {
-                s = s + pEntry;
+
+            if(r > 1) {
+
+                String pEntry = map.get(temp/10);
+
+                String s = "";
+                for (int k = 0; k < i; k++) {
+                    s = s + pEntry;
+                }
+                return s;
+            }else{
+                String s = map.get(5*temp/10);
+                String y = map.get(temp/10);
+
+                int n = i - 5;
+
+                for (int k = 0; k < r; k++) {
+                    s = s + y;
+                }
+                return s;
             }
-            return s;
-        }
+        //}
 
-        return prevEntry;
+        //return prevEntry;
     }
 }
