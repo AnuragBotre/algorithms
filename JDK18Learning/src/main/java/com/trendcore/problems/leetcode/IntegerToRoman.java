@@ -144,11 +144,6 @@ public class IntegerToRoman {
             return s;
         } else {
             String s = map.get(temp / 10);
-
-            if(temp/10 == 1){
-                s = "";
-            }
-
             String y;
 
             if (i == 1) {
@@ -156,10 +151,15 @@ public class IntegerToRoman {
             } else if(i == 5) {
                 return map.get(5 * temp / 10);
             }else{
-                y = map.get(5 * temp / 10);
-            }
+                if(i < 5){
+                    y = map.get(5 * temp / 10);
+                    return s+y;
+                }else{
+                    y = map.get(temp);
+                    return s+y;
+                }
 
-            return i < 5 ? s + y : y+s;
+            }
         }
 
     }
