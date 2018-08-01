@@ -77,6 +77,8 @@ public class IntegerToRoman {
         System.out.println(i.intToRoman(90));
         System.out.println(i.intToRoman(1994));
         System.out.println(i.intToRoman(2000));
+
+        System.out.println(i.optimizedSolution(1994));
     }
 
     private static Map<Integer, String> map = new LinkedHashMap<>();
@@ -168,5 +170,23 @@ public class IntegerToRoman {
             }
         }
 
+    }
+
+
+    public String optimizedSolution(int num) {
+        int[] digits = {1000, 900, 500, 400,100, 90, 50,  40, 10,9,5,4,1};
+        String[] strs = {"M","CM","D","CD","C","XC","L","XL","X","IX","V","IV","I"};
+        StringBuilder ans = new StringBuilder("");
+
+        for(int i = 0;i < strs.length;i++)
+        {
+            while(num >= digits[i])
+            {
+                ans.append(strs[i]);
+                num -= digits[i];
+            }
+        }
+
+        return ans.toString();
     }
 }
