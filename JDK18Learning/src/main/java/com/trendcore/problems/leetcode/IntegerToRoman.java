@@ -62,6 +62,7 @@ public class IntegerToRoman {
         System.out.println(i.intToRoman(3));
         System.out.println(i.intToRoman(4));
         System.out.println(i.intToRoman(5));
+        System.out.println(i.intToRoman(6));
         System.out.println(i.intToRoman(15));
         System.out.println(i.intToRoman(50));
         System.out.println(i.intToRoman(40));
@@ -155,8 +156,13 @@ public class IntegerToRoman {
                     y = map.get(5 * temp / 10);
                     return s+y;
                 }else{
-                    y = map.get(temp);
-                    return s+y;
+
+                    if(i-5>1){
+                        y = map.get(temp);
+                        return s+y;
+                    }else{
+                        return map.get(5 * temp / 10)+s;
+                    }
                 }
 
             }
