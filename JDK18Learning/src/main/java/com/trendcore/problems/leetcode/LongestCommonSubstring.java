@@ -12,7 +12,10 @@ public class LongestCommonSubstring {
 
     public static void main(String[] args) {
         LongestCommonSubstring l = new LongestCommonSubstring();
-        l.longestCommonSubstring(new String[]{"flower", "flow", "flight"});
+        System.out.println(l.longestCommonSubstring(new String[]{"zaab", "baa", "ddaa"}));
+        System.out.println(l.longestCommonSubstring(new String[]{"zaaab", "baadaaa", "ddaayaaa"}));
+        //This input is breaking the prog.
+        System.out.println(l.longestCommonSubstring(new String[]{"zaaab", "baadaba", "ddaayaca"}));
     }
 
     public String longestCommonSubstring(String[] strs) {
@@ -73,7 +76,8 @@ public class LongestCommonSubstring {
                             for(Object pos : positionList){
                                 if(((int)pos)+offset < strs[k].length() && strs[k].charAt(((int)pos)+offset) == nextChar){
                                     matches = true;
-                                    break;
+                                }else{
+
                                 }
                             }
 
@@ -83,6 +87,7 @@ public class LongestCommonSubstring {
                             }
                         }
                     }
+                    offset++;
 
                     if(!charContainsInAllList){
                         break;
