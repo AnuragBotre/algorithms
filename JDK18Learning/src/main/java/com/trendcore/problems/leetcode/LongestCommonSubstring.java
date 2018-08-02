@@ -79,6 +79,7 @@ public class LongestCommonSubstring {
 
                             if(!matches){
                                 charContainsInAllList = false;
+                                break;
                             }
                         }
                     }
