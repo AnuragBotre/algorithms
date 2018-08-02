@@ -44,14 +44,72 @@ public class LongestCommonSubstring {
 
         String result = "";
 
+        String maxSeq = "";
+
         for (int i = 0; i < strs[minLength].length(); i++) {
             char c = strs[minLength].charAt(i);
 
             //starting with this characters position
-            //
+            //i.e i and c
+            if (otherStringContainsCharacter(list, minLength, c)) {
 
+                result = "" + c;
+                //now we got character which is common in all string
+                //find next seq from this position
+                int offset = 1;
+                for (int j = i+1; j < strs[minLength].length(); j++) {
+
+                    char nextChar = strs[minLength].charAt(j);
+
+                    boolean charContainsInAllList = true;
+
+                    for (int k = 0 ; k < list.size();k++) {
+                        if(k != minLength){
+                            Map map = (Map) list.get(k);
+                            List positionList = (List) map.get(c);
+
+                            //from all positions check whether at least one of the position forms a sequence.
+                            boolean matches = false;
+                            for(Object pos : positionList){
+                                if(((int)pos)+offset < strs[k].length() && strs[k].charAt(((int)pos)+offset) == nextChar){
+                                    matches = true;
+                                    break;
+                                }
+                            }
+
+                            if(!matches){
+                                charContainsInAllList = false;
+                            }
+                        }
+                    }
+
+                    if(!charContainsInAllList){
+                        break;
+                    }
+                    result = result + nextChar;
+                }
+
+            } else {
+                result = "";
+            }
+
+            if(result.length() > maxSeq.length()){
+                maxSeq = result;
+            }
         }
 
-        return result;
+        return maxSeq;
+    }
+
+    private boolean otherStringContainsCharacter(List list, int toBeSkipped, char c) {
+        for (int i = 0; i < list.size(); i++) {
+            if (i != toBeSkipped) {
+                Map map = (Map) list.get(i);
+                if (!map.containsKey(c)) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }
