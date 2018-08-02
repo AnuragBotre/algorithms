@@ -60,28 +60,37 @@ public class LongestCommonSubstring {
                 //now we got character which is common in all string
                 //find next seq from this position
                 int offset = 1;
-                for (int j = i+1; j < strs[minLength].length(); j++) {
+                for (int j = i + 1; j < strs[minLength].length(); j++) {
 
                     char nextChar = strs[minLength].charAt(j);
 
                     boolean charContainsInAllList = true;
 
-                    for (int k = 0 ; k < list.size();k++) {
-                        if(k != minLength){
+                    for (int k = 0; k < list.size(); k++) {
+                        if (k != minLength) {
                             Map map = (Map) list.get(k);
-                            List positionList = (List) map.get(c);
+                            List<Integer> positionList = (List) map.get(c);
 
                             //from all positions check whether at least one of the position forms a sequence.
                             boolean matches = false;
-                            for(Object pos : positionList){
-                                if(((int)pos)+offset < strs[k].length() && strs[k].charAt(((int)pos)+offset) == nextChar){
+                            for (Integer pos : positionList) {
+                                /*if(((int)pos)+offset < strs[k].length() && strs[k].charAt(((int)pos)+offset) == nextChar){
                                     matches = true;
                                 }else{
 
+                                }*/
+                                for (int f = 0; f < result.length(); f++) {
+                                    if (pos + offset < strs[k].length() && strs[k].charAt(pos + offset) == result.charAt(f)) {
+                                        //then store this position somewhere
+                                    } else {
+
+
+                                    }
                                 }
+
                             }
 
-                            if(!matches){
+                            if (!matches) {
                                 charContainsInAllList = false;
                                 break;
                             }
@@ -89,7 +98,7 @@ public class LongestCommonSubstring {
                     }
                     offset++;
 
-                    if(!charContainsInAllList){
+                    if (!charContainsInAllList) {
                         break;
                     }
                     result = result + nextChar;
@@ -99,7 +108,7 @@ public class LongestCommonSubstring {
                 result = "";
             }
 
-            if(result.length() > maxSeq.length()){
+            if (result.length() > maxSeq.length()) {
                 maxSeq = result;
             }
         }
