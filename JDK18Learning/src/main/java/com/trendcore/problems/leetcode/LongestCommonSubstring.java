@@ -75,35 +75,25 @@ public class LongestCommonSubstring {
                             //from all positions check whether at least one of the position forms a sequence.
                             boolean matches = false;
                             for (Integer pos : positionList) {
-                                /*if(((int)pos)+offset < strs[k].length() && strs[k].charAt(((int)pos)+offset) == nextChar){
-                                    matches = true;
-                                }else{
 
-                                }*/
-                                for (int f = 0; f < result.length(); f++) {
+                                List discardedPosList = discardedPositions.get(k);
 
-                                    List discardedPosList = discardedPositions.get(k);
-
-                                    if(discardedPosList == null){
-                                        discardedPosList = new ArrayList();
-                                    }
-
-                                    if (pos + offset < strs[k].length() && !discardedPosList.contains(pos) && strs[k].charAt(pos + offset) == result.charAt(f)) {
-                                        //then store this position somewhere
-                                        matches = true;
-                                    } else {
-                                        //need to keep track of discarded positions
-                                        if(discardedPositions.get(k) != null) {
-                                            List list2 = discardedPositions.get(k);
-                                            list2.add(pos);
-                                        }else{
-                                            List list2 = new ArrayList();
-                                            list2.add(pos);
-                                            discardedPositions.put(k, list2);
-                                        }
-                                    }
+                                if(discardedPosList == null){
+                                    discardedPosList = new ArrayList();
                                 }
 
+                                if(pos+offset < strs[k].length() && !discardedPosList.contains(pos) && strs[k].charAt(pos+offset) == nextChar){
+                                    matches = true;
+                                }else{
+                                    if(discardedPositions.get(k) != null) {
+                                        List list2 = discardedPositions.get(k);
+                                        list2.add(pos);
+                                    }else{
+                                        List list2 = new ArrayList();
+                                        list2.add(pos);
+                                        discardedPositions.put(k, list2);
+                                    }
+                                }
                             }
 
                             if (!matches) {
