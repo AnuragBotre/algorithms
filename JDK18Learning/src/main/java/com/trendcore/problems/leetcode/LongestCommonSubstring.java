@@ -60,6 +60,7 @@ public class LongestCommonSubstring {
                 //now we got character which is common in all string
                 //find next seq from this position
                 int offset = 1;
+                Map<Integer,List> discardedPositions = new HashMap();
                 for (int j = i + 1; j < strs[minLength].length(); j++) {
 
                     char nextChar = strs[minLength].charAt(j);
@@ -80,11 +81,26 @@ public class LongestCommonSubstring {
 
                                 }*/
                                 for (int f = 0; f < result.length(); f++) {
-                                    if (pos + offset < strs[k].length() && strs[k].charAt(pos + offset) == result.charAt(f)) {
+
+                                    List discardedPosList = discardedPositions.get(k);
+
+                                    if(discardedPosList == null){
+                                        discardedPosList = new ArrayList();
+                                    }
+
+                                    if (pos + offset < strs[k].length() && !discardedPosList.contains(pos) && strs[k].charAt(pos + offset) == result.charAt(f)) {
                                         //then store this position somewhere
+                                        matches = true;
                                     } else {
-
-
+                                        //need to keep track of discarded positions
+                                        if(discardedPositions.get(k) != null) {
+                                            List list2 = discardedPositions.get(k);
+                                            list2.add(pos);
+                                        }else{
+                                            List list2 = new ArrayList();
+                                            list2.add(pos);
+                                            discardedPositions.put(k, list2);
+                                        }
                                     }
                                 }
 
