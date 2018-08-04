@@ -99,8 +99,10 @@ public class RegularExpressionMatching {
         System.out.println(r.formatResult("a", "c*.*a*"));
 
         System.out.println(r.formatResult("aasdfasdfasdfasdfas", "aasdf.*asdf.*asdf.*asdf.*s"));
-
         System.out.println(r.formatResult("afafafafas", "af.*af.*af.*af.*s"));
+        System.out.println(r.formatResult("b","aaa."));
+
+        System.out.println(r.formatResult("acaabbaccbbacaabbbb","a*.*b*.*a*aa*a*"));
     }
 
     public String formatResult(String s, String p) {
@@ -182,6 +184,11 @@ public class RegularExpressionMatching {
                         ) {
                     stringPointer--;
                 } else {
+
+                    //are we allow to move pattern Pointer
+                    if(!isCharacterEqual(s,stringPointer,structs,patternPointer) && !structs[patternPointer].oneOrMoreOccurance){
+                        return false;
+                    }
                     patternPointer++;
                 }
                 /*if(resultString.length() >= pointOfStrictMatch){
