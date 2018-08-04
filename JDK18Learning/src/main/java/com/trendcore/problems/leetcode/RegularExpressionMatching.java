@@ -100,9 +100,10 @@ public class RegularExpressionMatching {
 
         System.out.println(r.formatResult("aasdfasdfasdfasdfas", "aasdf.*asdf.*asdf.*asdf.*s"));
         System.out.println(r.formatResult("afafafafas", "af.*af.*af.*af.*s"));
-        System.out.println(r.formatResult("b","aaa."));
+        System.out.println(r.formatResult("b", "aaa."));
 
-        System.out.println(r.formatResult("acaabbaccbbacaabbbb","a*.*b*.*a*aa*a*"));
+        System.out.println(r.formatResult("acaabbaccbbacaabbbb", "a*.*b*.*a*aa*a*"));
+        System.out.println(r.formatResult("aabcbcbcaccbcaabc", ".*a*aa*.*b*.c*.*a*"));
     }
 
     public String formatResult(String s, String p) {
@@ -181,12 +182,20 @@ public class RegularExpressionMatching {
                 // and can be removed
                 if (patternPointer - 1 >= 0 && stringPointer > 0 && structs[patternPointer - 1].c == '.'
                         && structs[patternPointer - 1].oneOrMoreOccurance
+                        && s.charAt(stringPointer - 1) == structs[patternPointer].c
                         ) {
-                    stringPointer--;
+
+                    //probably need to considere remaining length
+
+                    if (!structs[patternPointer].oneOrMoreOccurance) {
+                        stringPointer--;
+                    } else {
+                        patternPointer++;
+                    }
                 } else {
 
                     //are we allow to move pattern Pointer
-                    if(!isCharacterEqual(s,stringPointer,structs,patternPointer) && !structs[patternPointer].oneOrMoreOccurance){
+                    if (!isCharacterEqual(s, stringPointer, structs, patternPointer) && !structs[patternPointer].oneOrMoreOccurance) {
                         return false;
                     }
                     patternPointer++;
