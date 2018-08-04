@@ -177,7 +177,9 @@ public class RegularExpressionMatching {
 
                 //check previous pattern was .*
                 // and can be removed
-                if (patternPointer - 1 >= 0 && structs[patternPointer - 1].c == '.' && structs[patternPointer - 1].oneOrMoreOccurance) {
+                if (patternPointer - 1 >= 0 && stringPointer > 0 && structs[patternPointer - 1].c == '.'
+                        && structs[patternPointer - 1].oneOrMoreOccurance
+                        ) {
                     stringPointer--;
                 } else {
                     patternPointer++;
