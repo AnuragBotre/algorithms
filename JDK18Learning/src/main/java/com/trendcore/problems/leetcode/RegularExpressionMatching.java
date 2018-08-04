@@ -156,7 +156,7 @@ public class RegularExpressionMatching {
             }
 
             if (isCharacterEqual(s, stringPointer, structs, patternPointer)) {
-                if(remaininglegthOfPatternWithoutZeroOrMoreOccurance <= s.length()-stringPointer){
+                if(remaininglegthOfPatternWithoutZeroOrMoreOccurance < s.length()-stringPointer){
                     resultString = resultString + s.charAt(stringPointer);
                     stringPointer++;
                     continue;
@@ -170,7 +170,7 @@ public class RegularExpressionMatching {
 
                 if(resultString.length() >= pointOfStrictMatch){
 
-                    if(resultString.length() - 1 >= 0) {
+                    if(resultString.length() - 1 >= 0 && patternPointer + 1 < structs.length) {
                         if (resultString.charAt(resultString.length() - 1) == structs[patternPointer + 1].c) {
                             resultString = resultString.substring(0, resultString.length() - 1);
                             patternPointer++;
