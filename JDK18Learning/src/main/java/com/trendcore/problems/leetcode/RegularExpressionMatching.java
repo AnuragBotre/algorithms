@@ -134,7 +134,7 @@ public class RegularExpressionMatching {
                 return true;
             } else if (stringPointer >= s.length() && patternPointer < structs.length) {
                 //need to take care of this part
-                for(int k=patternPointer+1;k < structs.length;k++){
+                for(int k=patternPointer;k < structs.length;k++){
                     if(!structs[k].oneOrMoreOccurance){
                         return false;
                     }
@@ -168,7 +168,8 @@ public class RegularExpressionMatching {
 
             if (!isCharacterEqual(s, stringPointer, structs, patternPointer)) {
 
-                if(resultString.length() >= pointOfStrictMatch){
+                patternPointer++;
+                /*if(resultString.length() >= pointOfStrictMatch){
 
                     if(resultString.length() - 1 >= 0 && patternPointer + 1 < structs.length) {
                         if (resultString.charAt(resultString.length() - 1) == structs[patternPointer + 1].c) {
@@ -183,7 +184,7 @@ public class RegularExpressionMatching {
                     }
                 }else{
 
-                }
+                }*/
 
             }
         }
