@@ -46,7 +46,6 @@ public class ThreeSum {
 
             int result = 0 - (nums[i] + nums[i + 1]);
             if (map.containsKey(result)) {
-                System.out.println(result + " " + nums[i]+ " " + nums[i+1]);
                 List list = new ArrayList();
                 list.add(nums[i]);
                 list.add(nums[i+1]);
