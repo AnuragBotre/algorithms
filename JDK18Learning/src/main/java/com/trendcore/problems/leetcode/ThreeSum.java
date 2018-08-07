@@ -1,7 +1,9 @@
 package com.trendcore.problems.leetcode;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * https://leetcode.com/problems/3sum/description/
@@ -32,7 +34,31 @@ public class ThreeSum {
 
     public List<List<Integer>> threeSum(int[] nums) {
 
-        return bruteForce(nums);
+        //using 2 pointer and hashmap
+        Map map = new HashMap<>();
+
+        List mainList = new ArrayList();
+
+        for (int i = 0; i < nums.length - 1; i++) {
+
+            map.put(nums[i],0);
+            map.put(nums[i+1],0);
+
+            int result = 0 - (nums[i] + nums[i + 1]);
+            if (map.containsKey(result)) {
+                System.out.println(result + " " + nums[i]+ " " + nums[i+1]);
+                List list = new ArrayList();
+                list.add(nums[i]);
+                list.add(nums[i+1]);
+                list.add(result);
+                mainList.add(list);
+            }else{
+
+            }
+        }
+
+        //return bruteForce(nums);
+        return mainList;
     }
 
     private List<List<Integer>> bruteForce(int[] nums) {
@@ -62,8 +88,8 @@ public class ThreeSum {
     }
 
     private boolean containsTriplet(List<List<Integer>> mainList, List<Integer> list) {
-        for(List elements : mainList){
-            if(isEqual(elements,list)){
+        for (List elements : mainList) {
+            if (isEqual(elements, list)) {
                 return true;
             }
         }
@@ -72,10 +98,10 @@ public class ThreeSum {
 
     private boolean isEqual(List<Integer> elements, List<Integer> list) {
 
-        for(Integer e : elements){
-            if(list.contains(e)){
+        for (Integer e : elements) {
+            if (list.contains(e)) {
                 continue;
-            }else{
+            } else {
                 return false;
             }
         }
