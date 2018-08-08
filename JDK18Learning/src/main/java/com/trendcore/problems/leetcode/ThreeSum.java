@@ -1,9 +1,8 @@
 package com.trendcore.problems.leetcode;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import sun.plugin.javascript.navig.Array;
+
+import java.util.*;
 
 /**
  * https://leetcode.com/problems/3sum/description/
@@ -29,37 +28,49 @@ public class ThreeSum {
 
     public static void main(String[] args) {
         ThreeSum t = new ThreeSum();
-        System.out.println(t.threeSum(new int[]{-1, 0, 1, 2, -1, -4}));
-        System.out.println(t.threeSum(new int[]{5, 4, 9}));
-        System.out.println(t.threeSum(new int[]{5, 4, 9, -9, 0}));
+        System.out.println(t.bruteForce(new int[]{-1, 0, 1, 2, -1, -4}));
+        System.out.println(t.bruteForce(new int[]{5, 4, 9}));
+        System.out.println(t.bruteForce(new int[]{5, 4, 9, -9, 0}));
+        System.out.println(t.bruteForce(new int[]{0,3,0,1,1,-1,-5,-5,3,-3,-3,0}));
     }
 
     public List<List<Integer>> threeSum(int[] nums) {
 
         //using 2 pointer and hashmap
-        Map map = new HashMap<>();
-
-        List mainList = new ArrayList();
+        Arrays.sort(nums);
+        Map map = new HashMap();
 
         for (int i = 0; i < nums.length - 1; i++) {
+            int r = nums[i] + nums[i + 1];
+            if (r <= 0) {
+                //put this in negative no
+                if(map.containsKey(r)){
+                    List o = (List) map.get(r);
+                    List tt = new ArrayList();
+                    tt.add(nums[i]);
+                    tt.add(nums[i+1]);
+                    o.add(tt);
+                }else{
+                    List o = new ArrayList();
+                    List tt = new ArrayList();
+                    tt.add(nums[i]);
+                    tt.add(nums[i+1]);
+                    o.add(tt);
+                    map.put(r,o);
+                }
+            } else {
+                //put this in positive array
 
-            map.put(nums[i],0);
-            map.put(nums[i+1],0);
-
-            int result = 0 - (nums[i] + nums[i + 1]);
-            if (map.containsKey(result)) {
-                List list = new ArrayList();
-                list.add(nums[i]);
-                list.add(nums[i+1]);
-                list.add(result);
-                mainList.add(list);
-            }else{
-
+                int result = 0 - nums[i];
+                if (map.containsKey(result)) {
+                    System.out.println(nums[i] + " " + map.get(result));
+                }
             }
         }
 
         return bruteForce(nums);
         //return mainList;
+        //return null;
     }
 
     private List<List<Integer>> bruteForce(int[] nums) {
@@ -90,7 +101,7 @@ public class ThreeSum {
 
     private boolean containsTriplet(List<List<Integer>> mainList, List<Integer> list) {
         for (List elements : mainList) {
-            if (isEqual(elements, list)) {
+            if (isEqual(elements, new ArrayList<>(list))) {
                 return true;
             }
         }
@@ -101,6 +112,7 @@ public class ThreeSum {
 
         for (Integer e : elements) {
             if (list.contains(e)) {
+                list.remove((Object)e);
                 continue;
             } else {
                 return false;
