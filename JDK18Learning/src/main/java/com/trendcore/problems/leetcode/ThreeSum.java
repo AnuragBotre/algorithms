@@ -21,6 +21,9 @@ import java.util.*;
  * [-1, 0, 1],
  * [-1, -1, 2]
  * ]
+ *
+ * solution is present
+ * https://www.geeksforgeeks.org/find-triplets-array-whose-sum-equal-zero/
  */
 public class ThreeSum {
 
