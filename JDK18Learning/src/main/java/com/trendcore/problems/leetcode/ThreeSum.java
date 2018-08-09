@@ -1,7 +1,5 @@
 package com.trendcore.problems.leetcode;
 
-import sun.plugin.javascript.navig.Array;
-
 import java.util.*;
 
 /**
@@ -44,6 +42,9 @@ public class ThreeSum {
             for (int j = i + 1; j < nums.length; j++) {
                 int result = nums[i] + nums[j];
                 List l = (List) additionOf2Num.get(result);
+
+                TreeMap t = new TreeMap();
+
                 if (l == null) {
                     l = new ArrayList();
                     l.add(nums[i]);
@@ -57,16 +58,34 @@ public class ThreeSum {
 
         numMap.put(nums[nums.length-1],0);
 
+        Map endResult = new HashMap();
+        List endResultList = new ArrayList();
+
         for(Object e : additionOf2Num.entrySet()){
             Map.Entry entry = (Map.Entry) e;
             int r = 0 - (Integer)entry.getKey();
             if(numMap.get(r) != null){
                 System.out.println(r + " " + entry.getValue());
+
+                List<Integer> k = (List) entry.getValue();
+
+                mergeResult(r,k);
+
+
+
             }
 
         }
 
         //return bruteForce(nums);
+        return null;
+    }
+
+    private List mergeResult(int r, List<Integer> k) {
+        List l = new ArrayList();
+        for(Integer i : k){
+            //if()
+        }
         return null;
     }
 
