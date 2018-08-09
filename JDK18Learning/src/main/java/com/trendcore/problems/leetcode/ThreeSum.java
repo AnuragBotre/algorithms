@@ -30,7 +30,7 @@ public class ThreeSum {
         System.out.println(t.threeSum(new int[]{5, 4, 9}));
         System.out.println(t.threeSum(new int[]{5, 4, 9, -9, 0}));
         System.out.println(t.threeSum(new int[]{0, 3, 0, 1, 1, -1, -5, -5, 3, -3, -3, 0}));
-        //System.out.println(t.threeSum(new int[]{-7, -11, 12, -15, 14, 4, 4, 11, -11, 2, -8, 5, 8, 14, 0, 3, 2, 3, -3, -15, -2, 3, 6, 1, 2, 8, -5, -7, 3, 1, 8, 11, -3, 6, 3, -4, -13, -15, 14, -8, 2, -8, 4, -13, 13, 11, 5, 0, 0, 9, -8, 5, -2, 14, -9, -15, -1, -6, -15, 9, 10, 9, -2, -8, -8, -14, -5, -14, -14, -6, -15, -5, -7, 5, -11, 14, -7, 2, -9, 0, -4, -1, -9, 9, -10, -11, 1, -4, -2, 2, -9, -15, -12, -4, -8, -5, -11, -6, -4, -9, -4, -3, -7, 4, 9, -2, -5, -13, 7, 2, -5, -12, -14, 1, 13, -9, -3, -9, 2, 3, 8, 0, 3}));
+        System.out.println(t.threeSum(new int[]{-7, -11, 12, -15, 14, 4, 4, 11, -11, 2, -8, 5, 8, 14, 0, 3, 2, 3, -3, -15, -2, 3, 6, 1, 2, 8, -5, -7, 3, 1, 8, 11, -3, 6, 3, -4, -13, -15, 14, -8, 2, -8, 4, -13, 13, 11, 5, 0, 0, 9, -8, 5, -2, 14, -9, -15, -1, -6, -15, 9, 10, 9, -2, -8, -8, -14, -5, -14, -14, -6, -15, -5, -7, 5, -11, 14, -7, 2, -9, 0, -4, -1, -9, 9, -10, -11, 1, -4, -2, 2, -9, -15, -12, -4, -8, -5, -11, -6, -4, -9, -4, -3, -7, 4, 9, -2, -5, -13, 7, 2, -5, -12, -14, 1, 13, -9, -3, -9, 2, 3, 8, 0, 3}));
     }
 
     public List<List<Integer>> threeSum(int[] nums) {
@@ -47,46 +47,69 @@ public class ThreeSum {
 
                 if (l == null) {
                     l = new ArrayList();
-                    l.add(nums[i]);
-                    l.add(nums[j]);
+
+                    if (nums[i] < nums[j]) {
+                        l.add(nums[i]);
+                        l.add(nums[j]);
+                    } else {
+                        l.add(nums[j]);
+                        l.add(nums[i]);
+                    }
+
                     additionOf2Num.put(result, l);
                 }
             }
 
-            numMap.put(nums[i],0);
+            numMap.put(nums[i], 0);
         }
 
-        numMap.put(nums[nums.length-1],0);
+        numMap.put(nums[nums.length - 1], 0);
 
         Map endResult = new HashMap();
         List endResultList = new ArrayList();
 
-        for(Object e : additionOf2Num.entrySet()){
+        for (Object e : additionOf2Num.entrySet()) {
             Map.Entry entry = (Map.Entry) e;
-            int r = 0 - (Integer)entry.getKey();
-            if(numMap.get(r) != null){
-                System.out.println(r + " " + entry.getValue());
-
+            int r = 0 - (Integer) entry.getKey();
+            if (numMap.get(r) != null) {
                 List<Integer> k = (List) entry.getValue();
-
-                mergeResult(r,k);
-
-
-
+                Object[] objects = mergeResult(r, k);
+                String key = (String) objects[1];
+                if (!endResult.containsKey(key)) {
+                    endResultList.add(objects[0]);
+                    endResult.put(key,0);
+                }
             }
-
         }
 
         //return bruteForce(nums);
-        return null;
+        return endResultList;
     }
 
-    private List mergeResult(int r, List<Integer> k) {
+    private Object[] mergeResult(int r, List<Integer> k) {
         List l = new ArrayList();
-        for(Integer i : k){
-            //if()
+        String key = "";
+        boolean rAdded = false;
+        for (Integer i : k) {
+            if (i < r) {
+                l.add(i);
+                key = key + i;
+            } else {
+                if (!rAdded) {
+                    l.add(r);
+                    rAdded = true;
+                    key = key + r;
+                }
+                l.add(i);
+                key = key + i;
+
+            }
         }
-        return null;
+        if (!rAdded) {
+            l.add(r);
+            key = key + r;
+        }
+        return new Object[]{l, key};
     }
 
     private List<List<Integer>> bruteForce(int[] nums) {
