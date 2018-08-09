@@ -27,6 +27,9 @@ public class ThreeSum {
     public static void main(String[] args) {
         ThreeSum t = new ThreeSum();
         System.out.println(t.threeSum(new int[]{-1, 0, 1, 2, -1, -4}));
+        System.out.println(t.threeSum(new int[]{}));
+        //Not working for this input
+        System.out.println(t.threeSum(new int[]{1,2,-2,-1}));
         System.out.println(t.threeSum(new int[]{5, 4, 9}));
         System.out.println(t.threeSum(new int[]{5, 4, 9, -9, 0}));
         System.out.println(t.threeSum(new int[]{0, 3, 0, 1, 1, -1, -5, -5, 3, -3, -3, 0}));
@@ -34,6 +37,10 @@ public class ThreeSum {
     }
 
     public List<List<Integer>> threeSum(int[] nums) {
+
+        if(nums.length < 3){
+            return new ArrayList<>();
+        }
 
         Map additionOf2Num = new HashMap();
         Map numMap = new HashMap();
