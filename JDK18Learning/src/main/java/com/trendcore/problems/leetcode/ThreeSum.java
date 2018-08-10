@@ -21,7 +21,7 @@ import java.util.*;
  * [-1, 0, 1],
  * [-1, -1, 2]
  * ]
- *
+ * <p>
  * solution is present
  * https://www.geeksforgeeks.org/find-triplets-array-whose-sum-equal-zero/
  */
@@ -32,7 +32,7 @@ public class ThreeSum {
         System.out.println(t.threeSum(new int[]{-1, 0, 1, 2, -1, -4}));
         System.out.println(t.threeSum(new int[]{}));
         //Not working for this input
-        System.out.println(t.threeSum(new int[]{1,2,-2,-1}));
+        System.out.println(t.threeSum(new int[]{1, 2, -2, -1}));
         System.out.println(t.threeSum(new int[]{5, 4, 9}));
         System.out.println(t.threeSum(new int[]{5, 4, 9, -9, 0}));
         System.out.println(t.threeSum(new int[]{0, 3, 0, 1, 1, -1, -5, -5, 3, -3, -3, 0}));
@@ -41,60 +41,42 @@ public class ThreeSum {
 
     public List<List<Integer>> threeSum(int[] nums) {
 
-        if(nums.length < 3){
-            return new ArrayList<>();
-        }
-
-        Map additionOf2Num = new HashMap();
-        Map numMap = new HashMap();
+        Map keys = new HashMap();
+        List list = new ArrayList();
 
         for (int i = 0; i < nums.length - 1; i++) {
+            Map map = new HashMap();
             for (int j = i + 1; j < nums.length; j++) {
-                int result = nums[i] + nums[j];
-                List l = (List) additionOf2Num.get(result);
-
-                TreeMap t = new TreeMap();
-
-                if (l == null) {
-                    l = new ArrayList();
-
-                    if (nums[i] < nums[j]) {
-                        l.add(nums[i]);
-                        l.add(nums[j]);
-                    } else {
-                        l.add(nums[j]);
-                        l.add(nums[i]);
+                int result = 0 - (nums[i] + nums[j]);
+                if (map.containsKey(result)) {
+                    List l = new ArrayList();
+                    l.add(result);
+                    l.add(nums[i]);
+                    l.add(nums[j]);
+                    String key = getKey(l);
+                    if (!keys.containsKey(key)) {
+                        keys.put(key, 0);
+                        list.add(l);
                     }
 
-                    additionOf2Num.put(result, l);
-                }
-            }
-
-            numMap.put(nums[i], 0);
-        }
-
-        numMap.put(nums[nums.length - 1], 0);
-
-        Map endResult = new HashMap();
-        List endResultList = new ArrayList();
-
-        for (Object e : additionOf2Num.entrySet()) {
-            Map.Entry entry = (Map.Entry) e;
-            int r = 0 - (Integer) entry.getKey();
-            if (numMap.get(r) != null) {
-                List<Integer> k = (List) entry.getValue();
-                Object[] objects = mergeResult(r, k);
-                String key = (String) objects[1];
-                if (!endResult.containsKey(key)) {
-                    endResultList.add(objects[0]);
-                    endResult.put(key,0);
+                } else {
+                    map.put(nums[j], 0);
                 }
             }
         }
 
-        //return bruteForce(nums);
-        return endResultList;
+        return list;
     }
+
+    private String getKey(List l) {
+        Collections.sort(l);
+        String s = "";
+        for (Object o : l) {
+            s = s + o;
+        }
+        return s;
+    }
+
 
     private Object[] mergeResult(int r, List<Integer> k) {
         List l = new ArrayList();
