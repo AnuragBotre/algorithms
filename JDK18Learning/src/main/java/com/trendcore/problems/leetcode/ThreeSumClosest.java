@@ -26,11 +26,18 @@ public class ThreeSumClosest {
         ThreeSumClosest t = new ThreeSumClosest();
         System.out.println(t.threeSumClosest(new int[]{-1, 2, 1, -4}, 1));
         System.out.println(t.threeSumClosest(new int[]{1, 1, 1, 0}, -100));
+        System.out.println(t.threeSumClosest(new int[]{-1000,-900,-1,-2,1,4,5}, -100));
+        System.out.println(t.threeSumClosest(new int[]{0,0,0}, 1));
+        System.out.println(t.threeSumClosest(new int[]{1,1,-1}, 0));
+
+        System.out.println(t.threeSumClosest(new int[]{0,2,1,-3}, 1));
     }
 
-    //Approach - 1 brute force
+
 
     //Approach - 2 sort array
+    //This approach has a flaw
+    //It will not work for this input 0,2,1,-3 , target = 1
     public int threeSumClosest(int[] nums, int target) {
 
         if (nums.length < 3) {
@@ -64,15 +71,17 @@ public class ThreeSumClosest {
             }
         }
 
+        if(mid == nums.length){
+            mid = nums.length - 1;
+        }
+
         //try to create window near mid
         if (mid - 1 < 0) {
             //at first
-            int i = nums[mid] + nums[mid + 1] + nums[mid + 2];
-            System.out.println("result = " + i);
-        } else if (mid + 1 > nums.length) {
+            return nums[mid] + nums[mid + 1] + nums[mid + 2];
+        } else if (mid + 1 >= nums.length) {
             //at last
-            int i = nums[mid] + nums[mid - 1] + nums[mid - 2];
-            System.out.println("result = " + i);
+            return nums[mid] + nums[mid - 1] + nums[mid - 2];
         } else {
             //there is chance of sliding
             int r1 = nums[mid - 1] + nums[mid] + nums[mid + 1];
@@ -84,21 +93,23 @@ public class ThreeSumClosest {
                 }
             }
 
-            if (mid - 2 < nums.length) {
+            //can we slide to left
+            if (mid - 2 > 0) {
                 int r3 = nums[mid - 1] + nums[mid - 2] + nums[mid];
                 if(closer(r3,r1,target)){
                     r1 = r3;
                 }
             }
-            System.out.println("result = " + r1);
-            //can we slide to left
+
+            return r1;
         }
 
 
 
-        return bruteForce(nums, target);
+        //return bruteForce(nums, target);
     }
 
+    //Approach - 1 brute force
     //Correct Algo
     private int bruteForce(int[] nums, int target) {
         Integer closest = null;
