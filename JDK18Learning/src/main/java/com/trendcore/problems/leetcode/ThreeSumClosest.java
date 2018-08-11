@@ -24,13 +24,15 @@ public class ThreeSumClosest {
 
     public static void main(String[] args) {
         ThreeSumClosest t = new ThreeSumClosest();
-        System.out.println(t.threeSumClosest(new int[]{-1, 2, 1, -4}, 1));
+        /*System.out.println(t.threeSumClosest(new int[]{-1, 2, 1, -4}, 1));
         System.out.println(t.threeSumClosest(new int[]{1, 1, 1, 0}, -100));
         System.out.println(t.threeSumClosest(new int[]{-1000, -900, -1, -2, 1, 4, 5}, -100));
         System.out.println(t.threeSumClosest(new int[]{0, 0, 0}, 1));
         System.out.println(t.threeSumClosest(new int[]{1, 1, -1}, 0));
 
-        System.out.println(t.threeSumClosest(new int[]{0, 2, 1, -3}, 1));
+        System.out.println(t.threeSumClosest(new int[]{0, 2, 1, -3}, 1));*/
+
+        System.out.println(t.bruteForce(new int[]{-100,-99,-98,-95}, -101));
     }
 
 
@@ -39,17 +41,15 @@ public class ThreeSumClosest {
     //2 pointer approach
     //from the centre one will go in left and other will go to right
     //need to decide how pointer should proceed
+
+    //target  = first closet no
+    //a = target - first closet no
+    //b = first - a
     public int threeSumClosest(int[] nums, int target) {
 
 
-        for (int i = 0; i < nums.length - 1; i++) {
-            Map map = new HashMap();
-            for (int j = i + 1; j < nums.length; j++) {
-                int result = target - nums[i] + nums[j];
 
-            }
-        }
-
+        //find two num which will keep the result same
 
         return bruteForce(nums, target);
     }
