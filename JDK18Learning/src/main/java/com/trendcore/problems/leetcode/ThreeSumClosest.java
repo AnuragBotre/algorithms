@@ -33,6 +33,7 @@ public class ThreeSumClosest {
         System.out.println(t.threeSumClosest(new int[]{0, 2, 1, -3}, 1));*/
 
         System.out.println(t.bruteForce(new int[]{-100,-99,-98,-95}, -101));
+        System.out.println(t.bruteForce(new int[]{-100,-99,-98,-95}, 101));
     }
 
 
