@@ -26,20 +26,38 @@ public class ThreeSumClosest {
         ThreeSumClosest t = new ThreeSumClosest();
         System.out.println(t.threeSumClosest(new int[]{-1, 2, 1, -4}, 1));
         System.out.println(t.threeSumClosest(new int[]{1, 1, 1, 0}, -100));
-        System.out.println(t.threeSumClosest(new int[]{-1000,-900,-1,-2,1,4,5}, -100));
-        System.out.println(t.threeSumClosest(new int[]{0,0,0}, 1));
-        System.out.println(t.threeSumClosest(new int[]{1,1,-1}, 0));
+        System.out.println(t.threeSumClosest(new int[]{-1000, -900, -1, -2, 1, 4, 5}, -100));
+        System.out.println(t.threeSumClosest(new int[]{0, 0, 0}, 1));
+        System.out.println(t.threeSumClosest(new int[]{1, 1, -1}, 0));
 
-        System.out.println(t.threeSumClosest(new int[]{0,2,1,-3}, 1));
+        System.out.println(t.threeSumClosest(new int[]{0, 2, 1, -3}, 1));
     }
 
 
+    //Approach-3
+    //traverse through mid of sorted array
+    //2 pointer approach
+    //from the centre one will go in left and other will go to right
+    //need to decide how pointer should proceed
+    public int threeSumClosest(int[] nums, int target) {
+
+
+        for (int i = 0; i < nums.length - 1; i++) {
+            Map map = new HashMap();
+            for (int j = i + 1; j < nums.length; j++) {
+                int result = target - nums[i] + nums[j];
+
+            }
+        }
+
+
+        return bruteForce(nums, target);
+    }
 
     //Approach - 2 sort array
     //This approach has a flaw
     //It will not work for this input 0,2,1,-3 , target = 1
-    public int threeSumClosest(int[] nums, int target) {
-
+    private int approach2(int[] nums, int target) {
         if (nums.length < 3) {
             return 0;
         }
@@ -71,7 +89,7 @@ public class ThreeSumClosest {
             }
         }
 
-        if(mid == nums.length){
+        if (mid == nums.length) {
             mid = nums.length - 1;
         }
 
@@ -88,7 +106,7 @@ public class ThreeSumClosest {
             //can we slide to right
             if (mid + 2 < nums.length) {
                 int r2 = nums[mid] + nums[mid + 1] + nums[mid + 2];
-                if(closer(r2,r1,target)){
+                if (closer(r2, r1, target)) {
                     r1 = r2;
                 }
             }
@@ -96,17 +114,13 @@ public class ThreeSumClosest {
             //can we slide to left
             if (mid - 2 > 0) {
                 int r3 = nums[mid - 1] + nums[mid - 2] + nums[mid];
-                if(closer(r3,r1,target)){
+                if (closer(r3, r1, target)) {
                     r1 = r3;
                 }
             }
 
             return r1;
         }
-
-
-
-        //return bruteForce(nums, target);
     }
 
     //Approach - 1 brute force
