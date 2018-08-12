@@ -24,16 +24,21 @@ public class ThreeSumClosest {
 
     public static void main(String[] args) {
         ThreeSumClosest t = new ThreeSumClosest();
-        /*System.out.println(t.threeSumClosest(new int[]{-1, 2, 1, -4}, 1));
-        System.out.println(t.threeSumClosest(new int[]{1, 1, 1, 0}, -100));
-        System.out.println(t.threeSumClosest(new int[]{-1000, -900, -1, -2, 1, 4, 5}, -100));
-        System.out.println(t.threeSumClosest(new int[]{0, 0, 0}, 1));
-        System.out.println(t.threeSumClosest(new int[]{1, 1, -1}, 0));
+        printResult(new int[]{-1, 2, 1, -4}, 1);
+        /*printResult(new int[]{1, 1, 1, 0}, -100);
+        printResult(new int[]{-1000, -900, -1, -2, 1, 4, 5}, -100);
+        printResult(new int[]{0, 0, 0}, 1);
+        printResult(new int[]{1, 1, -1}, 0);
 
-        System.out.println(t.threeSumClosest(new int[]{0, 2, 1, -3}, 1));*/
+        printResult(new int[]{0, 2, 1, -3}, 1);
 
-        System.out.println(t.bruteForce(new int[]{-100,-99,-98,-95}, -101));
-        System.out.println(t.bruteForce(new int[]{-100,-99,-98,-95}, 101));
+        printResult(new int[]{-100,-99,-98,-95}, -101);
+        printResult(new int[]{-100,-99,-98,-95}, 101);*/
+    }
+
+    private static void printResult(int[] nums, int target) {
+        ThreeSumClosest t = new ThreeSumClosest();
+        System.out.println(t.threeSumClosest(nums, target) + " " + t.bruteForce(nums, target));
     }
 
 
@@ -46,13 +51,115 @@ public class ThreeSumClosest {
     //target  = first closet no
     //a = target - first closet no
     //b = first - a
+
+    //Use division approach
+    //target / 3
+    //then search closest number
+    //after substract target - found number
+    //substracted no  / 2
     public int threeSumClosest(int[] nums, int target) {
 
+        Arrays.sort(nums);
 
+        int a = target - (target / 3);
 
-        //find two num which will keep the result same
+        Object t[] = getClosestNumber(nums, a);
+        int pos1 = (int) t[1];
+        int firstNo = (int) t[0];
 
-        return bruteForce(nums, target);
+        int c = (target - firstNo) / 2;
+
+        int[] closestNumber = getClosestNumber(nums, c, new int[]{pos1, -1}, 1);
+        int secondNo = closestNumber[0];
+        int pos2 = closestNumber[1];
+
+        int thirdNoToFind = target - (firstNo + secondNo);
+        closestNumber = getClosestNumber(nums, thirdNoToFind, new int[]{pos1, pos2}, 2);
+
+        int thirdNumber = closestNumber[0];
+
+        return firstNo + secondNo + thirdNumber;
+    }
+
+    //Need to correct the binary search algo
+    //Target binary search algo problem first then will solve this problem.
+    private int[] getClosestNumber(int[] nums, int c, int[] position, int posLen) {
+        int low = 0;
+        int high = nums.length - posLen;
+        int mid = (low + high) / 2;
+
+        //need to find target fits in which region
+        boolean flag = true;
+        while (flag) {
+            if (low >= high) {
+                flag = false;
+                break;
+            }
+
+            if (nums[mid] == c && notInPosition(mid, position)) {
+                break;
+            } else if (c < nums[mid]) {
+                high = mid;
+                mid = ((low + high) / 2) + 1;
+            } else {
+                low = mid;
+                mid = ((low + high) / 2) + 1;
+            }
+        }
+
+        if (mid == nums.length) {
+            //find correct mid
+            mid = nums.length - 1;
+
+            if (mid == position[0] || mid == position[1]) {
+                mid = nums.length - 2;
+            }
+
+            if (mid == position[0] || mid == position[1]) {
+                mid = nums.length - 3;
+            }
+
+        }
+        return new int[]{nums[mid], mid};
+    }
+
+    private boolean notInPosition(int mid, int[] position) {
+        for (int i = 0; i < position.length; i++) {
+            if (mid == position[i]) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private Object[] getClosestNumber(int[] nums, int target) {
+        int low = 0;
+        int high = nums.length;
+        int mid = (low + high) / 2;
+
+        //need to find target fits in which region
+        boolean flag = true;
+        while (flag) {
+            if (low >= high) {
+                flag = false;
+                break;
+            }
+
+            if (nums[mid] == target) {
+                break;
+            } else if (target < nums[mid]) {
+                high = mid;
+                mid = (low + high) / 2;
+            } else {
+                low = mid;
+                mid = (low + high) / 2;
+            }
+        }
+
+        if (mid == nums.length) {
+            mid = nums.length - 1;
+        }
+        return new Object[]{nums[mid], mid};
     }
 
     //Approach - 2 sort array
