@@ -57,6 +57,9 @@ public class ThreeSumClosest {
     //then search closest number
     //after substract target - found number
     //substracted no  / 2
+
+    //Try with Binary Tree
+    //keep track of positions for duplicates
     public int threeSumClosest(int[] nums, int target) {
 
         Arrays.sort(nums);
