@@ -29,12 +29,17 @@ public class BinaryTreeInOrderTraversal {
         root.right = b.new TreeNode(2);
         root.right.left = b.new TreeNode(3);
 
-        /*System.out.println(b.inorderTraversal(root));
-        System.out.println(b.inorderTraversal(b.new TreeNode(1)));*/
+        System.out.println(b.inorderTraversal(root));
+        System.out.println(b.inorderTraversal(b.new TreeNode(1)));
 
         root = b.new TreeNode(2);
         root.left = b.new TreeNode(3);
         root.left.left = b.new TreeNode(1);
+        System.out.println(b.inorderTraversal(root));
+
+        root = b.new TreeNode(3);
+        root.left = b.new TreeNode(1);
+        root.right = b.new TreeNode(2);
         System.out.println(b.inorderTraversal(root));
     }
 
@@ -70,11 +75,10 @@ public class BinaryTreeInOrderTraversal {
             t = (TreeNode) stack.pop();
             list.add(t.val);
             t = t.right;
-            //TODO : Fix me infinite loop
             if(t != null) {
                 stack.push(t);
             }else{
-                if(!stack.empty()){
+                while (!stack.empty()){
                     t = (TreeNode) stack.pop();
                     list.add(t.val);
                 }
