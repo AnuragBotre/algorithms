@@ -81,21 +81,13 @@ public class BinaryTreeInOrderTraversal {
                             root = root.right;
                             stack.push(root);
                             break;
-                        }/*else{
-                            list.add(root.val);
-                        }*/
+                        }
                     }
-                    /*else{
-                        root = null;
-                    }*/
+
                 }
             }
-            //visit node
-            //get right node
+
         }
-        /*if(root != null) {
-            list.add(root.val);
-        }*/
 
         return list;
     }
