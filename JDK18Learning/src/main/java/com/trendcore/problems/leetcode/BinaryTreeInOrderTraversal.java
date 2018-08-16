@@ -7,18 +7,18 @@ import java.util.Stack;
 /**
  * https://leetcode.com/problems/binary-tree-inorder-traversal/description/
  * Given a binary tree, return the inorder traversal of its nodes' values.
-
- Example:
-
- Input: [1,null,2,3]
- 1
- \
- 2
- /
- 3
-
- Output: [1,3,2]
- Follow up: Recursive solution is trivial, could you do it iteratively?
+ * <p>
+ * Example:
+ * <p>
+ * Input: [1,null,2,3]
+ * 1
+ * \
+ * 2
+ * /
+ * 3
+ * <p>
+ * Output: [1,3,2]
+ * Follow up: Recursive solution is trivial, could you do it iteratively?
  */
 public class BinaryTreeInOrderTraversal {
 
@@ -57,36 +57,79 @@ public class BinaryTreeInOrderTraversal {
     //iterative
     public List<Integer> inorderTraversal(TreeNode root) {
 
-        if(root == null){
+        if (root == null) {
             return new ArrayList<>();
         }
 
-        List list = new ArrayList();
-        Stack stack = new Stack();
+        List<Integer> list = new ArrayList<>();
+        Stack<TreeNode> stack = new Stack<>();
         stack.push(root);
-        TreeNode t = root;
         while (!stack.empty()) {
-            //traverse to the left most
-            t = (TreeNode) stack.pop();
-            while (t != null) {
-                stack.push(t);
-                t = t.left;
-            }
-            t = (TreeNode) stack.pop();
-            list.add(t.val);
-            t = t.right;
-            if(t != null) {
-                stack.push(t);
-            }else{
-                while (!stack.empty()){
-                    t = (TreeNode) stack.pop();
-                    list.add(t.val);
+            //traverse left nodes
+            TreeNode treeNode = traverseLeft(root, stack);
+            if (treeNode != null) {
+                stack.pop();
+                list.add(treeNode.val);
+                if (treeNode.right != null) {
+                    root = treeNode.right;
+                    stack.push(root);
+                } else {
+                    while(!stack.empty()) {
+                        root = stack.pop();
+                        list.add(root.val);
+                        if(root.right != null){
+                            root = root.right;
+                            stack.push(root);
+                            break;
+                        }/*else{
+                            list.add(root.val);
+                        }*/
+                    }
+                    /*else{
+                        root = null;
+                    }*/
                 }
             }
+            //visit node
+            //get right node
         }
+        /*if(root != null) {
+            list.add(root.val);
+        }*/
 
         return list;
     }
+
+    private TreeNode getRightTreeNodeToTraverse(TreeNode root, Stack<TreeNode> stack, List<Integer> list) {
+        if (root != null) {
+            if (root.right != null) {
+                stack.push(root.right);
+                return root.right;
+            } else {
+                while (!stack.empty()) {
+                    TreeNode t = stack.pop();
+                    if (t.right != null) {
+                        return t.right;
+                    } else {
+                        list.add(t.val);
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    private TreeNode traverseLeft(TreeNode root, Stack<TreeNode> stack) {
+        if (root != null) {
+            while (root.left != null) {
+                root = root.left;
+                stack.push(root);
+            }
+            return root;
+        }
+        return null;
+    }
+
 
     private List<Integer> solutionUsintRecursive(TreeNode root) {
         List<Integer> list = new ArrayList<>();
