@@ -1,5 +1,6 @@
 package com.trendcore.problems.leetcode;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,26 +19,53 @@ import java.util.Map;
  */
 public class CombinationOfPhoneNumbers {
 
+
+
     public static void main(String[] args) {
         CombinationOfPhoneNumbers c = new CombinationOfPhoneNumbers();
-        c.letterCombinations("23");
+        System.out.println(c.letterCombinations("23"));
+    }
+
+    private static Map<String, String> map;
+
+    static {
+        map = new HashMap();
+
+        map.put("2", "abc");
+        map.put("3", "def");
+        map.put("4", "ghi");
+        map.put("5", "jkl");
+        map.put("6", "mno");
+        map.put("7", "pqrs");
+        map.put("8", "tuv");
+        map.put("9", "wxyz");
     }
 
     public List<String> letterCombinations(String digits) {
 
-        Map map = new HashMap();
+        //get the strings from list
+        List<String> list = new ArrayList();
+        for (int i = 0; i < digits.length(); i++) {
+            if (map.get(""+digits.charAt(i)) != null) {
+                String s = map.get(""+digits.charAt(i));
 
-        map.put("2","abc");
-        map.put("3","def");
-        map.put("4","ghi");
-        map.put("5","jkl");
-        map.put("6","mno");
-        map.put("7","pqrs");
-        map.put("8","tuv");
-        map.put("9","wxyz");
+                if (list.isEmpty()) {
+                    for (int j = 0; j < s.length(); j++) {
+                        list.add("" + s.charAt(j));
+                    }
+                } else {
+                    List newList = new ArrayList();
+                    for (int j = 0; j < s.length(); j++) {
+                        for (int k = 0; k < list.size(); k++) {
+                            newList.add(list.get(k)+s.charAt(j));
+                        }
+                    }
+                    list = newList;
+                }
+            }
+        }
 
-
-        return null;
+        return list;
     }
 
 }
