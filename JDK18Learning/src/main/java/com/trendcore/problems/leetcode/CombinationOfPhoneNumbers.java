@@ -1,6 +1,8 @@
 package com.trendcore.problems.leetcode;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * https://leetcode.com/problems/letter-combinations-of-a-phone-number/description/
@@ -22,6 +24,19 @@ public class CombinationOfPhoneNumbers {
     }
 
     public List<String> letterCombinations(String digits) {
+
+        Map map = new HashMap();
+
+        map.put("2","abc");
+        map.put("3","def");
+        map.put("4","ghi");
+        map.put("5","jkl");
+        map.put("6","mno");
+        map.put("7","pqrs");
+        map.put("8","tuv");
+        map.put("9","wxyz");
+
+
         return null;
     }
 
