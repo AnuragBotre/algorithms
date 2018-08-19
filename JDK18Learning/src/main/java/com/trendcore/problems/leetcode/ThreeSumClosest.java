@@ -52,6 +52,8 @@ public class ThreeSumClosest {
 
         System.out.println(b.removeClosestNode(8).val);
         System.out.println(b.removeClosestNode(-2).val);
+        System.out.println(b.removeClosestNode(3).val);
+        System.out.println(b.removeClosestNode(-3).val);
     }
 
     private static void printResult(int[] nums, int target) {
@@ -129,20 +131,27 @@ public class ThreeSumClosest {
         }
 
         public Node removeClosestNode(int val){
-            return traverse(root,val,root);
+            Node[] traverse = traverse(root, val, root);
+            //we need to remove this node
+
+            return traverse[0];
         }
 
-        private Node traverse(Node node, int val, Node prevNode) {
+        private Node[] traverse(Node node, int val, Node prevNode) {
             if(node == null){
-                return prevNode;
+                return new Node[]{prevNode,null};
             }
 
             if(node.val == val){
-                return node;
+                return new Node[]{node,prevNode};
             }else if(val < node.val){
-                return traverse(node.left,val,node);
+                Node[] traverse = traverse(node.left, val, node);
+                traverse[1] = prevNode;
+                return traverse;
             }else{
-                return traverse(node.right,val,node);
+                Node[] traverse = traverse(node.right,val,node);
+                traverse[1] = prevNode;
+                return traverse;
             }
         }
     }
