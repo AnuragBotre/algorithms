@@ -24,7 +24,7 @@ public class ThreeSumClosest {
 
     public static void main(String[] args) {
         ThreeSumClosest t = new ThreeSumClosest();
-        printResult(new int[]{-1, 2, 1, -4}, 1);
+        //printResult(new int[]{-1, 2, 1, -4}, 1);
         /*printResult(new int[]{1, 1, 1, 0}, -100);
         printResult(new int[]{-1000, -900, -1, -2, 1, 4, 5}, -100);
         printResult(new int[]{0, 0, 0}, 1);
@@ -34,6 +34,14 @@ public class ThreeSumClosest {
 
         printResult(new int[]{-100,-99,-98,-95}, -101);
         printResult(new int[]{-100,-99,-98,-95}, 101);*/
+
+        BinarySearchTree b = t.new BinarySearchTree();
+        b.insert(2);
+        b.insert(1);
+        b.insert(3);
+        b.insert(-1);
+        b.insert(4);
+        b.insert(0);
     }
 
     private static void printResult(int[] nums, int target) {
@@ -57,6 +65,65 @@ public class ThreeSumClosest {
     //then search closest number
     //after substract target - found number
     //substracted no  / 2
+
+    //first create binary Search tree
+    class BinarySearchTree{
+
+        class Node{
+            int val;
+            int noOfTimes;
+            Node left;
+            Node right;
+
+            public Node(int val) {
+                this.val = val;
+            }
+        }
+
+        Node root;
+
+        public BinarySearchTree(){
+
+        }
+
+        public void insert(int val){
+            Node node = new Node(val);
+            if(root == null){
+                root = node;
+            }else{
+                insertNode(root,node);
+            }
+        }
+
+        private void insertNode(Node root, Node node) {
+            if(root == null){
+                return;
+            }
+
+            if(node.val == root.val){
+                root.noOfTimes++;
+                return;
+            }else if(node.val < root.val){
+                /*insertNode(root.left, node);
+                root.left = node;
+                return;*/
+                if(root.left != null) {
+                    insertNode(root.left, node);
+                }else{
+                    root.left = node;
+                }
+            }else{
+                /*insertNode(root.right, node);
+                root.right = node;
+                return;*/
+                if(root.right != null) {
+                    insertNode(root.right, node);
+                }else{
+                    root.right = node;
+                }
+            }
+        }
+    }
 
     //Try with Binary Tree
     //keep track of positions for duplicates
