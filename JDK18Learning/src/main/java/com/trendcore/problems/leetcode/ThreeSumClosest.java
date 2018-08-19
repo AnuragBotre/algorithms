@@ -36,12 +36,22 @@ public class ThreeSumClosest {
         printResult(new int[]{-100,-99,-98,-95}, 101);*/
 
         BinarySearchTree b = t.new BinarySearchTree();
-        b.insert(2);
-        b.insert(1);
-        b.insert(3);
-        b.insert(-1);
-        b.insert(4);
-        b.insert(0);
+        b.insert(5);
+        b.insert(-5);
+        b.insert(10);
+        b.insert(-10);
+        b.insert(-4);
+        b.insert(15);
+        b.insert(6);
+
+        System.out.println(b.removeClosestNode(2).val);
+        System.out.println(b.removeClosestNode(1).val);
+        System.out.println(b.removeClosestNode(0).val);
+        System.out.println(b.removeClosestNode(-1).val);
+        System.out.println(b.removeClosestNode(3).val);
+
+        System.out.println(b.removeClosestNode(8).val);
+        System.out.println(b.removeClosestNode(-2).val);
     }
 
     private static void printResult(int[] nums, int target) {
@@ -115,6 +125,24 @@ public class ThreeSumClosest {
                 }else{
                     root.right = node;
                 }
+            }
+        }
+
+        public Node removeClosestNode(int val){
+            return traverse(root,val,root);
+        }
+
+        private Node traverse(Node node, int val, Node prevNode) {
+            if(node == null){
+                return prevNode;
+            }
+
+            if(node.val == val){
+                return node;
+            }else if(val < node.val){
+                return traverse(node.left,val,node);
+            }else{
+                return traverse(node.right,val,node);
             }
         }
     }
