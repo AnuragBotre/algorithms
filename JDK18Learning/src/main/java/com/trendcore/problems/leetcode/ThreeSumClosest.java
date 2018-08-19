@@ -104,18 +104,12 @@ public class ThreeSumClosest {
                 root.noOfTimes++;
                 return;
             }else if(node.val < root.val){
-                /*insertNode(root.left, node);
-                root.left = node;
-                return;*/
                 if(root.left != null) {
                     insertNode(root.left, node);
                 }else{
                     root.left = node;
                 }
             }else{
-                /*insertNode(root.right, node);
-                root.right = node;
-                return;*/
                 if(root.right != null) {
                     insertNode(root.right, node);
                 }else{
