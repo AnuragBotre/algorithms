@@ -35,7 +35,7 @@ public class ThreeSumClosest {
         printResult(new int[]{-100,-99,-98,-95}, -101);
         printResult(new int[]{-100,-99,-98,-95}, 101);*/
 
-        BinarySearchTree b = t.new BinarySearchTree();
+        /*BinarySearchTree b = t.new BinarySearchTree();
         b.insert(5);
         b.insert(-5);
         b.insert(10);
@@ -53,7 +53,26 @@ public class ThreeSumClosest {
         System.out.println(b.removeClosestNode(8).val);
         System.out.println(b.removeClosestNode(-2).val);
         System.out.println(b.removeClosestNode(3).val);
-        System.out.println(b.removeClosestNode(-3).val);
+        System.out.println(b.removeClosestNode(-3).val);*/
+
+        testForNodeRemoval(t);
+    }
+
+    private static void testForNodeRemoval(ThreeSumClosest t) {
+        BinarySearchTree b = t.new BinarySearchTree();
+        b.insert(100);
+        b.insert(50);
+        b.insert(25);
+        b.insert(20);
+        b.insert(30);
+        b.insert(75);
+        b.insert(70);
+        b.insert(80);
+        b.insert(150);
+
+        b.printTree();
+
+        b.removeClosestNode(50);
     }
 
     private static void printResult(int[] nums, int target) {
@@ -79,9 +98,21 @@ public class ThreeSumClosest {
     //substracted no  / 2
 
     //first create binary Search tree
-    class BinarySearchTree{
+    class BinarySearchTree {
 
-        class Node{
+        public void printTree() {
+            preOrderTraversal(root);
+        }
+
+        public void preOrderTraversal(Node root){
+            if(root != null){
+                preOrderTraversal(root.left);
+                System.out.println(root.val);
+                preOrderTraversal(root.right);
+            }
+        }
+
+        class Node {
             int val;
             int noOfTimes;
             Node left;
@@ -90,66 +121,129 @@ public class ThreeSumClosest {
             public Node(int val) {
                 this.val = val;
             }
+
+            @Override
+            public String toString() {
+                return ""+this.val;
+            }
         }
 
         Node root;
 
-        public BinarySearchTree(){
+        public BinarySearchTree() {
 
         }
 
-        public void insert(int val){
+        public void insert(int val) {
             Node node = new Node(val);
-            if(root == null){
+            if (root == null) {
                 root = node;
-            }else{
-                insertNode(root,node);
+            } else {
+                insertNode(root, node);
             }
         }
 
         private void insertNode(Node root, Node node) {
-            if(root == null){
+            if (root == null) {
                 return;
             }
 
-            if(node.val == root.val){
+            if (node.val == root.val) {
                 root.noOfTimes++;
                 return;
-            }else if(node.val < root.val){
-                if(root.left != null) {
+            } else if (node.val < root.val) {
+                if (root.left != null) {
                     insertNode(root.left, node);
-                }else{
+                } else {
                     root.left = node;
                 }
-            }else{
-                if(root.right != null) {
+            } else {
+                if (root.right != null) {
                     insertNode(root.right, node);
-                }else{
+                } else {
                     root.right = node;
                 }
             }
         }
 
-        public Node removeClosestNode(int val){
+        public Node removeClosestNode(int val) {
             Node[] traverse = traverse(root, val, root);
             //we need to remove this node
+
+            if (traverse[0].noOfTimes == 0) {
+                Node nodeToBeRemoved = traverse[0];
+                Node parentNode = traverse[1];
+
+                Node leftTreeNode = nodeToBeRemoved.left;
+                Node rightTreeNode = nodeToBeRemoved.right;
+
+                //we will not handle root removal for now
+                if (nodeToBeRemoved.val < parentNode.val) {
+                    //left tree
+                    //Need to reposition tree
+                    //left tree node is going to be next node
+                    if (leftTreeNode != null) {
+                        parentNode.left = leftTreeNode;
+                        //need to reposition tree
+                        Node rightChildOfLeftTreeNode = leftTreeNode.right;
+
+
+                        //find node position
+                        if (rightChildOfLeftTreeNode != null) {
+                            Node rightTraversalRoot = rightTreeNode;
+                            leftTreeNode.right = rightTraversalRoot;
+                            insertNodeInBetween(rightTraversalRoot, rightChildOfLeftTreeNode);
+                        }
+
+
+                    } else {
+                        parentNode.left = rightTreeNode;
+                    }
+
+                } else {
+                    //right tree
+
+                }
+
+            } else {
+                traverse[0].noOfTimes--;
+            }
 
             return traverse[0];
         }
 
+        private void insertNodeInBetween(Node root, Node nodeToBeAttached) {
+            if (root == null) {
+                return;
+            }
+            if (nodeToBeAttached.val < root.val) {
+                if (root.left != null) {
+                    insertNodeInBetween(root.left, nodeToBeAttached);
+                } else {
+                    root.left = nodeToBeAttached;
+                }
+            } else {
+                if (root.right != null) {
+                    insertNodeInBetween(root.right, nodeToBeAttached);
+                } else {
+                    root.right = nodeToBeAttached;
+                }
+            }
+        }
+
         private Node[] traverse(Node node, int val, Node prevNode) {
-            if(node == null){
-                return new Node[]{prevNode,null};
+            if (node == null) {
+                return new Node[]{prevNode, null};
             }
 
-            if(node.val == val){
-                return new Node[]{node,prevNode};
-            }else if(val < node.val){
+            if (node.val == val) {
+                return new Node[]{node, prevNode};
+            } else if (val < node.val) {
                 Node[] traverse = traverse(node.left, val, node);
                 traverse[1] = prevNode;
                 return traverse;
-            }else{
-                Node[] traverse = traverse(node.right,val,node);
+            } else {
+                Node[] traverse = traverse(node.right, val, node);
                 traverse[1] = prevNode;
                 return traverse;
             }
