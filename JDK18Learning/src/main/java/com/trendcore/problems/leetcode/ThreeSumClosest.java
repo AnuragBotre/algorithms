@@ -32,8 +32,8 @@ public class ThreeSumClosest {
 
         printResult(new int[]{0, 2, 1, -3}, 1);
 
-        printResult(new int[]{-100,-99,-98,-95}, -101);
-        printResult(new int[]{-100,-99,-98,-95}, 101);
+        printResult(new int[]{-100, -99, -98, -95}, -101);
+        printResult(new int[]{-100, -99, -98, -95}, 101);
 
         /*BinarySearchTree b = t.new BinarySearchTree();
         b.insert(5);
@@ -190,9 +190,9 @@ public class ThreeSumClosest {
                 //we will not handle root removal for now
 
                 //need to check for root.
-                if(parentNode.val == nodeToBeRemoved.val){
+                if (parentNode.val == nodeToBeRemoved.val) {
                     //removing left
-                    if(leftTreeNode != null){
+                    if (leftTreeNode != null) {
                         Node rightChildOfLeftTreeNode = leftTreeNode.right;
 
                         //find node position
@@ -201,12 +201,14 @@ public class ThreeSumClosest {
                             leftTreeNode.right = rightTraversalRoot;
                             insertNodeInBetween(rightTraversalRoot, rightChildOfLeftTreeNode);
                             root = leftTreeNode;
+                        } else {
+                            root = leftTreeNode;
                         }
-                    }else{
+                    } else {
                         root = rightTreeNode;
                     }
 
-                }else if (nodeToBeRemoved.val < parentNode.val) {
+                } else if (nodeToBeRemoved.val < parentNode.val) {
                     //left tree
                     //Need to reposition tree
                     //left tree node is going to be next node
@@ -281,11 +283,15 @@ public class ThreeSumClosest {
                 return new Node[]{node, prevNode};
             } else if (val < node.val) {
                 Node[] traverse = traverse(node.left, val, node);
-                traverse[1] = prevNode;
+                if(node.left == null) {
+                    traverse[1] = prevNode;
+                }
                 return traverse;
             } else {
                 Node[] traverse = traverse(node.right, val, node);
-                traverse[1] = prevNode;
+                if(node.right == null) {
+                    traverse[1] = prevNode;
+                }
                 return traverse;
             }
         }
@@ -296,7 +302,7 @@ public class ThreeSumClosest {
     public int threeSumClosest(int[] nums, int target) {
 
         BinarySearchTree b = new BinarySearchTree();
-        for(int i = 0 ; i < nums.length ; i++) {
+        for (int i = 0; i < nums.length; i++) {
             b.insert(nums[i]);
         }
 
