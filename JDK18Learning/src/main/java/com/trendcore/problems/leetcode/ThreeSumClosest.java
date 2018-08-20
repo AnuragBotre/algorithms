@@ -78,9 +78,11 @@ public class ThreeSumClosest {
 
         //b.printTree();
 
-        b.removeClosestNode(50);
-        b.removeClosestNode(150);
+        /*b.removeClosestNode(50);
+        b.removeClosestNode(150);*/
+        b.removeClosestNode(100);
         b.printTree();
+        System.out.println("New Root :- " + b.root);
     }
 
     private static void printResult(int[] nums, int target) {
@@ -186,7 +188,25 @@ public class ThreeSumClosest {
                 Node rightTreeNode = nodeToBeRemoved.right;
 
                 //we will not handle root removal for now
-                if (nodeToBeRemoved.val < parentNode.val) {
+
+                //need to check for root.
+                if(root.val == parentNode.val){
+                    //removing left
+                    if(leftTreeNode != null){
+                        Node rightChildOfLeftTreeNode = leftTreeNode.right;
+
+                        //find node position
+                        if (rightChildOfLeftTreeNode != null) {
+                            Node rightTraversalRoot = rightTreeNode;
+                            leftTreeNode.right = rightTraversalRoot;
+                            insertNodeInBetween(rightTraversalRoot, rightChildOfLeftTreeNode);
+                            root = leftTreeNode;
+                        }
+                    }else{
+                        root = rightTreeNode;
+                    }
+
+                }else if (nodeToBeRemoved.val < parentNode.val) {
                     //left tree
                     //Need to reposition tree
                     //left tree node is going to be next node
@@ -222,7 +242,7 @@ public class ThreeSumClosest {
                             insertNodeInBetween(rightTraversalRoot, leftChildOfRightTreeNode);
                         }
                     } else {
-                        parentNode.right = rightTreeNode;
+                        parentNode.right = leftTreeNode;
                     }
                 }
 
