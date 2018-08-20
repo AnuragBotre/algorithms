@@ -25,7 +25,7 @@ public class ThreeSumClosest {
     public static void main(String[] args) {
         ThreeSumClosest t = new ThreeSumClosest();
         //printResult(new int[]{-1, 2, 1, -4}, 1);
-        /*printResult(new int[]{1, 1, 1, 0}, -100);
+        printResult(new int[]{1, 1, 1, 0}, -100);
         printResult(new int[]{-1000, -900, -1, -2, 1, 4, 5}, -100);
         printResult(new int[]{0, 0, 0}, 1);
         printResult(new int[]{1, 1, -1}, 0);
@@ -33,7 +33,7 @@ public class ThreeSumClosest {
         printResult(new int[]{0, 2, 1, -3}, 1);
 
         printResult(new int[]{-100,-99,-98,-95}, -101);
-        printResult(new int[]{-100,-99,-98,-95}, 101);*/
+        printResult(new int[]{-100,-99,-98,-95}, 101);
 
         /*BinarySearchTree b = t.new BinarySearchTree();
         b.insert(5);
@@ -55,7 +55,7 @@ public class ThreeSumClosest {
         System.out.println(b.removeClosestNode(3).val);
         System.out.println(b.removeClosestNode(-3).val);*/
 
-        testForNodeRemoval(t);
+        //testForNodeRemoval(t);
     }
 
     private static void testForNodeRemoval(ThreeSumClosest t) {
@@ -176,7 +176,7 @@ public class ThreeSumClosest {
             }
         }
 
-        public Node removeClosestNode(int val) {
+        public int removeClosestNode(int val) {
             Node[] traverse = traverse(root, val, root);
             //we need to remove this node
 
@@ -190,7 +190,7 @@ public class ThreeSumClosest {
                 //we will not handle root removal for now
 
                 //need to check for root.
-                if(root.val == parentNode.val){
+                if(parentNode.val == nodeToBeRemoved.val){
                     //removing left
                     if(leftTreeNode != null){
                         Node rightChildOfLeftTreeNode = leftTreeNode.right;
@@ -250,7 +250,7 @@ public class ThreeSumClosest {
                 traverse[0].noOfTimes--;
             }
 
-            return traverse[0];
+            return traverse[0].val;
         }
 
         private void insertNodeInBetween(Node root, Node nodeToBeAttached) {
@@ -295,24 +295,31 @@ public class ThreeSumClosest {
     //keep track of positions for duplicates
     public int threeSumClosest(int[] nums, int target) {
 
-        Arrays.sort(nums);
+        BinarySearchTree b = new BinarySearchTree();
+        for(int i = 0 ; i < nums.length ; i++) {
+            b.insert(nums[i]);
+        }
+
+        //Arrays.sort(nums);
 
         int a = target - (target / 3);
 
-        Object t[] = getClosestNumber(nums, a);
+        int firstNo = b.removeClosestNode(a);
+        /*Object t[] = getClosestNumber(nums, a);
         int pos1 = (int) t[1];
-        int firstNo = (int) t[0];
-
+        int firstNo = (int) t[0];*/
         int c = (target - firstNo) / 2;
 
-        int[] closestNumber = getClosestNumber(nums, c, new int[]{pos1, -1}, 1);
+        int secondNo = b.removeClosestNode(c);
+        /*int[] closestNumber = getClosestNumber(nums, c, new int[]{pos1, -1}, 1);
         int secondNo = closestNumber[0];
-        int pos2 = closestNumber[1];
-
+        int pos2 = closestNumber[1];*/
         int thirdNoToFind = target - (firstNo + secondNo);
+        int thirdNumber = b.removeClosestNode(thirdNoToFind);
+        /*int thirdNoToFind = target - (firstNo + secondNo);
         closestNumber = getClosestNumber(nums, thirdNoToFind, new int[]{pos1, pos2}, 2);
 
-        int thirdNumber = closestNumber[0];
+        int thirdNumber = closestNumber[0];*/
 
         return firstNo + secondNo + thirdNumber;
     }
