@@ -69,10 +69,18 @@ public class ThreeSumClosest {
         b.insert(70);
         b.insert(80);
         b.insert(150);
+        b.insert(125);
+        b.insert(120);
+        b.insert(130);
+        b.insert(175);
+        b.insert(170);
+        b.insert(180);
 
-        b.printTree();
+        //b.printTree();
 
         b.removeClosestNode(50);
+        b.removeClosestNode(150);
+        b.printTree();
     }
 
     private static void printResult(int[] nums, int target) {
@@ -104,8 +112,8 @@ public class ThreeSumClosest {
             preOrderTraversal(root);
         }
 
-        public void preOrderTraversal(Node root){
-            if(root != null){
+        public void preOrderTraversal(Node root) {
+            if (root != null) {
                 preOrderTraversal(root.left);
                 System.out.println(root.val);
                 preOrderTraversal(root.right);
@@ -124,7 +132,7 @@ public class ThreeSumClosest {
 
             @Override
             public String toString() {
-                return ""+this.val;
+                return "" + this.val;
             }
         }
 
@@ -202,7 +210,20 @@ public class ThreeSumClosest {
 
                 } else {
                     //right tree
+                    if (rightTreeNode != null) {
+                        parentNode.right = rightTreeNode;
 
+                        Node leftChildOfRightTreeNode = rightTreeNode.left;
+
+                        //find node position
+                        if (leftChildOfRightTreeNode != null) {
+                            Node rightTraversalRoot = leftTreeNode;
+                            rightTreeNode.left = rightTraversalRoot;
+                            insertNodeInBetween(rightTraversalRoot, leftChildOfRightTreeNode);
+                        }
+                    } else {
+                        parentNode.right = rightTreeNode;
+                    }
                 }
 
             } else {
