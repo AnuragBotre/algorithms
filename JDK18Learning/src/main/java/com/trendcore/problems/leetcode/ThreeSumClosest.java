@@ -202,6 +202,7 @@ public class ThreeSumClosest {
                             insertNodeInBetween(rightTraversalRoot, rightChildOfLeftTreeNode);
                             root = leftTreeNode;
                         } else {
+                            leftTreeNode.right = rightTreeNode;
                             root = leftTreeNode;
                         }
                     } else {
