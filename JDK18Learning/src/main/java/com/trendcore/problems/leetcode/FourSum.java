@@ -1,6 +1,6 @@
 package com.trendcore.problems.leetcode;
 
-import java.util.List;
+import java.util.*;
 
 /**
  * https://leetcode.com/problems/4sum/description/
@@ -8,27 +8,27 @@ import java.util.List;
  * are there elements a, b, c, and d in nums
  * such that a + b + c + d = target?
  * Find all unique quadruplets in the array which gives the sum of target.
-
- Note:
-
- The solution set must not contain duplicate quadruplets.
-
- Example:
-
- Given array nums = [1, 0, -1, 0, -2, 2], and target = 0.
-
- A solution set is:
- [
- [-1,  0, 0, 1],
- [-2, -1, 1, 2],
- [-2,  0, 0, 2]
- ]
+ * <p>
+ * Note:
+ * <p>
+ * The solution set must not contain duplicate quadruplets.
+ * <p>
+ * Example:
+ * <p>
+ * Given array nums = [1, 0, -1, 0, -2, 2], and target = 0.
+ * <p>
+ * A solution set is:
+ * [
+ * [-1,  0, 0, 1],
+ * [-2, -1, 1, 2],
+ * [-2,  0, 0, 2]
+ * ]
  */
 public class FourSum {
 
     public static void main(String[] args) {
         FourSum f = new FourSum();
-        f.fourSum(new int[]{1, 0, -1, 0, -2, 2},0);
+        f.fourSum(new int[]{1, 0, -1, 0, -2, 2}, 0);
     }
 
     public List<List<Integer>> fourSum(int[] nums, int target) {
@@ -42,6 +42,68 @@ public class FourSum {
         //Approach 4 sort array go with each no and try to find
         //remaing 3 look ThreeSumClosest approach that needs to be implemented.
         //Or complete that example with this approach
+        //Implemented this algo has problems for few inputs need to think
+
+        return bruteForce(nums, target);
+    }
+
+    private List<List<Integer>> bruteForce(int[] nums, int target) {
+
+        Map map = new HashMap<>();
+
+        for (int i = 0; i < nums.length; i++) {
+            for (int j = i + 1; j < nums.length; j++) {
+                for (int k = j + 1; k < nums.length; k++) {
+                    int result = 0 - (nums[i] + nums[j] + nums[k]);
+                    if (map.get(result) != null) {
+
+                    } else {
+                        map.put(result, 0);
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    private List<List<Integer>> approach3(int[] nums, int target) {
+        List<Integer> negativeNums = new ArrayList(nums.length);
+        List<Integer> positiveNums = new ArrayList(nums.length);
+
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] < 0) {
+                negativeNums.add(nums[i]);
+            } else {
+                positiveNums.add(nums[i]);
+            }
+        }
+
+        Collections.sort(negativeNums);
+        Collections.sort(positiveNums);
+
+        //addition of 4 nums is 0
+        //4,-4,0,0
+        //4,-4,5,-5
+        //4+4,-8,0
+        //4+4+4,-12,0
+        //4,4,-4,-4
+
+        //need to go with 2 pointers
+        //start of positive nums
+        int startOfPositiveNums = 0;
+        int endOfPositiveNums = positiveNums.size()-1;
+
+        for(int i = 0 ; i < negativeNums.size() ; i++){
+            Integer firstNum = negativeNums.get(i);
+
+            if(positiveNums.get(endOfPositiveNums) < firstNum){
+                //need to look for another positive num
+
+            }else{
+
+            }
+        }
+
 
         return null;
     }
