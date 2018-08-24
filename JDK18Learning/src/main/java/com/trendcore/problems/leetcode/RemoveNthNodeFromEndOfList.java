@@ -69,7 +69,12 @@ public class RemoveNthNodeFromEndOfList {
         }
     }
 
-
+    /**
+     * Leet Code has different Approach
+     * @param head
+     * @param n
+     * @return
+     */
     public ListNode removeNthFromEnd(ListNode head, int n) {
         //traverse till n
         ListNode firstPointer = head;
