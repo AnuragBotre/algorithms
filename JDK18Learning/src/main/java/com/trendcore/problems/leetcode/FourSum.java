@@ -69,10 +69,13 @@ public class FourSum {
     private List<List<Integer>> approach3(int[] nums, int target) {
         List<Integer> negativeNums = new ArrayList(nums.length);
         List<Integer> positiveNums = new ArrayList(nums.length);
+        List<Integer> zerosNums = new ArrayList<>(nums.length);
 
         for (int i = 0; i < nums.length; i++) {
             if (nums[i] < 0) {
                 negativeNums.add(nums[i]);
+            } else if (nums[i] == 0) {
+                zerosNums.add(nums[i]);
             } else {
                 positiveNums.add(nums[i]);
             }
@@ -88,18 +91,37 @@ public class FourSum {
         //4+4+4,-12,0
         //4,4,-4,-4
 
+        //-9,-7,-5,-2,0,0,0,1,2,5,9,10,12
+        //-9,-7,-5,-2,0,0,0,1,2,5
+
         //need to go with 2 pointers
         //start of positive nums
-        int startOfPositiveNums = 0;
-        int endOfPositiveNums = positiveNums.size()-1;
 
-        for(int i = 0 ; i < negativeNums.size() ; i++){
+        int negativeArrayStartPointer = 0;
+
+        int startOfPositiveNums = 0;
+        int endOfPositiveNums = positiveNums.size() - 1;
+
+        int endPTraversalPointer = endOfPositiveNums;
+
+        for (int i = 0; i < negativeNums.size(); i++) {
             Integer firstNum = negativeNums.get(i);
 
-            if(positiveNums.get(endOfPositiveNums) < firstNum){
+            if (positiveNums.get(endOfPositiveNums) < Math.abs(firstNum)) {
                 //need to look for another positive num
+                endPTraversalPointer = endOfPositiveNums;
+                Integer secondNo = positiveNums.get(endPTraversalPointer);
+                //need to find 3rd positive.
+                if (firstNum + secondNo < 0) {
+                    //need to find 3rd no in positive array
+                    Integer thirdNum = positiveNums.get(endPTraversalPointer-1);
 
-            }else{
+                } else if (firstNum + secondNo == 0) {
+
+                } else {
+
+                }
+            } else {
 
             }
         }
