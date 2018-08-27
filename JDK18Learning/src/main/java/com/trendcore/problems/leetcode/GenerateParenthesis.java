@@ -20,6 +20,7 @@ import java.util.Stack;
  * ]
  * <p>
  * (((())))
+ * ((()()))
  * ((())())
  * ((()))()
  * ()((()))
@@ -46,12 +47,56 @@ public class GenerateParenthesis {
             finalString = finalString + "()";
         }
 
-
         list.add(s);
         list.add(finalString);
 
-        while (!s.equals(finalString)) {
+        String tempString = s;
+        int positions = n;
+        int cnt = 0;
+        int rotationCount = 1;
 
+        int nn = n;
+
+        while (!tempString.equals(finalString)) {
+            if (cnt == nn - 1) {
+                //rotation phase
+                String newString = "";
+                for (int i = 0; i < positions - 1; i++) {
+                    newString = newString + tempString.charAt(i);
+                }
+                tempString = "()" + newString;
+                System.out.println(tempString);
+                int remainingLength=tempString.length()-(2*rotationCount);
+                positions = (2*rotationCount) + (remainingLength / 2);
+                cnt = 0;
+                rotationCount++;
+                nn--;
+            } else {
+                String newString = "";
+                for (int i = 0; i < positions - 1; i++) {
+                    newString = newString + tempString.charAt(i);
+                }
+                for (int i = positions + 1; i < s.length(); i++) {
+                    newString = newString + tempString.charAt(i);
+                }
+
+                //insert at n+1 position
+                String t = "";
+                int j = 0;
+                for (j = 0; j < positions; j++) {
+                    t = t + newString.charAt(j);
+                }
+                t = t + "()";
+                for (int i = j; i < newString.length(); i++) {
+                    t = t + newString.charAt(i);
+                }
+
+                //need to move next pos starting cnt which is cnt+1
+                tempString = t;
+                System.out.println(tempString);
+                positions++;
+                cnt++;
+            }
         }
 
         return list;
