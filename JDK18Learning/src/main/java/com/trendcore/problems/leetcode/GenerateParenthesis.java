@@ -33,7 +33,8 @@ public class GenerateParenthesis {
 
     public static void main(String[] args) {
         GenerateParenthesis g = new GenerateParenthesis();
-        g.generateParenthesis(3);
+        System.out.println(g.generateParenthesis(3));
+        System.out.println(g.generateParenthesis(4));
     }
 
     public List<String> generateParenthesis(int n) {
@@ -48,7 +49,7 @@ public class GenerateParenthesis {
         }
 
         list.add(s);
-        list.add(finalString);
+        //list.add(finalString);
 
         String tempString = s;
         int positions = n;
@@ -65,7 +66,7 @@ public class GenerateParenthesis {
                     newString = newString + tempString.charAt(i);
                 }
                 tempString = "()" + newString;
-                System.out.println(tempString);
+                list.add(tempString);
                 int remainingLength=tempString.length()-(2*rotationCount);
                 positions = (2*rotationCount) + (remainingLength / 2);
                 cnt = 0;
@@ -93,7 +94,7 @@ public class GenerateParenthesis {
 
                 //need to move next pos starting cnt which is cnt+1
                 tempString = t;
-                System.out.println(tempString);
+                list.add(tempString);
                 positions++;
                 cnt++;
             }
