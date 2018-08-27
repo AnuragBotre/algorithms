@@ -18,7 +18,7 @@ import java.util.Stack;
  * "()(())",
  * "()()()"
  * ]
- *
+ * <p>
  * (((())))
  * ((())())
  * ((()))()
@@ -40,53 +40,21 @@ public class GenerateParenthesis {
         List<String> list = new ArrayList();
 
         String s = "";
+        String finalString = "";
         for (int i = 0; i < n; i++) {
-            s = s + "(";
+            s = "(" + s + ")";
+            finalString = finalString + "()";
         }
-        for (int i = 0; i < n; i++) {
-            s = s + ")";
-        }
+
 
         list.add(s);
+        list.add(finalString);
 
-        String originalString = s;
+        while (!s.equals(finalString)) {
 
-        boolean flag = true;
-        int offset = 0;
-        while (flag) {
-            //first need to find
-            int pos = getPosition(s, offset);
-            //move that character if possible
-            if (canMove(s, pos)) {
-                //form new string
-                String newString = "";
-                for (int i = 0; i < pos - 1; i++) {
-                    newString = newString + s.charAt(i);
-                }
-                newString = newString + ")";
-                newString = newString + "(";
-                for (int i = pos + 1; i < s.length(); i++) {
-                    newString = newString + s.charAt(i);
-                }
-
-                System.out.println(newString);
-                s = newString;
-
-            } else {
-                offset = pos + 1;
-            }
         }
 
-        System.out.println(s);
-
-        return null;
-
-
-        //can go have recursive algo like generating ()
-        //then insert followed and append
-        //in case of 2
-        //1st () -> (())
-        //2nd -> ()()
+        return list;
     }
 
     private boolean canMove(String s, int pos) {
@@ -98,7 +66,7 @@ public class GenerateParenthesis {
                 } else {
                     cnt++;
                 }
-            }else{
+            } else {
                 cnt--;
             }
         }
