@@ -66,8 +66,13 @@ public class MergeKSortedList {
 
     public ListNode mergeKLists(ListNode[] lists) {
         //brute force
-        return approach2(lists);
+        return divideAndConquer(lists);
 
+    }
+
+    private ListNode divideAndConquer(ListNode[] lists) {
+        //TODO : This needs to be implemented
+        return null;
     }
 
     private ListNode approach2(ListNode[] lists) {
@@ -76,7 +81,7 @@ public class MergeKSortedList {
             return null;
 
         ListNode mergedListRoot;
-        ListNode mergedList = mergedListRoot= new ListNode(0);
+        ListNode mergedList = mergedListRoot = new ListNode(0);
 
         boolean flag = true;
 
@@ -88,14 +93,14 @@ public class MergeKSortedList {
             boolean isEmpty = true;
             for (int i = 0; i < lists.length; i++) {
                 //store elements in the list
-                if(lists[i] != null) {
+                if (lists[i] != null) {
                     //list.add(i, lists[i].val);
                     list[i] = lists[i];
                     isEmpty = false;
                 }
             }
 
-            if(isEmpty){
+            if (isEmpty) {
                 break;
             }
 
@@ -115,19 +120,19 @@ public class MergeKSortedList {
     }
 
     private int[] findMinimum(ListNode[] list) {
-        int min  = 0;
+        int min = 0;
         int cnt = 0;
         int pos = 0;
-        for(int i = 0 ; i < list.length ; i++){
-            if(list[i] == null){
+        for (int i = 0; i < list.length; i++) {
+            if (list[i] == null) {
                 continue;
             }
-            if(cnt == 0){
+            if (cnt == 0) {
                 min = list[i].val;
                 pos = i;
                 cnt++;
-            }else{
-                if(list[i].val < min){
+            } else {
+                if (list[i].val < min) {
                     min = list[i].val;
                     pos = i;
                 }
@@ -136,7 +141,7 @@ public class MergeKSortedList {
         }
 
 
-        return new int[]{min,pos};
+        return new int[]{min, pos};
     }
 
     private ListNode bruteForce(ListNode[] lists) {
