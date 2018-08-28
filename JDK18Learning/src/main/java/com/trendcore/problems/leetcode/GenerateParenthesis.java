@@ -1,8 +1,6 @@
 package com.trendcore.problems.leetcode;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
 /**
  * https://leetcode.com/problems/generate-parentheses/description/
@@ -33,14 +31,55 @@ public class GenerateParenthesis {
 
     public static void main(String[] args) {
         GenerateParenthesis g = new GenerateParenthesis();
-        System.out.println(g.generateParenthesis(3));
+        //System.out.println(g.generateParenthesis(3));
         System.out.println(g.generateParenthesis(4));
     }
 
-    public List<String> generateParenthesis(int n) {
+    public List generateParenthesis(int n) {
 
-        List<String> list = new ArrayList();
+        Set<String> list = new HashSet<>();
 
+        for (int i = 0; i < n; i++) {
+            if (list.isEmpty()) {
+                list.add("()");
+            } else {
+                //List newList = new ArrayList();
+                Set<String> newList = new HashSet<>();
+                /*for (int j = 0; j < list.size(); j++) {
+                    String s = list.get(j);
+                    //start inserting  ()
+                    insert(s, newList);
+                }*/
+                for(String s : list){
+                    insert(s, newList);
+                }
+                list = newList;
+            }
+        }
+
+        List list1 = new ArrayList(list);
+
+        return list1;
+    }
+
+    private void insert(String s, Set<String> newList) {
+        String t = "()";
+        String newString = "";
+        for (int i = 0; i < s.length(); i++) {
+            newString = "";
+            for (int j = 0; j < i; j++) {
+                newString = newString + s.charAt(j);
+            }
+            newString = newString + t;
+            for (int j = i; j < s.length(); j++) {
+                newString = newString + s.charAt(j);
+            }
+
+            newList.add(newString);
+        }
+    }
+
+    private void approch2NotWorking(int n, List<String> list) {
         String s = "";
         String finalString = "";
         for (int i = 0; i < n; i++) {
@@ -67,8 +106,9 @@ public class GenerateParenthesis {
                 }
                 tempString = "()" + newString;
                 list.add(tempString);
-                int remainingLength=tempString.length()-(2*rotationCount);
-                positions = (2*rotationCount) + (remainingLength / 2);
+                System.out.println(tempString);
+                int remainingLength = tempString.length() - (2 * rotationCount);
+                positions = (2 * rotationCount) + (remainingLength / 2);
                 cnt = 0;
                 rotationCount++;
                 nn--;
@@ -95,12 +135,11 @@ public class GenerateParenthesis {
                 //need to move next pos starting cnt which is cnt+1
                 tempString = t;
                 list.add(tempString);
+                System.out.println(tempString);
                 positions++;
                 cnt++;
             }
         }
-
-        return list;
     }
 
     private boolean canMove(String s, int pos) {
@@ -126,6 +165,37 @@ public class GenerateParenthesis {
             }
         }
         return 0;
+    }
+
+    /**
+     * Leet Code most optimized solution
+     */
+    class Solution {
+        public List<String> generateParenthesis(int n) {
+            List<String> result = new ArrayList<>();
+            if (n <= 0) {
+                return result;
+            }
+            StringBuilder sb = new StringBuilder();
+            dfs(result, n, n, sb);
+            return result;
+        }
+        private void dfs(List<String> result, int left, int right, StringBuilder sb) {
+            if (left == 0 && right == 0) {
+                result.add(sb.toString());
+                return;
+            }
+            if (left > 0) {
+                sb.append('(');
+                dfs(result, left - 1, right, sb);
+                sb.deleteCharAt(sb.length() - 1);
+            }
+            if (right > left) {
+                sb.append(')');
+                dfs(result, left, right - 1, sb);
+                sb.deleteCharAt(sb.length() - 1);
+            }
+        }
     }
 
 }
