@@ -1,5 +1,8 @@
 package com.trendcore.problems.leetcode;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * https://leetcode.com/problems/merge-k-sorted-lists/description/
  * 23. Merge k Sorted Lists
@@ -33,8 +36,8 @@ public class MergeKSortedList {
 
 
         print(m.merge(l1, l2));
-        print(m.merge(l1,null));
-        print(m.merge(null,l1));
+        print(m.merge(l1, null));
+        print(m.merge(null, l1));
 
         ListNode[] lists = new ListNode[3];
         lists[0] = l1;
@@ -46,7 +49,7 @@ public class MergeKSortedList {
     private static void print(ListNode merge) {
         System.out.println();
         ListNode l = merge;
-        while(l != null){
+        while (l != null) {
             System.out.print(" " + l.val);
             l = l.next;
         }
@@ -63,13 +66,82 @@ public class MergeKSortedList {
 
     public ListNode mergeKLists(ListNode[] lists) {
         //brute force
-        return bruteForce(lists);
+        return approach2(lists);
 
+    }
+
+    private ListNode approach2(ListNode[] lists) {
+
+        if (lists.length == 0)
+            return null;
+
+        ListNode mergedListRoot;
+        ListNode mergedList = mergedListRoot= new ListNode(0);
+
+        boolean flag = true;
+
+        int originalLength = lists.length;
+
+        while (flag) {
+            //List list = new ArrayList(originalLength);
+            ListNode list[] = new ListNode[originalLength];
+            boolean isEmpty = true;
+            for (int i = 0; i < lists.length; i++) {
+                //store elements in the list
+                if(lists[i] != null) {
+                    //list.add(i, lists[i].val);
+                    list[i] = lists[i];
+                    isEmpty = false;
+                }
+            }
+
+            if(isEmpty){
+                break;
+            }
+
+            int returnArgs[] = findMinimum(list);
+            int val = returnArgs[0];
+            int pos = returnArgs[1];
+
+            mergedList.next = new ListNode(lists[pos].val);
+            lists[pos] = lists[pos].next;
+            mergedList = mergedList.next;
+
+        }
+
+        mergedListRoot = mergedListRoot.next;
+
+        return mergedListRoot;
+    }
+
+    private int[] findMinimum(ListNode[] list) {
+        int min  = 0;
+        int cnt = 0;
+        int pos = 0;
+        for(int i = 0 ; i < list.length ; i++){
+            if(list[i] == null){
+                continue;
+            }
+            if(cnt == 0){
+                min = list[i].val;
+                pos = i;
+                cnt++;
+            }else{
+                if(list[i].val < min){
+                    min = list[i].val;
+                    pos = i;
+                }
+            }
+
+        }
+
+
+        return new int[]{min,pos};
     }
 
     private ListNode bruteForce(ListNode[] lists) {
 
-        if(lists.length == 0)
+        if (lists.length == 0)
             return null;
 
         ListNode mergedList = lists[0];
@@ -84,19 +156,19 @@ public class MergeKSortedList {
         ListNode mergeList;
         ListNode mergeListRoot = mergeList = new ListNode(0);
         while (list1 != null || list2 != null) {
-            if(list1 != null && list2 != null){
-                if(list1.val < list2.val){
+            if (list1 != null && list2 != null) {
+                if (list1.val < list2.val) {
                     mergeList.next = new ListNode(list1.val);
                     list1 = list1.next;
-                }else{
+                } else {
                     mergeList.next = new ListNode(list2.val);
                     list2 = list2.next;
                 }
-            }else{
-                if(list1 != null && list2 == null){
+            } else {
+                if (list1 != null && list2 == null) {
                     mergeList.next = new ListNode(list1.val);
                     list1 = list1.next;
-                }else if(list1 == null && list2 != null){
+                } else if (list1 == null && list2 != null) {
                     mergeList.next = new ListNode(list2.val);
                     list2 = list2.next;
                 }
@@ -105,6 +177,41 @@ public class MergeKSortedList {
         }
         mergeListRoot = mergeListRoot.next;
         return mergeListRoot;
+    }
+
+    /**
+     * Leet Code Solution
+     */
+    class Solution {
+        public ListNode mergeKLists(ListNode[] lists) {
+            if (lists.length == 0) return null;
+            return merge(lists, 0, lists.length - 1);
+        }
+
+        private ListNode merge(ListNode[] lists, int left, int right) {
+            if (left == right) return lists[right];
+            int mid = left + (right - left) / 2;
+            ListNode node1 = merge(lists, left, mid);
+            ListNode node2 = merge(lists, mid + 1, right);
+            ListNode pre = new ListNode(0), p = pre;
+            while (node1 != null && node2 != null) {
+                if (node1.val <= node2.val) {
+                    p.next = node1;
+                    node1 = node1.next;
+                } else {
+                    p.next = node2;
+                    node2 = node2.next;
+                }
+                p = p.next;
+            }
+            if (node1 != null) {
+                p.next = node1;
+            }
+            if (node2 != null) {
+                p.next = node2;
+            }
+            return pre.next;
+        }
     }
 
 }
