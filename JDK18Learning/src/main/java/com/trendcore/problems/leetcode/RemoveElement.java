@@ -48,7 +48,7 @@ public class RemoveElement {
         RemoveElement r = new RemoveElement();
         int[] nums = {3, 2, 2, 3};
         //int[] nums = {0,1,2,2,3,0,4,2};
-        int i = r.removeElement(nums, 2);
+        int i = r.removeElement(nums, 3);
 
         print(nums, i);
     }
@@ -66,11 +66,22 @@ public class RemoveElement {
         int noOfVals = 0;
 
         for (int i = 0; i < nums.length; i++) {
-            if (nums[i] == val && i + 1 < nums.length) {
+            if (nums[i] == val) {
 
-                nums[i] = nums[i + 1];
-                nums[i + 1] = val;
-                noOfVals++;
+                int pos = i;
+                int j;
+                for(j = i ; j < nums.length ; j++){
+                    if(nums[j] != val){
+                        break;
+                    }
+                    noOfVals++;
+                }
+                pos = j;
+
+                nums[i] = nums[pos];
+                nums[pos] = val;
+                i = j;
+
             } else {
 
             }
