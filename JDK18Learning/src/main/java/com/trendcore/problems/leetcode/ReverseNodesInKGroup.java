@@ -42,7 +42,8 @@ public class ReverseNodesInKGroup {
         l.next.next.next = r.new ListNode(4);
         l.next.next.next.next = r.new ListNode(5);
 
-        print(r.reverseKGroup(l, 2));
+        //print(r.reverseKGroup(l, 2));
+        print(r.reverseKGroup(l, 3));
     }
 
     private static void print(ListNode listNode) {
@@ -58,13 +59,53 @@ public class ReverseNodesInKGroup {
         int cnt = 0;
 
         ListNode l = head;
+        ListNode end = null;
 
+        boolean swapHead = false;
 
         while (l != null) {
+            cnt = 0;
 
-            while(cnt < k){
+            ListNode prev = end;
 
+            ListNode start = l;
+            ListNode temp = null;
+            while (cnt < k && l.next != null) {
                 cnt++;
+                l = l.next;
+            }
+            end = l;
+
+            if (cnt >= k) {
+                //then need reverse from start and end
+                ListNode h = start;
+
+                ListNode endOfSublist = prev;
+
+                while (h != end) {
+                    ListNode next = h.next;
+                    ListNode cur = h;
+
+                    cur.next = prev;
+                    prev = cur;
+                    h = next;
+                }
+
+                start.next = l;
+
+                if (!swapHead) {
+                    head = prev;
+                    swapHead = true;
+                }
+
+                end = start;
+
+                if(endOfSublist != null){
+                    endOfSublist.next = prev;
+                }
+            } else {
+                //no reverse
+                break;
             }
 
         }
