@@ -114,4 +114,30 @@ public class ReverseNodesInKGroup {
         return head;
     }
 
+    /**
+     * Leet Code Most Optmized Approach.
+     * It does have Space Complexity.
+     */
+    class Solution {
+        public ListNode reverseKGroup(ListNode head, int k) {
+            ListNode cur = head;
+            int count = 0;
+            while (cur != null && count != k) { // search for the (k+1)th node
+                cur = cur.next;
+                count++;
+            }
+            if(count == k) { // found the (k+1)th node
+                cur = reverseKGroup(cur, k);
+                while (count-- > 0) {
+                    ListNode next = head.next;
+                    head.next = cur;
+                    cur = head;
+                    head = next;
+                }
+                head = cur;
+            }
+            return head;
+        }
+    }
+
 }
