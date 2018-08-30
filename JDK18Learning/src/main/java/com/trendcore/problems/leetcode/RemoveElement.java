@@ -45,17 +45,30 @@ package com.trendcore.problems.leetcode;
 public class RemoveElement {
 
     public static void main(String[] args) {
-        RemoveElement r = new RemoveElement();
-        int[] nums = {3, 2, 2, 3};
-        //int[] nums = {0,1,2,2,3,0,4,2};
-        int i = r.removeElement(nums, 2);
 
-        print(nums, i);
+        //int[] nums = {3, 2, 2, 3}; //val 2 - 3
+        //int[] nums = {0,1,2,2,3,0,4,2}; //val 2
+        testCase(new int[]{3, 2, 2, 3}, 2);
+        testCase(new int[]{3, 2, 2, 3}, 3);
+        testCase(new int[]{0, 1, 2, 2, 3, 0, 4, 2}, 2);
+        testCase(new int[]{3}, 3);
+        testCase(new int[]{2}, 3);
+        testCase(new int[]{3, 3}, 5);
+        testCase(new int[]{4, 5}, 5);
+        testCase(new int[]{4, 4, 3, 4, 5, 5}, 5);
     }
 
-    private static void print(int[] nums, int len) {
+    private static void testCase(int[] nums, int val) {
+        RemoveElement r = new RemoveElement();
+        //int[] nums = {3,3};
+        int i = r.removeElement(nums, val);
+
+        print(nums, i, val);
+    }
+
+    private static void print(int[] nums, int len, int val) {
         System.out.println();
-        System.out.print(" " + len + " :- ");
+        System.out.print(" [" + val + "] " + len + " :- ");
         for (int i = 0; i < nums.length; i++) {
             System.out.print(" " + nums[i]);
         }
@@ -63,7 +76,60 @@ public class RemoveElement {
 
     public int removeElement(int[] nums, int val) {
 
-        return bruteForce(nums, val);
+        int index = 0;
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] != val) {
+                nums[index] = nums[i];
+                index++;
+            }
+        }
+
+        return index;
+
+    }
+
+    private int approach2(int[] nums, int val) {
+        if (nums.length == 0) {
+            return 0;
+        } else if (nums.length == 1) {
+            return nums[0] == val ? 0 : 1;
+        }
+
+        //using 2 pointers when element is found replace at last
+
+        int last = nums.length - 1;
+
+        boolean containsVal = false;
+
+        for (int i = 0; i <= last; i++) {
+            if (nums[i] == val) {
+                //get element
+
+                boolean found = false;
+
+                for (int j = last; j > i; j--) {
+                    if (nums[j] != val) {
+                        nums[i] = nums[j];
+                        nums[j] = val;
+                        last = j;
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (!found) {
+                    last = i;
+                }
+
+                containsVal = true;
+            }
+        }
+
+        if (containsVal) {
+            return last;
+        } else {
+            return nums.length;
+        }
     }
 
     private int bruteForce(int[] nums, int val) {
