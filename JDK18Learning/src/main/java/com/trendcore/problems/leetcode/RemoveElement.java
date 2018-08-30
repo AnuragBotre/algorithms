@@ -48,7 +48,7 @@ public class RemoveElement {
         RemoveElement r = new RemoveElement();
         int[] nums = {3, 2, 2, 3};
         //int[] nums = {0,1,2,2,3,0,4,2};
-        int i = r.removeElement(nums, 3);
+        int i = r.removeElement(nums, 2);
 
         print(nums, i);
     }
@@ -63,27 +63,28 @@ public class RemoveElement {
 
     public int removeElement(int[] nums, int val) {
 
+        return bruteForce(nums, val);
+    }
+
+    private int bruteForce(int[] nums, int val) {
         int noOfVals = 0;
 
         for (int i = 0; i < nums.length; i++) {
             if (nums[i] == val) {
-
-                int pos = i;
                 int j;
-                for(j = i ; j < nums.length ; j++){
-                    if(nums[j] != val){
+                for (j = i; j < nums.length; j++) {
+                    if (nums[j] != val) {
+
+                        nums[i] = nums[j];
+                        nums[j] = val;
+
+                        noOfVals++;
                         break;
                     }
-                    noOfVals++;
                 }
-                pos = j;
-
-                nums[i] = nums[pos];
-                nums[pos] = val;
-                i = j;
 
             } else {
-
+                noOfVals++;
             }
         }
 
