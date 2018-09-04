@@ -35,6 +35,9 @@ public class LongestValidParentheses {
         System.out.println(l.longestValidParentheses("(()())"));
         System.out.println(l.longestValidParentheses("()(())"));
 
+        //This case needs to be handled
+        System.out.println(l.longestValidParentheses(")()())()()("));
+
     }
 
     public int longestValidParentheses(String s) {
@@ -42,52 +45,48 @@ public class LongestValidParentheses {
         if (s.length() < 2)
             return 0;
 
-        Stack stack = new Stack();
+        Stack<Character> stack = new Stack<>();
 
-        String validParenthesesString = "";
-        String maxLengthString = "";
+        String r = "";
 
-        List list = new ArrayList<>();
-
-        String previousString = "";
+        List<Character> list = new ArrayList<>();
 
         for (int i = 0; i < s.length(); i++) {
             if (s.charAt(i) == '(') {
                 stack.push(s.charAt(i));
+                list.add(s.charAt(i));
             } else {
-
-                int j = i;
-                int len = 0;
-                String newStr = "";
-                while(!stack.empty() && j < s.length()){
-                    if(s.charAt(j) == ')'){
-                        stack.pop();
-                        newStr = newStr + "(" + ")";
-                    }else{
-                        break;
+                if (!stack.empty()) {
+                    stack.pop();
+                    for (int j = list.size() - 1; j >= 0; j--) {
+                        if (list.get(j) != '_') {
+                            list.remove(j);
+                            break;
+                        }
                     }
-                    j++;
-                    len++;
-                }
 
-                //can we attach this string combination to previous string
-                if(stack.isEmpty())
-                    previousString = previousString + newStr;
-                else{
-                    previousString = newStr;
+                    list.add('_');
                 }
-            }
-
-            if(maxLengthString.length() < previousString.length()){
-                maxLengthString = previousString;
             }
         }
 
-        if (validParenthesesString.length() > maxLengthString.length()) {
-            maxLengthString = validParenthesesString;
+        System.out.println(list);
+
+        int max = 0;
+        String str = "";
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i) == '(') {
+                str = "";
+            } else {
+                str = str + list.get(i);
+            }
+
+            if (max < str.length()) {
+                max = str.length();
+            }
         }
 
-        return maxLengthString.length();
+        return 2 * max;
     }
 
 }
