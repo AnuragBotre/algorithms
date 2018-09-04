@@ -40,6 +40,11 @@ public class LongestValidParentheses {
 
     }
 
+    /**
+     * There is optimized way of doing this try to find.
+     * @param s
+     * @return
+     */
     public int longestValidParentheses(String s) {
 
         if (s.length() < 2)
@@ -48,6 +53,8 @@ public class LongestValidParentheses {
         Stack<Character> stack = new Stack<>();
 
         String r = "";
+
+        int len = 0;
 
         List<Character> list = new ArrayList<>();
 
@@ -65,17 +72,22 @@ public class LongestValidParentheses {
                         }
                     }
 
+                    len = len + 2;
+
                     list.add('_');
+                }else{
+                    list.add(s.charAt(i));
+                    len = 0;
                 }
             }
         }
 
-        System.out.println(list);
+        System.out.println(len + " " + list );
 
         int max = 0;
         String str = "";
         for (int i = 0; i < list.size(); i++) {
-            if (list.get(i) == '(') {
+            if (list.get(i) == '(' || list.get(i) == ')' ) {
                 str = "";
             } else {
                 str = str + list.get(i);
