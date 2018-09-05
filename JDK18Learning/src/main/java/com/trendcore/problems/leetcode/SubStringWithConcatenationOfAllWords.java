@@ -106,7 +106,6 @@ public class SubStringWithConcatenationOfAllWords {
                 s2 = s2 + words[k];
             }
 
-            //TODO : This need to be corrected
             //indexOf returns only 1st occurance
 
             int i1 = s.indexOf(s2);
