@@ -1,7 +1,11 @@
 package com.trendcore.problems.leetcode;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * https://leetcode.com/problems/substring-with-concatenation-of-all-words/description/
@@ -29,38 +33,47 @@ public class SubStringWithConcatenationOfAllWords {
 
     public static void main(String[] args) {
         testCase("barfoothefoobarman", new String[]{"foo", "bar"});
+        testCase("wordgoodstudentgoodword", new String[]{"word", "student"});
+        testCase("wordgoodgoodgoodbestword", new String[]{"word", "good", "best", "good"});
+        testCase("foobarfoobar", new String[]{"foo","bar"});
 
         SubStringWithConcatenationOfAllWords s = new SubStringWithConcatenationOfAllWords();
         s.combinationOfString(new String[]{"foo", "bar", "abc"});
     }
 
-    private void combinationOfString(String[] strings) {
+    private List<List<Integer>> combinationOfString(String[] strings) {
 
-        //TODO Fix Me
-        //Instead of string with contains
-        //use positions
+        List<List<Integer>> positions = new ArrayList<>();
 
-        List<String> list = new ArrayList();
+        int lengthOfCombinations = strings.length;
 
-        for (int i = 0; i < strings.length; i++) {
+        for (int i = 0; i < lengthOfCombinations; i++) {
             if (i == 0) {
-                for (int j = 0; j < strings.length; j++) {
-                    list.add(strings[j]);
+                for (int j = 0; j < lengthOfCombinations; j++) {
+                    ArrayList<Integer> objects = new ArrayList<>();
+                    objects.add(j);
+                    positions.add(objects);
                 }
             } else {
-                List list1 = new ArrayList();
-                for (int j = 0; j < list.size(); j++) {
-                    for (int k = 0; k < strings.length; k++) {
-                        if (!list.get(j).contains(strings[k])) {
-                            list1.add(list.get(j) + strings[k]);
+                List newList = new ArrayList();
+                for (int j = 0; j < positions.size(); j++) {
+                    for (int k = 0; k < lengthOfCombinations; k++) {
+
+                        List<Integer> integers = positions.get(j);
+                        if (!integers.contains(k)) {
+                            ArrayList<Integer> integers1 = new ArrayList<>(integers);
+                            integers1.add(k);
+                            newList.add(integers1);
                         }
                     }
                 }
-                list = list1;
+                positions = newList;
             }
         }
 
-        System.out.println(list);
+
+        return positions;
+        //System.out.println(list);
     }
 
     /*private void findCombinationOfOtherWords(String[] strings, int wordToBeSkipped,) {
@@ -69,16 +82,37 @@ public class SubStringWithConcatenationOfAllWords {
 
     private static void testCase(String str, String[] words) {
         SubStringWithConcatenationOfAllWords s = new SubStringWithConcatenationOfAllWords();
-        s.findSubstring(str, words);
+        System.out.println(" " + s.findSubstring(str, words));
     }
 
     public List<Integer> findSubstring(String s, String[] words) {
 
         //find all combination of words
         //then check for substring
+        List<List<Integer>> combinations = combinationOfString(words);
+        //List<String> combinations = new ArrayList<>();
+
+        Set<Integer> set = new HashSet<>();
+
+        for (int i = 0; i < combinations.size(); i++) {
+            List<Integer> integers = combinations.get(i);
+
+            String s2 = "";
+            for(Integer k : integers){
+                s2 = s2 + words[k];
+            }
+
+            //TODO : This need to be corrected
+            //indexOf returns only 1st occurance
+            int i1 = s.indexOf(s2);
+
+            if (i1 > -1) {
+                set.add(i1);
+            }
+        }
 
 
-        return null;
+        return new ArrayList<>(set);
     }
 
 }
