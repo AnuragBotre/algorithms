@@ -1,5 +1,7 @@
 package com.trendcore.problems.leetcode;
 
+import java.util.Arrays;
+
 /**
  * https://leetcode.com/problems/next-permutation/description/
  * 31. Next Permutation
@@ -17,22 +19,64 @@ package com.trendcore.problems.leetcode;
  * 1,2,3 → 1,3,2
  * 3,2,1 → 1,2,3
  * 1,1,5 → 1,5,1
+ * 1,3,2 -> 2,1,3
+ * 1,1,1,5 -> 1,1,5,1
+ * 1,1,2,3 -> 1,1,3,2
+ * 1,1,2,2 -> 1,2,1,2
+ * 1,2,2,2 -> 2,1,1,1
  */
 public class NextPermutation {
 
     public static void main(String[] args) {
-        testCase(new int[]{1,2,3});
-        testCase(new int[]{3,2,1});
-        testCase(new int[]{1,1,5});
+        testCase(new int[]{1, 2, 3});
+        testCase(new int[]{3, 2, 1});
+        testCase(new int[]{1, 1, 5});
+        testCase(new int[]{1, 1, 1, 5});
+        testCase(new int[]{1, 1, 2, 3});
+        testCase(new int[]{1, 1, 2, 2});
+        testCase(new int[]{1, 2, 2, 2});
     }
 
     private static void testCase(int[] nums) {
+        NextPermutation n = new NextPermutation();
+        n.nextPermutation(nums);
 
+        for (int i = 0 ; i < nums.length ; i++) {
+            System.out.print(" " + nums[i]);
+        }
+        System.out.println();
     }
 
     public void nextPermutation(int[] nums) {
-        for(int i = 0 ; i < nums.length ; i++){
-            System.out.println(nums[i]);
+        if(nums.length < 2){
+            return;
+        }
+
+        //swapping of last 2 digits
+        int newNums[] = new int[nums.length];
+
+        System.arraycopy(nums, 0, newNums, 0, nums.length);
+
+        Arrays.sort(nums);
+
+        for (int i = 0; i < newNums.length; i++) {
+            if (nums[i] != newNums[i]) {
+                return;
+            }
+        }
+
+        //need to alter last 2 digits of num
+        if (nums.length >= 2) {
+            int j = nums.length - 1;
+            for(j = nums.length - 1 ; j >= 2 ; j--){
+                if(nums[j] != nums[j-1]){
+                    break;
+                }
+            }
+
+            int temp = nums[j-1];
+            nums[j-1] = nums[j];
+            nums[j] = temp;
         }
     }
 
