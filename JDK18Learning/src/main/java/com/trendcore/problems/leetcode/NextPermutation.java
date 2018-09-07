@@ -31,6 +31,7 @@ public class NextPermutation {
         testCase(new int[]{1, 2, 3});
         testCase(new int[]{3, 2, 1});
         testCase(new int[]{1, 1, 5});
+        testCase(new int[]{1, 3, 2});
         testCase(new int[]{1, 1, 1, 5});
         testCase(new int[]{1, 1, 2, 3});
         testCase(new int[]{1, 1, 2, 2});
@@ -41,43 +42,57 @@ public class NextPermutation {
         NextPermutation n = new NextPermutation();
         n.nextPermutation(nums);
 
-        for (int i = 0 ; i < nums.length ; i++) {
+        for (int i = 0; i < nums.length; i++) {
             System.out.print(" " + nums[i]);
         }
         System.out.println();
     }
 
     public void nextPermutation(int[] nums) {
-        if(nums.length < 2){
+        if (nums.length < 2) {
             return;
         }
 
-        //swapping of last 2 digits
-        int newNums[] = new int[nums.length];
+        //find max element and its position
+        int max = 0;
+        int maxPosition = 0;
 
-        System.arraycopy(nums, 0, newNums, 0, nums.length);
+        int secondMax = 0;
+        int secondMaxPosition = 0;
 
-        Arrays.sort(nums);
+        for (int i = 0; i < nums.length; i++) {
+            if (i == 0) {
+                max = nums[i];
+                maxPosition = i;
 
-        for (int i = 0; i < newNums.length; i++) {
-            if (nums[i] != newNums[i]) {
-                return;
-            }
-        }
+                secondMax = nums[i];
+                secondMaxPosition = i;
+            } else {
+                if (max < nums[i]) {
 
-        //need to alter last 2 digits of num
-        if (nums.length >= 2) {
-            int j = nums.length - 1;
-            for(j = nums.length - 1 ; j >= 2 ; j--){
-                if(nums[j] != nums[j-1]){
-                    break;
+                    secondMax = max;
+                    secondMaxPosition = maxPosition;
+
+                    max = nums[i];
+                    maxPosition = i;
                 }
-            }
 
-            int temp = nums[j-1];
-            nums[j-1] = nums[j];
-            nums[j] = temp;
+            }
         }
+
+        if (maxPosition == 0) {
+            Arrays.sort(nums);
+        } else {
+            nums[maxPosition] = secondMax;
+            nums[secondMaxPosition] = max;
+        }
+
+        //System.out.println("Max :- " + max + " Max Position :- " + maxPosition + " Second Max :- " + secondMax + " Second Max Positon :- " + secondMaxPosition);
+
+        //find smaller number than max and swap two position
+        //Also if Max number position is 0 then also return sorted array
+        //if not found then return sorted nums
+
     }
 
 }
