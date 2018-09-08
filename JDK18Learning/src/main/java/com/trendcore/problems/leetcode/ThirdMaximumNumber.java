@@ -37,6 +37,9 @@ public class ThirdMaximumNumber {
         System.out.println(thirdMax(new int[]{3, 2, 1}));
         System.out.println(thirdMax(new int[]{1, 2}));
         System.out.println(thirdMax(new int[]{2, 2, 3, 1}));
+        System.out.println(thirdMax(new int[]{2, 5, 7}));
+        System.out.println(thirdMax(new int[]{2, 5}));
+        System.out.println(thirdMax(new int[]{-2147483648,-2147483648,-2147483648,-2147483648,1,1,1}));
     }
 
     public int thirdMax(int[] nums) {
@@ -54,22 +57,38 @@ public class ThirdMaximumNumber {
             } else {
 
                 if (firstMax < nums[i]) {
+                    if(secondMaxInitialized) {
+                        thirdMax = secondMax;
+                        thirdMaxInitialized = true;
+                    }
+                    secondMax = firstMax;
+                    secondMaxInitialized = true;
+
                     firstMax = nums[i];
                 }
 
                 if (!secondMaxInitialized && nums[i] < firstMax) {
+                    thirdMax = secondMax;
                     secondMax = nums[i];
-                } else if(secondMaxInitialized && secondMax < firstMax && secondMax < nums[i]){
+                    secondMaxInitialized = true;
+                } else if (secondMaxInitialized && nums[i] < firstMax && secondMax < nums[i]) {
+                    thirdMax = secondMax;
+                    thirdMaxInitialized = true;
                     secondMax = nums[i];
+                    secondMaxInitialized = true;
                 }
 
-                /*if(!thirdMaxInitialized && ){
-
-                }*/
+                if (!thirdMaxInitialized && secondMaxInitialized && nums[i] < secondMax) {
+                    thirdMax = nums[i];
+                    thirdMaxInitialized = true;
+                } else if (thirdMaxInitialized && nums[i] < secondMax && thirdMax < nums[i]) {
+                    thirdMax = nums[i];
+                    thirdMaxInitialized = true;
+                }
             }
         }
 
-        return 0;
+        return thirdMaxInitialized ? thirdMax : firstMax;
     }
 
     private void shifArr(int[] kArr, int num) {
