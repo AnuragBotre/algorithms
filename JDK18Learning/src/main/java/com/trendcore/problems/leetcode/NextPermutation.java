@@ -53,45 +53,10 @@ public class NextPermutation {
             return;
         }
 
-        //find max element and its position
-        int max = 0;
-        int maxPosition = 0;
-
-        int secondMax = 0;
-        int secondMaxPosition = 0;
-
-        for (int i = 0; i < nums.length; i++) {
-            if (i == 0) {
-                max = nums[i];
-                maxPosition = i;
-
-                secondMax = nums[i];
-                secondMaxPosition = i;
-            } else {
-                if (max < nums[i]) {
-
-                    secondMax = max;
-                    secondMaxPosition = maxPosition;
-
-                    max = nums[i];
-                    maxPosition = i;
-                }
-
-            }
-        }
-
-        if (maxPosition == 0) {
-            Arrays.sort(nums);
-        } else {
-            nums[maxPosition] = secondMax;
-            nums[secondMaxPosition] = max;
-        }
-
-        //System.out.println("Max :- " + max + " Max Position :- " + maxPosition + " Second Max :- " + secondMax + " Second Max Positon :- " + secondMaxPosition);
-
-        //find smaller number than max and swap two position
-        //Also if Max number position is 0 then also return sorted array
-        //if not found then return sorted nums
+        //solve using 2 pointer
+        //compare i and i+1
+        //if i+1 is greater than those can be swapped
+        //in case of 1 1 2 2 min should point to 1 and max should point to 2
 
     }
 
