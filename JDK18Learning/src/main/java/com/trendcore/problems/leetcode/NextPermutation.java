@@ -20,6 +20,7 @@ import java.util.Arrays;
  * 3,2,1 → 1,2,3
  * 1,1,5 → 1,5,1
  * 1,3,2 -> 2,1,3
+ * 2,3,1 -> 3,1,2
  * 1,1,1,5 -> 1,1,5,1
  * 1,1,2,3 -> 1,1,3,2
  * 1,1,2,2 -> 1,2,1,2
@@ -28,10 +29,12 @@ import java.util.Arrays;
 public class NextPermutation {
 
     public static void main(String[] args) {
+        testCase(new int[]{1, 2, 5, 4, 7, 6, 9, 5, 3, 1});
         testCase(new int[]{1, 2, 3});
         testCase(new int[]{3, 2, 1});
         testCase(new int[]{1, 1, 5});
         testCase(new int[]{1, 3, 2});
+        testCase(new int[]{2, 3, 1});
         testCase(new int[]{1, 1, 1, 5});
         testCase(new int[]{1, 1, 2, 3});
         testCase(new int[]{1, 1, 2, 2});
@@ -49,14 +52,54 @@ public class NextPermutation {
     }
 
     public void nextPermutation(int[] nums) {
+
+        //start with 0 try to find just max
+
+
         if (nums.length < 2) {
             return;
         }
 
-        //solve using 2 pointer
-        //compare i and i+1
-        //if i+1 is greater than those can be swapped
-        //in case of 1 1 2 2 min should point to 1 and max should point to 2
+        //swap last no
+        //if swapped with max no then re-swapping is required
+
+        //algo
+        //First find no a[i-1] > a[i] in decreasing order.
+        boolean found = false;
+        int i;
+        for (i = nums.length - 1; i > 0; i--) {
+            if (nums[i] > nums[i - 1]) {
+                found = true;
+                break;
+            }
+        }
+
+        if (found) {
+            System.out.println(nums[i] + " " + nums[i - 1]);
+            //from the ith position find no just max than a[i]
+
+            int justMax = 0;
+            int max = 0;
+            boolean justMaxInitialized = false;
+            for (int j = i - 1; j < nums.length; j++) {
+                if (j == i - 1) {
+                    justMax = nums[j];
+                    max = nums[j];
+                } else {
+                    if (max < nums[j]) {
+                        max = nums[j];
+                    }
+
+                    if (justMax > nums[j] && justMax < max) {
+                        justMax = nums[j];
+                    }
+
+
+                }
+            }
+        } else {
+            Arrays.sort(nums);
+        }
 
     }
 
