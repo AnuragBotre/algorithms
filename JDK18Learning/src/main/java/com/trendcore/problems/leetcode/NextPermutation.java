@@ -39,6 +39,7 @@ public class NextPermutation {
         testCase(new int[]{1, 1, 2, 3});
         testCase(new int[]{1, 1, 2, 2});
         testCase(new int[]{1, 2, 2, 2});
+        testCase(new int[]{2,3,1,3,3});
     }
 
     private static void testCase(int[] nums) {
@@ -75,26 +76,35 @@ public class NextPermutation {
         }
 
         if (found) {
-            System.out.println(nums[i] + " " + nums[i - 1]);
-            //from the ith position find no just max than a[i]
 
-            int justMax = 0;
-            int max = 0;
+
+            int justMaxPos = 0;
             boolean justMaxInitialized = false;
             for (int j = i - 1; j < nums.length; j++) {
-                if (j == i - 1) {
-                    justMax = nums[j];
-                    max = nums[j];
+                if (!justMaxInitialized) {
+                    if (nums[j] > nums[i - 1]) {
+                        justMaxPos = j;
+                        justMaxInitialized = true;
+                    }
                 } else {
-                    if (max < nums[j]) {
-                        max = nums[j];
+                    if (nums[j] <= nums[justMaxPos]) {
+                        if (nums[j] > nums[i - 1]) {
+                            justMaxPos = j;
+                            justMaxInitialized = true;
+                        }
                     }
+                }
+            }
 
-                    if (justMax > nums[j] && justMax < max) {
-                        justMax = nums[j];
-                    }
+            if (justMaxInitialized) {
+                int temp = nums[justMaxPos];
+                nums[justMaxPos] = nums[i - 1];
+                nums[i - 1] = temp;
 
-
+                for (int firstPointer = i, lastPointer = nums.length - 1; firstPointer < lastPointer; firstPointer++, lastPointer--) {
+                    int t = nums[firstPointer];
+                    nums[firstPointer] = nums[lastPointer];
+                    nums[lastPointer] = t;
                 }
             }
         } else {
