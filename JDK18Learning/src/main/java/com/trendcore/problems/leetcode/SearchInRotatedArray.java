@@ -27,14 +27,14 @@ package com.trendcore.problems.leetcode;
 public class SearchInRotatedArray {
 
     public static void main(String[] args) {
-        testCase(new int[]{4,5,6,7,0,1,2}, 0);
-        testCase(new int[]{4,5,6,7,0,1,2}, 3);
-        testCase(new int[]{4,5,6,7,0,1,2}, 4);
-        testCase(new int[]{4,5,6,7,0,1,2}, 1);
-        testCase(new int[]{4,5,6,7,0,1,2}, 5);
-        testCase(new int[]{4,5,6,7,0,1,2}, 6);
-        testCase(new int[]{4,5,6,7,0,1,2}, 7);
-        testCase(new int[]{4,5,6,7,0,1,2}, 1);
+        testCase(new int[]{4, 5, 6, 7, 0, 1, 2}, 0);
+        testCase(new int[]{4, 5, 6, 7, 0, 1, 2}, 3);
+        testCase(new int[]{4, 5, 6, 7, 0, 1, 2}, 4);
+        testCase(new int[]{4, 5, 6, 7, 0, 1, 2}, 1);
+        testCase(new int[]{4, 5, 6, 7, 0, 1, 2}, 5);
+        testCase(new int[]{4, 5, 6, 7, 0, 1, 2}, 6);
+        testCase(new int[]{4, 5, 6, 7, 0, 1, 2}, 7);
+        testCase(new int[]{4, 5, 6, 7, 0, 1, 2}, 1);
     }
 
     private static void testCase(int[] ints, int i) {
@@ -55,19 +55,10 @@ public class SearchInRotatedArray {
             mid = (low + high) / 2;
             if (nums[mid] == target) {
                 return mid;
-            } else if (nums[mid] < target) {
-                if (nums[mid] > nums[high]) {
-                    low = mid + 1;
-                } else {
-                    high = mid - 1;
-                }
             } else {
-                if (nums[mid] > nums[high]) {
-                    low = mid + 1;
-                } else {
-                    high = mid - 1;
-                }
-            }
+                //need to find the partition
+                //need to check if given no is in the first half or second
+                            }
         }
 
         return -1;
