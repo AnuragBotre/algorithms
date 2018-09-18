@@ -35,6 +35,7 @@
         <module>javaunsafe</module>
         <module>OffHeapCache</module>
         <module>kryo-study</module>
+        <module>neural-networkt-tutorial</module>
     </modules>
 
     <dependencyManagement>
