@@ -104,6 +104,19 @@ public class ValidSudoku {
         v.testCase(board3);
 
         System.out.println(v.oneOfLeetCodeSolutionIsValidSudoku(board3));
+
+        char[][] board4 = new char[][]{
+                {'.', '.', '.', '.', '5', '.', '.', '1', '.'},
+                {'.', '4', '.', '3', '.', '.', '.', '.', '.'},
+                {'.', '.', '.', '.', '.', '3', '.', '.', '1'},
+                {'8', '.', '.', '.', '.', '.', '.', '2', '.'},
+                {'.', '.', '2', '.', '7', '.', '.', '.', '.'},
+                {'.', '1', '5', '.', '.', '.', '.', '.', '.'},
+                {'.', '.', '.', '.', '.', '2', '.', '.', '.'},
+                {'.', '2', '.', '9', '.', '.', '.', '.', '.'},
+                {'.', '.', '4', '.', '.', '.', '.', '.', '.'}};
+        v.testCase(board4);
+        System.out.println(" " + v.oneOfLeetCodeSolutionIsValidSudoku(board4));
     }
 
     private void testCase(char[][] board) {
@@ -112,7 +125,67 @@ public class ValidSudoku {
 
     //TODO : Optmize me
     public boolean isValidSudoku(char[][] board) {
+        //check for columns
 
+        int cnt = 0;
+
+        for (int i = 0; i < board.length; i++) {
+
+            Map duplicate = new HashMap();
+            for (int j = 0; j < board[i].length; j++) {
+                //cases
+                //find duplicate in a row
+                if (duplicate.containsKey(board[i][j])) {
+                    return false;
+                } else {
+                    if (board[i][j] != '.') {
+                        duplicate.put(board[i][j], true);
+                    }
+
+                }
+            }
+
+            duplicate = new HashMap();
+            for (int k = 0; k < board.length; k++) {
+                //cases
+                //find duplicate in a row
+                if (duplicate.containsKey(board[k][i])) {
+                    return false;
+                } else {
+                    if (board[k][i] != '.') {
+                        duplicate.put(board[k][i], true);
+                    }
+
+                }
+            }
+
+            if (i % 3 == 0) {
+
+                for (int j = 0; j < board.length; j = j + 3) {
+                    Map map = new HashMap();
+
+                    for (int k = i; k < i + 3; k++) {
+                        for (int l = j; l < j + 3; l++) {
+                            if (map.containsKey(board[k][l])) {
+                                return false;
+                            } else {
+                                if (board[k][l] != '.') {
+                                    map.put(board[k][l], true);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+
+        return true;
+
+
+    }
+
+    private boolean approach1(char[][] board) {
         //check for columns
         for (int i = 0; i < board.length; i++) {
 
@@ -172,22 +245,22 @@ public class ValidSudoku {
 
 
     public boolean oneOfLeetCodeSolutionIsValidSudoku(char[][] board) {
-        for (int i = 0;i < 9; i ++){
-            if (!isRowValid(i,board) || !isColumnValid(i,board) || !isSquareValid(3*(i % 3), 3*(i / 3),board)){
+        for (int i = 0; i < 9; i++) {
+            if (!isRowValid(i, board) || !isColumnValid(i, board) || !isSquareValid(3 * (i % 3), 3 * (i / 3), board)) {
                 return false;
             }
         }
         return true;
     }
 
-    private boolean isRowValid(int y,char[][] board){
-        boolean [] alreadyUsed = new boolean[9];
-        for(int x = 0;x<9;x++){
+    private boolean isRowValid(int y, char[][] board) {
+        boolean[] alreadyUsed = new boolean[9];
+        for (int x = 0; x < 9; x++) {
             char c = board[x][y];
-            int cValue = c-'1';
-            if(c!='.' && alreadyUsed[cValue] == true){
+            int cValue = c - '1';
+            if (c != '.' && alreadyUsed[cValue] == true) {
                 return false;
-            } else if (c!='.'){
+            } else if (c != '.') {
                 alreadyUsed[cValue] = true;
             }
         }
@@ -195,29 +268,29 @@ public class ValidSudoku {
     }
 
 
-    private boolean isColumnValid(int x,char[][] board){
-        boolean [] alreadyUsed = new boolean[9];
-        for(int y = 0;y<9;y++){
+    private boolean isColumnValid(int x, char[][] board) {
+        boolean[] alreadyUsed = new boolean[9];
+        for (int y = 0; y < 9; y++) {
             char c = board[x][y];
-            int cValue = c-'1';
-            if(c!='.' && alreadyUsed[cValue] == true){
+            int cValue = c - '1';
+            if (c != '.' && alreadyUsed[cValue] == true) {
                 return false;
-            } else if (c!='.'){
+            } else if (c != '.') {
                 alreadyUsed[cValue] = true;
             }
         }
         return true;
     }
 
-    private boolean isSquareValid(int x,int y,char[][] board){
-        boolean [] alreadyUsed = new boolean[9];
-        for(int i = 0;i<3;i++){
-            for(int j = 0;j<3;j++){
-                char c = board[x+i][y+j];
-                int cValue = c-'1';
-                if(c!='.' && alreadyUsed[cValue] == true){
+    private boolean isSquareValid(int x, int y, char[][] board) {
+        boolean[] alreadyUsed = new boolean[9];
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                char c = board[x + i][y + j];
+                int cValue = c - '1';
+                if (c != '.' && alreadyUsed[cValue] == true) {
                     return false;
-                } else if (c!='.'){
+                } else if (c != '.') {
                     alreadyUsed[cValue] = true;
                 }
             }
