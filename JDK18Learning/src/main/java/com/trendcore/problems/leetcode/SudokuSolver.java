@@ -134,18 +134,21 @@ public class SudokuSolver {
 
         if (board[row][column] == '.') {
 
-            List<List<Character>> newCharacterList = new ArrayList<>(list);
+            //Get new instance of list here
+            List<List<Character>> newCharacterList = getCopiedList(list);
+
+            //List<List<Character>> newCharacterList = new ArrayList<>(list);
 
 
-            List<Character> originalList = list.get(row);
-            List<Character> newList = new ArrayList<>(originalList);
+            //List<Character> originalList = list.get(row);
+            //List<Character> newList = new ArrayList<>(originalList);
 
             //list.add(row,newList);
-            newCharacterList.remove(row);
-            newCharacterList.add(row,newList);
+            //newCharacterList.remove(row);
+            //newCharacterList.add(row,newList);
 
             //List<List<Character>> tempList = new ArrayList(list);
-            board[row][column] = newList.remove(listIndex);
+            board[row][column] = newCharacterList.get(row).remove(listIndex);
             //System.out.print(" " + board[row][column]);
             //TODO : Need to create function which will take row,col,char which will check if the board is valid.
             if (v.isValidSudoku(board)) {
@@ -178,6 +181,16 @@ public class SudokuSolver {
 
 
         recurse(row, column + 1, listIndex, board, list);*/
+    }
+
+    private List getCopiedList(List<List<Character>> list) {
+        List newList = new ArrayList();
+        for(List charList : list){
+            List tempList = new ArrayList(charList);
+            newList.add(tempList);
+        }
+
+        return newList;
     }
 
     private void insertCharacter(List<List<Character>> list, char[][] board, int row, int col, int listIndex) {
