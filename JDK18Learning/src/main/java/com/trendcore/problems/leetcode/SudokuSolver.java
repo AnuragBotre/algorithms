@@ -40,6 +40,11 @@ public class SudokuSolver {
                 {'6', '.', '.',},
                 {'.', '9', '8',}
         };*/
+        /*char board1[][] = new char[][]{
+                {'5', '3', '.','.', '7', '.'},
+                {'6', '.', '.','1', '9', '5'},
+                {'.', '9', '8','.', '.', '.'}
+        };*/
         s.solveSudoku(board1);
 
         s.printBoard(board1);
@@ -110,7 +115,7 @@ public class SudokuSolver {
             return;
         }
 
-        if (column >= board.length) {
+        if (column >= board[row].length) {
             //System.out.println();
             recurse(row + 1, 0, 0, board, list);
             return;
@@ -126,6 +131,8 @@ public class SudokuSolver {
             List<Character> originalList = list.get(row);
             List<Character> newList = new ArrayList<>(originalList);
 
+            //list.add(row,newList);
+            list.remove(row);
             list.add(row,newList);
 
             //List<List<Character>> tempList = new ArrayList(list);
@@ -135,10 +142,11 @@ public class SudokuSolver {
             if (v.isValidSudoku(board)) {
                 recurse(row, column + 1, 0, board, list);
             } else {
+                list.remove(row);
                 list.add(row,originalList);
                 board[row][column] = '.';
-                return;
-                //recurse(row, column, listIndex + 1, board, list);
+                //return;
+                recurse(row, column, listIndex + 1, board, list);
             }
 
 
