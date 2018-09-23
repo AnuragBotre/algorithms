@@ -35,19 +35,25 @@ public class SudokuSolver {
                 {'.', '.', '.', '4', '1', '9', '.', '.', '5'},
                 {'.', '.', '.', '.', '8', '.', '.', '7', '9'}
         };
+        s.testCase(board1);
         /*char board1[][] = new char[][]{
                 {'5', '3', '.',},
                 {'6', '.', '.',},
                 {'.', '9', '8',}
-        };*/
-        /*char board1[][] = new char[][]{
+        };
+        char board2[][] = new char[][]{
                 {'5', '3', '.','.', '7', '.'},
                 {'6', '.', '.','1', '9', '5'},
                 {'.', '9', '8','.', '.', '.'}
-        };*/
-        s.solveSudoku(board1);
+        };
+        s.testCase(board2);*/
+        //s.solveSudoku(board1);
+    }
 
-        s.printBoard(board1);
+    private void testCase(char[][] board1) {
+        solveSudoku(board1);
+
+        printBoard(board1);
     }
 
     private void printBoard(char[][] board) {
@@ -122,28 +128,31 @@ public class SudokuSolver {
         }
 
         if (listIndex >= list.get(row).size()) {
-            //recurse(row, column + 1, 0, board, list);
+            recurse(row, column + 1, 0, board, list);
             return;
         }
 
         if (board[row][column] == '.') {
 
+            List<List<Character>> newCharacterList = new ArrayList<>(list);
+
+
             List<Character> originalList = list.get(row);
             List<Character> newList = new ArrayList<>(originalList);
 
             //list.add(row,newList);
-            list.remove(row);
-            list.add(row,newList);
+            newCharacterList.remove(row);
+            newCharacterList.add(row,newList);
 
             //List<List<Character>> tempList = new ArrayList(list);
             board[row][column] = newList.remove(listIndex);
             //System.out.print(" " + board[row][column]);
             //TODO : Need to create function which will take row,col,char which will check if the board is valid.
             if (v.isValidSudoku(board)) {
-                recurse(row, column + 1, 0, board, list);
+                recurse(row, column + 1, 0, board, newCharacterList);
             } else {
-                list.remove(row);
-                list.add(row,originalList);
+                /*list.remove(row);
+                list.add(row,originalList);*/
                 board[row][column] = '.';
                 //return;
                 recurse(row, column, listIndex + 1, board, list);
