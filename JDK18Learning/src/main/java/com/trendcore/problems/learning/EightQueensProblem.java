@@ -3,6 +3,9 @@ package com.trendcore.problems.learning;
 public class EightQueensProblem {
 
     public static void main(String[] args) {
+
+        EightQueensProblem e = new EightQueensProblem();
+
         char board[][] = new char[8][8];
 
         for (int i = 0; i < board.length; i++) {
@@ -13,17 +16,22 @@ public class EightQueensProblem {
 
         printBoard(board);
 
-        backtrack(board, 0, 0);
-
+        board[0][0] = '1';
+        e.backtrack(board, 0, 0);
+        System.out.println(e.isValid(board, 1, 1));
+        System.out.println(e.isValid(board, 7, 0));
+        System.out.println(e.isValid(board, 0, 7));
     }
 
-    private static void backtrack(char[][] board, int rows, int cols) {
+    private void backtrack(char[][] board, int rows, int cols) {
         if (isValid(board, rows, cols)) {
             board[rows][cols] = '1';
         }
     }
 
-    private static boolean isValid(char[][] board, int rows, int cols) {
+    private boolean isValid(char[][] board, int rows, int cols) {
+
+        board[rows][cols] = '1';
 
         //check verticals
         int rowCount = 0;
@@ -38,17 +46,49 @@ public class EightQueensProblem {
             }
         }
 
-        if (rowCount > 0 || colCount > 0)
+        if (rowCount > 1 || colCount > 1)
             return false;
 
         //check diagonals
-        /*int r = rows;
+        int r = rows;
         int c = cols;
-        while(true){
+        int diagonalCount = 0;
+        int counter = 0;
+        boolean flag = true;
+        while (flag) {
 
-        }*/
+            if (rows + counter >= board.length || cols + counter >= board.length) {
+                break;
+            }
 
-        return false;
+            if (counter != 0 && board[rows + counter][cols + counter] == '1') {
+                diagonalCount++;
+            }
+
+            counter++;
+        }
+
+        counter = 0;
+        while (flag) {
+
+            if ((rows + counter) < 0 || (cols + counter) < 0) {
+                break;
+            }
+
+            if (counter != 0 && board[rows + counter][cols + counter] == '1') {
+                diagonalCount++;
+            }
+
+            counter--;
+        }
+
+        if (diagonalCount > 0) {
+            return false;
+        }
+
+        board[rows][cols] = '0';
+
+        return true;
     }
 
     private static void printBoard(char[][] board) {
