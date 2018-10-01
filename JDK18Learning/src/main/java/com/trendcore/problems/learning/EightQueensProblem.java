@@ -17,9 +17,21 @@ public class EightQueensProblem {
             }
         }
 
-        printBoard(board);
 
-        //board[0][0] = '1';
+        /*1 0 0 0 0 0 0 0
+        0 0 1 0 0 0 0 0
+        0 1 0 0 0 0 0 0
+        0 0 0 0 0 0 0 0
+        0 0 0 0 0 0 0 0
+        0 0 0 0 0 0 0 0
+        0 0 0 0 0 0 0 0
+        0 0 0 0 0 0 0 0*/
+
+        /*printBoard(board);
+
+        board[0][0] = '1';
+        board[1][2] = '1';
+        System.out.println(e.isValid(board, 2, 1));*/
         e.backtrack(board, 0, 0);
 
         System.out.println(" ");
@@ -49,14 +61,17 @@ public class EightQueensProblem {
             return;
         }
 
-        for(int i = 0 ; i < board.length ; i++){
-            if(isValid(board, rows, i)){
-                board[rows][i] = QUEEN;
-                backtrack(board, rows + 1, 0);
-            }else{
-                board[rows][cols] = BLANK_SQUARE;
-
+        for(int i = rows ; i < board.length ; i++){
+            for(int j = cols ; j < board.length ; j++){
+                if(isValid(board, i, j)){
+                    board[i][j] = QUEEN;
+                    backtrack(board, i + 1, 0);
+                }else{
+                    board[i][j] = BLANK_SQUARE;
+                    //backtrack(board, rows, i);
+                }
             }
+
         }
 
         /*if (isValid(board, rows, cols)) {
@@ -127,11 +142,27 @@ public class EightQueensProblem {
             int incCounter = 0;
             while (flag) {
 
-                if ((rows + counter) < 0 || (cols + counter) < 0) {
+                if ((rows + decCounter) < 0 || (cols + incCounter) >= board.length) {
                     break;
                 }
 
                 if (incCounter != 0 && board[rows + decCounter][cols + incCounter] == '1') {
+                    diagonalCount++;
+                }
+
+                decCounter--;
+                incCounter++;
+            }
+
+            decCounter = 0;
+            incCounter = 0;
+            while (flag) {
+
+                if ((rows + incCounter) >= board.length || (cols + decCounter) < 0) {
+                    break;
+                }
+
+                if (incCounter != 0 && board[rows + incCounter][cols + decCounter] == '1') {
                     diagonalCount++;
                 }
 
