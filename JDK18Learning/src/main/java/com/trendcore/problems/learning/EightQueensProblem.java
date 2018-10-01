@@ -61,14 +61,13 @@ public class EightQueensProblem {
             return;
         }
 
-        for(int i = rows ; i < board.length ; i++){
-            for(int j = cols ; j < board.length ; j++){
-                if(isValid(board, i, j)){
+        for (int i = rows; i < board.length; i++) {
+            for (int j = cols; j < board.length; j++) {
+                if (isValid(board, i, j)) {
                     board[i][j] = QUEEN;
                     backtrack(board, i + 1, 0);
-                }else{
+                } else {
                     board[i][j] = BLANK_SQUARE;
-                    //backtrack(board, rows, i);
                 }
             }
 
@@ -181,7 +180,7 @@ public class EightQueensProblem {
             board[rows][cols] = '0';
 
             return true;
-        }finally {
+        } finally {
             board[rows][cols] = BLANK_SQUARE;
         }
     }
