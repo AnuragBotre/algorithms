@@ -9,7 +9,7 @@ public class EightQueensProblem {
 
         EightQueensProblem e = new EightQueensProblem();
 
-        char board[][] = new char[8][8];
+        char board[][] = new char[4][4];
 
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {
@@ -32,7 +32,18 @@ public class EightQueensProblem {
         board[0][0] = '1';
         board[1][2] = '1';
         System.out.println(e.isValid(board, 2, 1));*/
-        e.backtrack(board, 0, 0);
+
+        for (int i = 0; i < board.length; ) {
+            boolean backtrack = e.backtrack(board, 0, i);
+            if (!backtrack) {
+                i++;
+            }
+        }
+
+        /*for(int i = 0 ; i < board.length ; i++){
+            e.backtrack(board, i, 0);
+        }*/
+
 
         System.out.println(" ");
 
@@ -50,36 +61,27 @@ public class EightQueensProblem {
         }
     }
 
-    private void backtrack(char[][] board, int rows, int cols) {
-
-        if (cols >= board.length) {
-            //backtrack(board, rows + 1, 0);
-            return;
-        }
-
+    private boolean backtrack(char[][] board, int rows, int cols) {
         if (rows >= board.length) {
-            return;
+            return false;
         }
 
-        for (int i = rows; i < board.length; i++) {
-            for (int j = cols; j < board.length; j++) {
-                if (isValid(board, i, j)) {
-                    board[i][j] = QUEEN;
-                    backtrack(board, i + 1, 0);
-                } else {
-                    board[i][j] = BLANK_SQUARE;
-                }
-            }
+        return findCol(board, rows, cols);
+    }
 
+    private boolean findCol(char[][] board, int rows, int cols) {
+        if (cols >= board.length) {
+            return false;
         }
 
-        /*if (isValid(board, rows, cols)) {
-            board[rows][cols] = '1';
-            backtrack(board, rows, cols + 1);
+        if (isValid(board, rows, cols)) {
+            board[rows][cols] = QUEEN;
+            return backtrack(board, rows + 1, cols);
         } else {
             board[rows][cols] = BLANK_SQUARE;
-            backtrack(board, rows, cols + 1);
-        }*/
+            return findCol(board, rows, cols + 1);
+        }
+
     }
 
     private boolean isValid(char[][] board, int rows, int cols) {
