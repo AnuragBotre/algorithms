@@ -19,10 +19,10 @@ public class EightQueensProblem {
             }
         }
 
-        board[0][0] = 1;
-        board[1][2] = 1;
-        board[2][4] = 1;
-        board[3][6] = 1;
+        board[0][0] = QUEEN;
+        board[1][2] = QUEEN;
+        board[2][4] = QUEEN;
+        board[3][6] = QUEEN;
 
         for (int col = 0; col < board.length; col++) {
             System.out.println(" " + col + " " + e.isValid(board, 4, col));
@@ -88,9 +88,9 @@ public class EightQueensProblem {
         if (isValid(board, rows, cols)) {
             board[rows][cols] = QUEEN;
 
-            debug(board);
+            //debug(board);
 
-            boolean backtrack = backtrack(board, rows + 1, cols);
+            boolean backtrack = backtrack(board, rows + 1, 0);
             //System.out.println(" " + backtrack);
             if (!backtrack && cols < board.length) {
                 board[rows][cols] = BLANK_SQUARE;
@@ -100,7 +100,7 @@ public class EightQueensProblem {
         } else {
             board[rows][cols] = BLANK_SQUARE;
             boolean col = findCol(board, rows, cols + 1);
-            System.out.println(" " + col);
+            //System.out.println(" " + col);
             return col;
         }
 
