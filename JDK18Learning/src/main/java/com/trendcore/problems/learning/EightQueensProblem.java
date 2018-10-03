@@ -1,5 +1,7 @@
 package com.trendcore.problems.learning;
 
+import java.util.Scanner;
+
 public class EightQueensProblem {
 
     public static final char BLANK_SQUARE = '0';
@@ -9,7 +11,7 @@ public class EightQueensProblem {
 
         EightQueensProblem e = new EightQueensProblem();
 
-        char board[][] = new char[4][4];
+        char board[][] = new char[8][8];
 
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {
@@ -17,15 +19,24 @@ public class EightQueensProblem {
             }
         }
 
+        board[0][0] = 1;
+        board[1][2] = 1;
+        board[2][4] = 1;
+        board[3][6] = 1;
 
-        /*1 0 0 0 0 0 0 0
-        0 0 1 0 0 0 0 0
-        0 1 0 0 0 0 0 0
-        0 0 0 0 0 0 0 0
-        0 0 0 0 0 0 0 0
-        0 0 0 0 0 0 0 0
-        0 0 0 0 0 0 0 0
-        0 0 0 0 0 0 0 0*/
+        for (int col = 0; col < board.length; col++) {
+            System.out.println(" " + col + " " + e.isValid(board, 4, col));
+        }
+
+        /*
+         1 0 0 0 0 0 0 0
+         0 0 1 0 0 0 0 0
+         0 0 0 0 1 0 0 0
+         0 0 0 0 0 0 1 0
+         0 0 0 0 0 0 0 0
+         0 0 0 0 0 0 0 0
+         0 0 0 0 0 0 0 0
+         0 0 0 0 0 0 0 0*/
 
         /*printBoard(board);
 
@@ -76,12 +87,29 @@ public class EightQueensProblem {
 
         if (isValid(board, rows, cols)) {
             board[rows][cols] = QUEEN;
-            return backtrack(board, rows + 1, cols);
+
+            debug(board);
+
+            boolean backtrack = backtrack(board, rows + 1, cols);
+            //System.out.println(" " + backtrack);
+            if (!backtrack && cols < board.length) {
+                board[rows][cols] = BLANK_SQUARE;
+                return findCol(board, rows, cols + 1);
+            }
+            return backtrack;
         } else {
             board[rows][cols] = BLANK_SQUARE;
-            return findCol(board, rows, cols + 1);
+            boolean col = findCol(board, rows, cols + 1);
+            System.out.println(" " + col);
+            return col;
         }
 
+    }
+
+    private void debug(char[][] board) {
+        Scanner s = new Scanner(System.in);
+        s.next();
+        printBoard(board);
     }
 
     private boolean isValid(char[][] board, int rows, int cols) {
