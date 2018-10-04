@@ -44,18 +44,19 @@ public class EightQueensProblem {
         board[1][2] = '1';
         System.out.println(e.isValid(board, 2, 1));*/
 
-        for (int i = 0; i < board.length; ) {
+        /*for (int i = 0; i < board.length; ) {
             boolean backtrack = e.backtrack(board, 0, i);
             if (!backtrack) {
                 i++;
             }
-        }
+        }*/
 
         /*for(int i = 0 ; i < board.length ; i++){
             e.backtrack(board, i, 0);
         }*/
 
 
+        e.backtrack(board, 0, 0);
         System.out.println(" ");
 
         printBoard(board);
@@ -89,14 +90,18 @@ public class EightQueensProblem {
             board[rows][cols] = QUEEN;
 
             //debug(board);
-
-            boolean backtrack = backtrack(board, rows + 1, 0);
-            //System.out.println(" " + backtrack);
-            if (!backtrack && cols < board.length) {
-                board[rows][cols] = BLANK_SQUARE;
-                return findCol(board, rows, cols + 1);
+            if(rows +1 >= board.length){
+                return true;
+            }else{
+                boolean backtrack = backtrack(board, rows + 1, 0);
+                //System.out.println(" " + backtrack);
+                if (!backtrack && cols < board.length) {
+                    board[rows][cols] = BLANK_SQUARE;
+                    return findCol(board, rows, cols + 1);
+                }
+                return backtrack;
             }
-            return backtrack;
+
         } else {
             board[rows][cols] = BLANK_SQUARE;
             boolean col = findCol(board, rows, cols + 1);
