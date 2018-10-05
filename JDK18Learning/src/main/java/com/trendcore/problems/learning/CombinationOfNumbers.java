@@ -26,8 +26,7 @@ public class CombinationOfNumbers {
 
     private void doForRemaining(String s, int noOfCombinations, Set<String> collector) {
         if (s.split(",").length == noOfCombinations) {
-            System.out.println(s);
-            //TODO need to considere hash codes.
+            //System.out.println(s);
             //Hash codes are not getting same.
             collector.add(s);
             return;
