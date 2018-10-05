@@ -1,14 +1,78 @@
 package com.trendcore.problems.learning;
 
+import java.util.HashSet;
+import java.util.Set;
+import java.util.StringTokenizer;
+
 public class CombinationOfNumbers {
 
     public static void main(String[] args) {
         CombinationOfNumbers c = new CombinationOfNumbers();
 
-        c.printCombinations(3);
+        Set<String> collector = new HashSet<>();
+
+        c.printCombinations(3,collector);
+
+        collector.forEach(System.out::println);
     }
 
-    private void printCombinations(int noOfCombinations) {
+    private void printCombinations(int noOfCombinations, Set<String> collector) {
+        String s = "";
+        for (int i = 0; i < noOfCombinations; i++) {
+            s = i + ",";
+            doForRemaining(s, noOfCombinations , collector);
+        }
+    }
+
+    private void doForRemaining(String s, int noOfCombinations, Set<String> collector) {
+        if (s.split(",").length == noOfCombinations) {
+            System.out.println(s);
+            //TODO need to considere hash codes.
+            //Hash codes are not getting same.
+            collector.add(s);
+            return;
+        }
+
+        for (int i = 0; i < noOfCombinations; i++) {
+            if (!contains(i, s)) {
+                s = s + i + ",";
+                doForRemaining(s, noOfCombinations, collector);
+            }
+        }
+
+
+        //take out last element
+        String s1 = s;
+        String[] split = s1.split(",");
+        if (split.length == noOfCombinations) {
+
+            if(split[0].equals(""+(noOfCombinations-1))){
+                return;
+            }
+            s = "";
+            for (int i = 0; i < split.length; i++) {
+                if (i == split.length - 2) {
+                    s = s + split[i] + ",";
+                }
+            }
+            s = s + split[split.length - 1] + ",";
+            doForRemaining(s,noOfCombinations, collector);
+        }
+    }
+
+    private boolean contains(int i, String s) {
+        StringTokenizer tokenizer = new StringTokenizer(s, ",");
+        while (tokenizer.hasMoreElements()) {
+            String s1 = tokenizer.nextToken();
+            if (s1.trim().equals("" + i)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /*private void printCombinations(int noOfCombinations) {
         for (int i = 0; i < noOfCombinations; i++) {
             //get ith element and insert in between except for i
             //insert xth at position
@@ -46,6 +110,6 @@ public class CombinationOfNumbers {
                 otherElements++;
             }
         }
-    }
+    }*/
 
 }
