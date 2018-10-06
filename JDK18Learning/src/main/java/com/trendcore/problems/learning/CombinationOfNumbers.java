@@ -1,17 +1,16 @@
 package com.trendcore.problems.learning;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.StringTokenizer;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class CombinationOfNumbers {
 
     public static void main(String[] args) {
         CombinationOfNumbers c = new CombinationOfNumbers();
 
-        Set<String> collector = new HashSet<>();
+        Set<String> collector = new TreeSet<>();
 
-        c.printCombinations(3,collector);
+        c.printCombinations(4, collector);
 
         collector.forEach(System.out::println);
     }
@@ -20,11 +19,11 @@ public class CombinationOfNumbers {
         String s = "";
         for (int i = 0; i < noOfCombinations; i++) {
             s = i + ",";
-            doForRemaining(s, noOfCombinations , collector);
+            doForRemaining(s, noOfCombinations, collector, noOfCombinations - 1);
         }
     }
 
-    private void doForRemaining(String s, int noOfCombinations, Set<String> collector) {
+    private void doForRemaining(String s, int noOfCombinations, Set<String> collector, int rotationalIndex) {
         if (s.split(",").length == noOfCombinations) {
             //System.out.println(s);
             //Hash codes are not getting same.
@@ -35,13 +34,27 @@ public class CombinationOfNumbers {
         for (int i = 0; i < noOfCombinations; i++) {
             if (!contains(i, s)) {
                 s = s + i + ",";
-                doForRemaining(s, noOfCombinations, collector);
+                doForRemaining(s, noOfCombinations, collector, rotationalIndex);
             }
         }
 
 
-        //take out last element
         String s1 = s;
+        String[] split = s1.split(",");
+        //if (split.length == noOfCombinations) {
+        //shift array
+        //for (int i = noOfCombinations - 1; i > 0; i--) {
+        if (rotationalIndex > 0) {
+            String temp = split[rotationalIndex - 1];
+            split[rotationalIndex - 1] = split[rotationalIndex];
+            split[rotationalIndex] = temp;
+            doForRemaining(toString(split , rotationalIndex), noOfCombinations, collector, rotationalIndex - 1);
+        }
+
+        //}
+
+        //take out last element
+        /*String s1 = s;
         String[] split = s1.split(",");
         if (split.length == noOfCombinations) {
 
@@ -49,14 +62,23 @@ public class CombinationOfNumbers {
                 return;
             }
             s = "";
-            for (int i = 0; i < split.length; i++) {
-                if (i == split.length - 2) {
+            //TODO :- need to fix this logic.
+            for (int i = 0; i < split.length - 2; i++) {
+
                     s = s + split[i] + ",";
-                }
+
             }
             s = s + split[split.length - 1] + ",";
             doForRemaining(s,noOfCombinations, collector);
+        }*/
+    }
+
+    private String toString(String[] split, int rotationalIndex) {
+        String s = "";
+        for (int i = 0; i < rotationalIndex; i++) {
+            s = s + split[i] + ",";
         }
+        return s;
     }
 
     private boolean contains(int i, String s) {
