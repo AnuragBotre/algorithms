@@ -25,9 +25,9 @@ public class CombinationOfNumbers {
 
     private void doForRemaining(String s, int noOfCombinations, Set<String> collector, int rotationalIndex) {
         if (s.split(",").length == noOfCombinations) {
-            //System.out.println(s);
+            System.out.println(s);
             //Hash codes are not getting same.
-            collector.add(s);
+            //collector.add(s);
             return;
         }
 
@@ -45,10 +45,15 @@ public class CombinationOfNumbers {
         //shift array
         //for (int i = noOfCombinations - 1; i > 0; i--) {
         if (rotationalIndex > 0) {
-            String temp = split[rotationalIndex - 1];
-            split[rotationalIndex - 1] = split[rotationalIndex];
-            split[rotationalIndex] = temp;
-            doForRemaining(toString(split , rotationalIndex), noOfCombinations, collector, rotationalIndex - 1);
+
+            for (int i = rotationalIndex; i < noOfCombinations; i++) {
+                String temp = split[i - 1];
+                split[i - 1] = split[i];
+                split[i] = temp;
+            }
+            String s2 = toString(split, rotationalIndex);
+            //System.out.println(s2);
+            doForRemaining(s2, noOfCombinations, collector, rotationalIndex - 1);
         }
 
         //}
