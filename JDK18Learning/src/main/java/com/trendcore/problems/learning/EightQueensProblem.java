@@ -89,7 +89,7 @@ public class EightQueensProblem {
         if (isValid(board, rows, cols)) {
             board[rows][cols] = QUEEN;
 
-            //debug(board);
+            debug(board);
             if(rows +1 >= board.length){
                 return true;
             }else{
