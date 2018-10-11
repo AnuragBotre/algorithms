@@ -32,7 +32,7 @@ public class CombinationSum {
                 if (isNumberPresent(i1, candidates)) {
                     System.out.println(candidates[i] + " " + i1);
                 }
-                findWithSubtraction(target,i,candidates);
+                findWithSubtraction(target, i, candidates);
             }
         }
 
@@ -66,5 +66,34 @@ public class CombinationSum {
         }
         System.out.println();
     }
+
+    //write all the combination
+    private void isDivisible(int no, int target) {
+        if (target % no == 0) {
+            System.out.println("true");
+        }
+        System.out.println("false");
+    }
+
+    private void subtractAndSearch(int target, int candidates[], int currentCandidate) {
+        if (target < 0) {
+            return;
+        }
+
+        int result = target - currentCandidate;
+        //find the result in
+        find(result, candidates, currentCandidate);
+        subtractAndSearch(result, candidates, currentCandidate);
+    }
+
+    private void find(int result, int[] candidates, int currentCandidate) {
+        for (int i = 0; i < candidates.length; i++) {
+            if (candidates[i] != currentCandidate && result % candidates[i] == 0) {
+                System.out.println("true");
+            }
+        }
+        System.out.println("false");
+    }
+
 
 }
