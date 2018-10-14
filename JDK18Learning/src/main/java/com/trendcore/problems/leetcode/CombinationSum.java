@@ -1,5 +1,6 @@
 package com.trendcore.problems.leetcode;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -8,32 +9,81 @@ public class CombinationSum {
     public static void main(String[] args) {
         CombinationSum c = new CombinationSum();
         c.testCase(new int[]{2, 3, 6, 7}, 7);
-        //c.testCase(new int[]{2, 3, 5}, 8);
+        c.testCase(new int[]{2, 3, 5}, 8);
     }
 
     private void testCase(int[] candidates, int target) {
-        System.out.println(combinationSum(candidates, target));
+        List<List<Integer>> lists = combinationSum(candidates, target);
+        lists.forEach(integers -> {
+                    integers.forEach(integer -> System.out.print(" " + integer));
+                    System.out.println();
+                }
+        );
     }
 
     private List<List<Integer>> combinationSum(int[] candidates, int target) {
 
+        System.out.println("Starting");
+        int result;
+        List finalList = new ArrayList();
+
+        for (int i = 0; i < candidates.length; i++) {
+            //substract
+            result = target;
+            List list = new ArrayList();
+            List searchList = new ArrayList();
+
+            while (result > 0) {
+                result = result - candidates[i];
+                if (result < 0) {
+                    break;
+                }
+
+                list.add(candidates[i]);
+
+                //search the result
+                Integer search = search(result, candidates, i);
+                if (search != null) {
+                    searchList.addAll(list);
+                    searchList.add(search);
+                    finalList.add(searchList);
+                    searchList = new ArrayList();
+                }
+            }
+
+            if (result == 0) {
+                //need to check the list
+                finalList.add(list);
+            }
+        }
+
+        return finalList;
+    }
+
+    private Integer search(int result, int[] candidates, int position) {
+        for (int i = 0; i < candidates.length; i++) {
+            if (candidates[i] == result) {
+                return candidates[i];
+            }
+        }
+        return null;
+    }
+
+    private List<List<Integer>> approach1(int[] candidates, int target) {
         //sort the candidates
         Arrays.sort(candidates);
 
         for (int i = 0; i < candidates.length; i++) {
-            if (target % candidates[i] == 0) {
+            if (isDivisible(candidates[i], target)) {
                 int r = target / candidates[i];
                 //1st combination
                 insertNoRTimes(candidates[i], r);
                 //need to check multiple combination of r.
                 findWithSubtraction(target, i, candidates);
-            } else {
-                int i1 = target % candidates[i];
-                if (isNumberPresent(i1, candidates)) {
-                    System.out.println(candidates[i] + " " + i1);
-                }
-                findWithSubtraction(target, i, candidates);
             }
+
+            List list = new ArrayList();
+            subtractAndSearch(target, candidates, candidates[i], list);
         }
 
         return null;
@@ -68,31 +118,37 @@ public class CombinationSum {
     }
 
     //write all the combination
-    private void isDivisible(int no, int target) {
+    private boolean isDivisible(int no, int target) {
         if (target % no == 0) {
-            System.out.println("true");
+            return true;
         }
-        System.out.println("false");
+        return false;
     }
 
-    private void subtractAndSearch(int target, int candidates[], int currentCandidate) {
+    private boolean subtractAndSearch(int target, int[] candidates, int currentCandidate, List list) {
         if (target < 0) {
-            return;
+            return false;
         }
 
+        list.add(currentCandidate);
         int result = target - currentCandidate;
+
+        if (result == 0) {
+            return true;
+        }
         //find the result in
-        find(result, candidates, currentCandidate);
-        subtractAndSearch(result, candidates, currentCandidate);
+
+        return subtractAndSearch(result, candidates, currentCandidate, list);
     }
 
-    private void find(int result, int[] candidates, int currentCandidate) {
+    private Integer find(int result, int[] candidates, int currentCandidate) {
         for (int i = 0; i < candidates.length; i++) {
             if (candidates[i] != currentCandidate && result % candidates[i] == 0) {
-                System.out.println("true");
+                return candidates[i];
             }
         }
-        System.out.println("false");
+
+        return null;
     }
 
 
