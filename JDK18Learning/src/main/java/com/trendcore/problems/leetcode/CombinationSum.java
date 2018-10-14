@@ -10,9 +10,11 @@ public class CombinationSum {
         CombinationSum c = new CombinationSum();
         c.testCase(new int[]{2, 3, 6, 7}, 7);
         c.testCase(new int[]{2, 3, 5}, 8);
+        c.testCase(new int[]{3,5,7}, 15);
     }
 
     private void testCase(int[] candidates, int target) {
+        System.out.println("target -> " + target);
         List<List<Integer>> lists = combinationSum(candidates, target);
         lists.forEach(integers -> {
                     integers.forEach(integer -> System.out.print(" " + integer));
