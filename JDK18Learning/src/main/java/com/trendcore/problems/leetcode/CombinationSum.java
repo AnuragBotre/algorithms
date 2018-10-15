@@ -8,8 +8,8 @@ public class CombinationSum {
 
     public static void main(String[] args) {
         CombinationSum c = new CombinationSum();
-        c.testCase(new int[]{2, 3, 6, 7}, 7);
-        c.testCase(new int[]{2, 3, 5}, 8);
+        //c.testCase(new int[]{2, 3, 6, 7}, 7);
+        //c.testCase(new int[]{2, 3, 5}, 8);
         c.testCase(new int[]{3, 5, 7}, 15);
     }
 
@@ -70,7 +70,7 @@ public class CombinationSum {
 
         list.remove(list.size()-1);
         //remove one element and then take next element
-        traverse(candidates,target,i+1,list,secondList);
+        traverse = traverse(candidates,target,i+1,list,secondList);
 
         return traverse;
     }
