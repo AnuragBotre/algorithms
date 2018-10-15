@@ -8,8 +8,8 @@ public class CombinationSum {
 
     public static void main(String[] args) {
         CombinationSum c = new CombinationSum();
-        //c.testCase(new int[]{2, 3, 6, 7}, 7);
-        //c.testCase(new int[]{2, 3, 5}, 8);
+        c.testCase(new int[]{2, 3, 6, 7}, 7);
+        c.testCase(new int[]{2, 3, 5}, 8);
         c.testCase(new int[]{3, 5, 7}, 15);
     }
 
@@ -23,7 +23,7 @@ public class CombinationSum {
         );
     }
 
-    //Not working for some test cases
+
     private List<List<Integer>> combinationSum(int[] candidates, int target) {
         List<List<Integer>> secondList = new ArrayList();
         /*for (int i = 0; i < candidates.length; i++) {
@@ -75,6 +75,7 @@ public class CombinationSum {
         return traverse;
     }
 
+    //Not working for some test cases
     private List<List<Integer>> approach2(int[] candidates, int target) {
         System.out.println("Starting");
         int result;
