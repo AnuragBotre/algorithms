@@ -10,7 +10,7 @@ public class CombinationSum {
         CombinationSum c = new CombinationSum();
         c.testCase(new int[]{2, 3, 6, 7}, 7);
         c.testCase(new int[]{2, 3, 5}, 8);
-        c.testCase(new int[]{3,5,7}, 15);
+        c.testCase(new int[]{3, 5, 7}, 15);
     }
 
     private void testCase(int[] candidates, int target) {
@@ -23,8 +23,59 @@ public class CombinationSum {
         );
     }
 
+    //Not working for some test cases
     private List<List<Integer>> combinationSum(int[] candidates, int target) {
+        List<List<Integer>> secondList = new ArrayList();
+        /*for (int i = 0; i < candidates.length; i++) {
+            List list = new ArrayList();
+            traverse(candidates, target, i , list , secondList);
+            printList(secondList);
+        }*/
+        List list = new ArrayList();
+        traverse(candidates, target, 0 , list , secondList);
 
+        return secondList;
+    }
+
+    private void printList(List<List> lists) {
+        System.out.println();
+        lists.forEach(integers -> {
+                    integers.forEach(integer -> System.out.print(" " + integer));
+                    System.out.println();
+                }
+        );
+        System.out.println();
+    }
+
+    private boolean traverse(int[] candidates, int target, int i, List list, List secondList) {
+
+        if(i >= candidates.length){
+            if(target == 0){
+                return true;
+            }
+            return false;
+        }
+
+        if (target <= 0) {
+            if(target == 0){
+                return true;
+            }
+            return false;
+        }
+        list.add(candidates[i]);
+        boolean traverse = traverse(candidates, target - candidates[i], i, list, secondList);
+        if(traverse){
+            secondList.add(new ArrayList<>(list));
+        }
+
+        list.remove(list.size()-1);
+        //remove one element and then take next element
+        traverse(candidates,target,i+1,list,secondList);
+
+        return traverse;
+    }
+
+    private List<List<Integer>> approach2(int[] candidates, int target) {
         System.out.println("Starting");
         int result;
         List finalList = new ArrayList();
