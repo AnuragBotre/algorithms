@@ -31,6 +31,9 @@ public class TrappingRainWater {
         t.testCase(new int[]{2, 2, 3});
         t.testCase(new int[]{2, 0, 3});
         t.testCase(new int[]{4, 2, 3});
+        t.testCase(new int[]{5, 4, 1, 2});
+        t.testCase(new int[]{5,2,1,2,1,5});
+        t.testCase(new int[]{4, 3, 2, 1, 0, 1, 2, 3, 4});
     }
 
     private void testCase(int[] height) {
@@ -72,7 +75,7 @@ public class TrappingRainWater {
         int area = 0;
         int b = Math.min(height[startPointer], height[endPointer]);
         for (int i = startPointer + 1; i < endPointer; i++) {
-            int r = b - height[i];
+            int r = height[i] < b ? b - height[i] : 0;
             area = area + r;
         }
         return area;
@@ -89,16 +92,24 @@ public class TrappingRainWater {
 
             int heightOfStartPointer = height[startPointer];
             int cnt = 0;
+            int endPointer = startPointer + 1;
+
+            boolean endPointerInit = false;
+
             for (int i = startPointer + 1; i < height.length; i++) {
+
                 if (height[i] >= height[startPointer]) {
-                    return i;
-                } else {
-                    if(cnt >= 1){
-                        needToFindEndPointerGreaterThanStartPointerHeight = true;
-                    }
+                    endPointer = i;
+                    endPointerInit = true;
+                } else if (endPointerInit && height[i] < endPointer) {
+                    break;
                 }
                 startPointer = i;
                 cnt++;
+            }
+
+            if (endPointerInit) {
+                return endPointer;
             }
         }
         return null;
