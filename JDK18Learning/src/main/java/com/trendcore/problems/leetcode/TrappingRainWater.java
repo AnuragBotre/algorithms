@@ -10,8 +10,8 @@ package com.trendcore.problems.leetcode;
  * The above elevation map is represented by
  * array [0,1,0,2,1,0,1,3,2,1,2,1].
  * In this case, 6 units of rain water (blue section) are being trapped.
- *
- *
+ * <p>
+ * <p>
  * Thanks Marcos for contributing this image!
  * <p>
  * Example:
@@ -38,7 +38,7 @@ public class TrappingRainWater {
 
     public int trap(int[] height) {
 
-        int startPointer = 0;
+        Integer startPointer = 0;
         boolean starPointerInit = false;
 
         int endPointer = 0;
@@ -47,11 +47,29 @@ public class TrappingRainWater {
             startPointer = i;
             if (!starPointerInit) {
                 //get start pointer
+                startPointer = getStartPointer(height, i);
+                if(startPointer != null) {
+                    System.out.println(" Start pointer :- " + startPointer);
+                }
             }
         }
 
 
         return 0;
+    }
+
+    private Integer getStartPointer(int[] height, int i) {
+        for (int j = i + 1; j < height.length; j++) {
+            if (height[i] > height[j]) {
+                return i;
+            } else if (height[i] == height[j]) {
+
+            } else {
+                return j;
+            }
+        }
+
+        return null;
     }
 
 }
