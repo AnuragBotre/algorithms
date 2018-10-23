@@ -34,9 +34,13 @@
                 <version>1.0-SNAPSHOT</version>
                 <executions>
                     <execution>
+                        <phase>install</phase>
                         <goals>
                             <goal>classpath</goal>
                         </goals>
+                        <configuration>
+                            <warPath>ABCD</warPath>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
