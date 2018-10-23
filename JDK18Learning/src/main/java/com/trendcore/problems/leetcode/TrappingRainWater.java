@@ -30,6 +30,7 @@ public class TrappingRainWater {
         t.testCase(new int[]{1, 2, 3});
         t.testCase(new int[]{2, 2, 3});
         t.testCase(new int[]{2, 0, 3});
+        t.testCase(new int[]{4, 2, 3});
     }
 
     private void testCase(int[] height) {
@@ -68,14 +69,36 @@ public class TrappingRainWater {
     }
 
     private int calculateArea(int[] height, Integer startPointer, Integer endPointer) {
-        System.out.println("Start Pointer :- " + startPointer + " End Pointer :- " + endPointer);
-        return 0;
+        int area = 0;
+        int b = Math.min(height[startPointer], height[endPointer]);
+        for (int i = startPointer + 1; i < endPointer; i++) {
+            int r = b - height[i];
+            area = area + r;
+        }
+        return area;
     }
 
     private Integer getEndPointer(int[] height, Integer startPointer) {
-        for (int i = startPointer + 2; i < height.length; i++) {
-            if (height[i] >= height[startPointer]) {
-                return i;
+
+        //TODO : need to calculate the end Pointer
+
+        if (startPointer < height.length) {
+
+            //need to find end pointer greater than start pointer heigh
+            boolean needToFindEndPointerGreaterThanStartPointerHeight = false;
+
+            int heightOfStartPointer = height[startPointer];
+            int cnt = 0;
+            for (int i = startPointer + 1; i < height.length; i++) {
+                if (height[i] >= height[startPointer]) {
+                    return i;
+                } else {
+                    if(cnt >= 1){
+                        needToFindEndPointerGreaterThanStartPointerHeight = true;
+                    }
+                }
+                startPointer = i;
+                cnt++;
             }
         }
         return null;
