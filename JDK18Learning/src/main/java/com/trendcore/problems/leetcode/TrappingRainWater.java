@@ -41,35 +41,56 @@ public class TrappingRainWater {
         Integer startPointer = 0;
         boolean starPointerInit = false;
 
-        int endPointer = 0;
+        int area = 0;
 
-        for (int i = 0; i < height.length - 1; i++) {
-            startPointer = i;
-            if (!starPointerInit) {
-                //get start pointer
-                startPointer = getStartPointer(height, i);
-                if(startPointer != null) {
-                    System.out.println(" Start pointer :- " + startPointer);
+        Integer endPointer = 0;
+
+        for (int i = 0; i < height.length; i++) {
+            //get start pointer
+            startPointer = getStartPointer(height, i);
+
+            if (startPointer != null) {
+                //from start pointer + 2 get end pointer
+                endPointer = getEndPointer(height, startPointer);
+
+                if (endPointer != null) {
+                    area = area + calculateArea(height, startPointer, endPointer);
+
+                    //after all need to adjust i
+                    i = endPointer - 1;
                 }
             }
+
         }
 
 
+        return area;
+    }
+
+    private int calculateArea(int[] height, Integer startPointer, Integer endPointer) {
+        System.out.println("Start Pointer :- " + startPointer + " End Pointer :- " + endPointer);
         return 0;
     }
 
-    private Integer getStartPointer(int[] height, int i) {
-        for (int j = i + 1; j < height.length; j++) {
-            if (height[i] > height[j]) {
+    private Integer getEndPointer(int[] height, Integer startPointer) {
+        for (int i = startPointer + 2; i < height.length; i++) {
+            if (height[i] >= height[startPointer]) {
                 return i;
-            } else if (height[i] == height[j]) {
-
-            } else {
-                return j;
             }
         }
-
         return null;
+    }
+
+    private Integer getStartPointer(int[] height, int currentPos) {
+        int j;
+        for (j = currentPos + 1; j < height.length; j++) {
+            if (height[currentPos] > height[j]) {
+                return currentPos;
+            }
+            currentPos = j;
+        }
+
+        return j;
     }
 
 }
