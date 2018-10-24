@@ -32,7 +32,8 @@ public class TrappingRainWater {
         t.testCase(new int[]{2, 0, 3});
         t.testCase(new int[]{4, 2, 3});
         t.testCase(new int[]{5, 4, 1, 2});
-        t.testCase(new int[]{5,2,1,2,1,5});
+        t.testCase(new int[]{5, 2, 1, 2, 1, 5});
+        t.testCase(new int[]{9, 6, 8, 8, 5, 6, 3});
         t.testCase(new int[]{4, 3, 2, 1, 0, 1, 2, 3, 4});
     }
 
@@ -40,6 +41,7 @@ public class TrappingRainWater {
         System.out.println(trap(height));
     }
 
+    //TODO : Optimize me
     public int trap(int[] height) {
 
         Integer startPointer = 0;
@@ -93,15 +95,26 @@ public class TrappingRainWater {
             int heightOfStartPointer = height[startPointer];
             int cnt = 0;
             int endPointer = startPointer + 1;
-
+            int s = startPointer;
             boolean endPointerInit = false;
 
             for (int i = startPointer + 1; i < height.length; i++) {
 
                 if (height[i] >= height[startPointer]) {
+
+                    if (endPointerInit) {
+                        if(height[endPointer] < height[i]){
+                            endPointer = i;
+                        }
+                    } else {
+                        endPointer = i;
+                        endPointerInit = true;
+                    }
+                }
+
+                if (height[i] >= height[s]) {
                     endPointer = i;
                     endPointerInit = true;
-                } else if (endPointerInit && height[i] < endPointer) {
                     break;
                 }
                 startPointer = i;
