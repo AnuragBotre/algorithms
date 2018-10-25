@@ -69,6 +69,7 @@ public class WildCardMatching {
         w.testCase("", "*" , true);
         w.testCase("acdcb", "a*c?b" , false);
         w.testCase("aaaabaaaabbbbaabbbaabbaababbabbaaaababaaabbbbbbaabbbabababbaaabaabaaaaaabbaabbbbaababbababaabbbaababbbba", "*****b*aba***babaa*bbaba***a*aaba*b*aa**a*b**ba***a*a*", true);*/
+        w.testCase("ababba","***b*ab***ba",true);
     }
 
     private void testCase(String abc, String s, boolean b) {
@@ -151,7 +152,7 @@ public class WildCardMatching {
 
         boolean traverse = traverse(s, stringPointer + 1, p, patternPointer);
         if (!traverse) {
-            traverse(s, stringPointer, p, patternPointer + 1);
+            traverse = traverse(s, stringPointer, p, patternPointer + 1);
         }
 
         return traverse;
