@@ -53,20 +53,26 @@ public class WildCardMatching {
 
     public static void main(String[] args) {
         WildCardMatching w = new WildCardMatching();
-        System.out.println(w.isMatch("abc", "*"));
-        System.out.println(w.isMatch("abc", "**"));
-        System.out.println(w.isMatch("abc", "***"));
-        System.out.println(w.isMatch("abc", "abc"));
-        System.out.println(w.isMatch("abc", "???"));
-        System.out.println(w.isMatch("abc", "a"));
-        System.out.println(w.isMatch("abc", "a*c"));
-        System.out.println(w.isMatch("abc", "a?c"));
-        System.out.println(w.isMatch("abc", "a**c"));
-        System.out.println(w.isMatch("abc", "**c"));
-        System.out.println(w.isMatch("abc", "*b*c"));
-        System.out.println(w.isMatch("", "*"));
-        System.out.println(w.isMatch("acdcb", "a*c?b"));
-        System.out.println(w.isMatch("aaaabaaaabbbbaabbbaabbaababbabbaaaababaaabbbbbbaabbbabababbaaabaabaaaaaabbaabbbbaababbababaabbbaababbbba", "*****b*aba***babaa*bbaba***a*aaba*b*aa**a*b**ba***a*a*"));
+
+        w.testCase("bba", "*a**", true);
+        /*w.testCase("abc", "**" , true);
+        w.testCase("abc", "*" , true);
+        w.testCase("abc", "***" , true);
+        w.testCase("abc", "abc",true);
+        w.testCase("abc", "???",true);
+        w.testCase("abc", "a" , false);
+        w.testCase("abc", "a*c" , true);
+        w.testCase("abc", "a?c" , true);
+        w.testCase("abc", "a**c" , true);
+        w.testCase("abc", "**c" , true);
+        w.testCase("abc", "*b*c" , true);
+        w.testCase("", "*" , true);
+        w.testCase("acdcb", "a*c?b" , false);
+        w.testCase("aaaabaaaabbbbaabbbaabbaababbabbaaaababaaabbbbbbaabbbabababbaaabaabaaaaaabbaabbbbaababbababaabbbaababbbba", "*****b*aba***babaa*bbaba***a*aaba*b*aa**a*b**ba***a*a*", true);*/
+    }
+
+    private void testCase(String abc, String s, boolean b) {
+        System.out.println("Expected :- " + b + " Actual :- " + isMatch(abc, s));
     }
 
     public boolean isMatch(String s, String p) {
@@ -78,6 +84,10 @@ public class WildCardMatching {
     }
 
     private boolean traverse(String s, int stringPointer, String p, int patternPointer) {
+
+        if (stringPointer < 0) {
+            return false;
+        }
 
         if (stringPointer == s.length() - 1 && patternPointer == p.length() - 1) {
             char c = s.charAt(stringPointer);
@@ -112,19 +122,19 @@ public class WildCardMatching {
         if (c == '*') {
             //TODO Need to fix this.
             //do we need to keep
-            boolean traverse;
-            if (s.length() - stringPointer >= p.length() - patternPointer) {
-                traverse = traverse(s, stringPointer + 1, p, patternPointer + 1);
-            } else {
-                traverse = traverse(s, stringPointer + 1, p, patternPointer);
-            }
+            /*boolean traverse = traverse(s, stringPointer + 1, p, patternPointer);
 
             //how to backtrack
             if (!traverse) {
-                traverse = traverse(s, stringPointer, p, patternPointer + 1);
+                traverse = traverse(s, stringPointer + 1, p, patternPointer + 1);
+                *//*if (!traverse) {
+                    traverse(s, stringPointer - 1, p, patternPointer + 1);
+                }*//*
             }
 
-            return traverse;
+            return traverse;*/
+
+            boolean traverse = combinationsOfZeroOrManyOccurances(s, stringPointer, p, patternPointer, stringPointer);
 
         } else if (c == '?') {
             return traverse(s, stringPointer + 1, p, patternPointer + 1);
@@ -135,8 +145,20 @@ public class WildCardMatching {
         return false;
     }
 
-    private void traverseStar(String s, int i, String p, int patternPointer) {
+    private boolean combinationsOfZeroOrManyOccurances(String s, int stringPointer, String p, int patternPointer, int pointer) {
 
+        //string pointer cannot go below original string pointer
+
+        boolean traverse = traverse(s, stringPointer + 1, p, patternPointer);
+        if (!traverse) {
+            traverse(s, stringPointer, p, patternPointer + 1);
+        }
+
+        return traverse;
+    }
+
+    private boolean traverseStar(String s, int stringPointer, String p, int patternPointer) {
+        return traverse(s, stringPointer + 1, p, patternPointer);
     }
 
 }
