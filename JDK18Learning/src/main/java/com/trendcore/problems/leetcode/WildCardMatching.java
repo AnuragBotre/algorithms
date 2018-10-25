@@ -110,18 +110,22 @@ public class WildCardMatching {
         char c = p.charAt(patternPointer);
 
         if (c == '*') {
-
             //TODO Need to fix this.
-
-            //rule 1
-            boolean traverse = traverse(s, stringPointer + 1, p, patternPointer);
-            if (!traverse) {
+            //do we need to keep
+            boolean traverse;
+            if (s.length() - stringPointer >= p.length() - patternPointer) {
                 traverse = traverse(s, stringPointer + 1, p, patternPointer + 1);
-                /*if (!traverse) {
-                    traverse = traverse(s, stringPointer, p, patternPointer + 1);
-                }*/
+            } else {
+                traverse = traverse(s, stringPointer + 1, p, patternPointer);
             }
+
+            //how to backtrack
+            if (!traverse) {
+                traverse = traverse(s, stringPointer, p, patternPointer + 1);
+            }
+
             return traverse;
+
         } else if (c == '?') {
             return traverse(s, stringPointer + 1, p, patternPointer + 1);
         } else if (c == s.charAt(stringPointer)) {
@@ -129,6 +133,10 @@ public class WildCardMatching {
         }
 
         return false;
+    }
+
+    private void traverseStar(String s, int i, String p, int patternPointer) {
+
     }
 
 }
