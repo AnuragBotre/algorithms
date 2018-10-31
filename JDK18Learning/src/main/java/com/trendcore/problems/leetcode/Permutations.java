@@ -31,6 +31,8 @@ public class Permutations {
     }
 
     public List<List<Integer>> permute(int[] nums) {
+        //TODO This solution is incomplete.
+        //may need to rotate array and then have to re-traverse.
         traverse(nums, 0);
         return null;
     }
