@@ -40,12 +40,15 @@ public class CombinationOfNumbers {
 
     private void printCombinations(int[] nums, int position) {
         for (int i = 0; i < nums.length; i++) {
-            for (int j = 0; j < nums.length; j++) {
-
-                if (i == j) {
-                    System.out.print(nums[position] + " ");
+            for (int j = position + 1, cnt = 0; cnt < nums.length; cnt++) {
+                if(j >= nums.length){
+                    j = 0;
+                }
+                if (i == cnt) {
+                    System.out.print(" " + nums[position]);
                 } else {
-                    System.out.print(nums[j] + " ");
+                    System.out.print(" " + nums[j]);
+                    j++;
                 }
             }
             System.out.println();
