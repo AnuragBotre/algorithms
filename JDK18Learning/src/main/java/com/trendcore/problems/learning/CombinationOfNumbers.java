@@ -31,10 +31,26 @@ public class CombinationOfNumbers {
         int num = nums[i];
 
         //print the others
-        printOthers(nums, i);
-        printOthersReverse(nums, i);
+        /*printOthers(nums, i);
+        printOthersReverse(nums, i);*/
+        printCombinations(nums, i);
 
         traverse(nums, i + 1);
+    }
+
+    private void printCombinations(int[] nums, int position) {
+        for (int i = 0; i < nums.length; i++) {
+            for (int j = 0; j < nums.length; j++) {
+
+                if (i == j) {
+                    System.out.print(nums[position] + " ");
+                } else {
+                    System.out.print(nums[j] + " ");
+                }
+            }
+            System.out.println();
+        }
+        System.out.println();
     }
 
     private void printOthersReverse(int[] nums, int location) {
