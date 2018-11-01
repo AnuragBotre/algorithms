@@ -37,6 +37,7 @@
         <module>kryo-study</module>
         <module>neural-networkt-tutorial</module>
         <module>classpath-maven-plugin</module>
+        <module>query-dsl-study</module>
     </modules>
 
     <dependencyManagement>
