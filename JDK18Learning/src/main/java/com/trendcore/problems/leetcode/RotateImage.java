@@ -51,7 +51,22 @@ public class RotateImage {
      * @param args
      */
     public static void main(String[] args) {
+        RotateImage r = new RotateImage();
+        r.rotate(new int[][]{
+                {1, 2, 3},
+                {4, 5, 6},
+                {7, 8, 9},
+        });
+    }
 
+    public void rotate(int[][] matrix) {
+
+        for (int i = 0 ; i < matrix.length ; i++) {
+            for (int j = matrix.length - 1 ; j >= 0; j--) {
+                System.out.print(matrix[j][i]);
+            }
+            System.out.println();
+        }
     }
 
 }
