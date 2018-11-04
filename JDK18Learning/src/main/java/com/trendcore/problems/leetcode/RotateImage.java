@@ -1,5 +1,7 @@
 package com.trendcore.problems.leetcode;
 
+import java.util.Scanner;
+
 /**
  * https://leetcode.com/problems/rotate-image/
  * <p>
@@ -52,21 +54,58 @@ public class RotateImage {
      */
     public static void main(String[] args) {
         RotateImage r = new RotateImage();
-        r.rotate(new int[][]{
+        r.testCase(new int[][]{
                 {1, 2, 3},
                 {4, 5, 6},
                 {7, 8, 9},
         });
+
+
+    }
+
+    private void testCase(int[][] matrix) {
+        rotate(matrix);
+
+        printMatrix(matrix);
+    }
+
+    private void printMatrix(int[][] matrix) {
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix.length; j++) {
+                System.out.print(matrix[i][j]);
+            }
+            System.out.println();
+        }
     }
 
     public void rotate(int[][] matrix) {
 
-        for (int i = 0 ; i < matrix.length ; i++) {
-            for (int j = matrix.length - 1 ; j >= 0; j--) {
-                System.out.print(matrix[j][i]);
+        for (int i = 0, row = 0; i < matrix.length; i++, row++) {
+            int oThEleOfRow = matrix[row][0];
+            for (int j = matrix.length - 1 , col = 0; j >= 0; j-- , col++) {
+
+                if(col == matrix.length - 1){
+                    int temp = matrix[row][col];
+                    matrix[row][col] = matrix[matrix.length - 1][row];
+                    matrix[matrix.length - 1][row] = temp;
+                }else{
+                    int temp = matrix[row][col];
+                    matrix[row][col] = matrix[j][i];
+                    matrix[j][i] = temp;
+                }
+
+                //System.out.print(matrix[j][i]);
+                debug(matrix);
             }
             System.out.println();
         }
+    }
+
+    private void debug(int[][] matrix) {
+        Scanner s = new Scanner(System.in);
+        String next = s.next();
+        System.out.println();
+        printMatrix(matrix);
     }
 
 }
