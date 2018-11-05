@@ -61,7 +61,7 @@ public class RotateImage {
         });*/
 
         r.testCase(new int[][]{
-                {5, 1, 9,11},
+                {5, 1, 9, 11},
                 {2, 4, 8, 10},
                 {13, 3, 6, 7},
                 {15, 14, 12, 16}
@@ -91,6 +91,51 @@ public class RotateImage {
         //traverse diagonally
 
 
+        int cnt = matrix.length;
+        int prev = 0;
+
+        for (int i = 0; i < matrix.length; i++, cnt--) {
+
+            traverse(i, i, i, i, matrix,matrix[i][i]);
+
+            /*for (int j = i; j < cnt; j++) {
+                prev = matrix[i][j];
+                int obj[] = getRowCol(i, j, matrix.length - 1);
+                matrix[i][j] = matrix[obj[0]][obj[1]];
+            }*/
+        }
+
+    }
+
+    private void traverse(int row, int col, int origRow, int origCol, int[][] matrix,int prev) {
+
+        int obj[] = getRowCol(row, col, matrix.length - 1);
+
+        if (obj[0] == origRow && obj[1] == origCol) {
+            return;
+        }
+
+        prev = matrix[row][col];
+
+        matrix[row][col] = matrix[obj[0]][obj[1]];
+        traverse(obj[0], obj[1], origRow, origCol, matrix,prev);
+    }
+
+    private int[] getRowCol(int curRow, int curCol, int matrixLength) {
+
+        int obj[] = new int[2];
+        if (curRow == 0 && curCol == 0) {
+            obj[0] = matrixLength;
+            obj[1] = matrixLength;
+        } else if (curRow == 0) {
+
+        }
+
+
+        return obj;
+    }
+
+    private void approach1(int[][] matrix) {
         for (int i = 0, row = 0; i < matrix.length; i++, row++) {
             int oThEleOfRow = matrix[row][0];
             for (int j = matrix.length - 1, col = 0; j >= 0; j--, col++) {

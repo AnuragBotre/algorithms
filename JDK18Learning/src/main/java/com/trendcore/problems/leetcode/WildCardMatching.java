@@ -1,5 +1,8 @@
 package com.trendcore.problems.leetcode;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * https://leetcode.com/problems/wildcard-matching/
  * Given an input string (s) and a pattern (p),
@@ -54,8 +57,8 @@ public class WildCardMatching {
     public static void main(String[] args) {
         WildCardMatching w = new WildCardMatching();
 
-        w.testCase("bba", "*a**", true);
-        w.testCase("baaabab", "*****ba*****ab", true);
+        //w.testCase("bba", "*a**", true);
+        //w.testCase("baaabab", "*****ba*****ab", true);
         /*w.testCase("abc", "**" , true);
         w.testCase("abc", "*" , true);
         w.testCase("abc", "***" , true);
