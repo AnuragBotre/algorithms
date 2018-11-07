@@ -77,7 +77,7 @@ public class RotateImage {
     private void printMatrix(int[][] matrix) {
         for (int i = 0; i < matrix.length; i++) {
             for (int j = 0; j < matrix.length; j++) {
-                System.out.print(" " + matrix[i][j]);
+                System.out.print("\t" + matrix[i][j]);
             }
             System.out.println();
         }
@@ -91,48 +91,103 @@ public class RotateImage {
         //traverse diagonally
 
 
-        int cnt = matrix.length;
+        int cnt = matrix.length - 1;
         int prev = 0;
 
-        for (int i = 0; i < matrix.length; i++, cnt--) {
+        traverse(0, 0, 0, 0, matrix, matrix[0][0], cnt,true);
+        traverse(1, 1, 1, 1, matrix, matrix[1][1], cnt-1,true);
+        /*for (int i = 0; i < matrix.length; i++, cnt--) {
 
-            traverse(i, i, i, i, matrix,matrix[i][i]);
+            traverse(i, i, i, i, matrix, matrix[i][i], cnt,true);
 
-            /*for (int j = i; j < cnt; j++) {
+            *//*for (int j = i; j < cnt; j++) {
                 prev = matrix[i][j];
                 int obj[] = getRowCol(i, j, matrix.length - 1);
                 matrix[i][j] = matrix[obj[0]][obj[1]];
-            }*/
-        }
-
+            }*//*
+        }*/
+        System.out.println();
     }
 
-    private void traverse(int row, int col, int origRow, int origCol, int[][] matrix,int prev) {
+    private void traverse(int row, int col, int origRow, int origCol, int[][] matrix, int prev, int length,boolean firstTime) {
 
-        int obj[] = getRowCol(row, col, matrix.length - 1);
+        int copyTo[] = getRowCol(row, col, length, origRow);
 
-        if (obj[0] == origRow && obj[1] == origCol) {
+        int copyFrom[] = getCopyFromRowCol(row, col, length, origRow);
+
+        if (copyTo[0] == origRow && copyTo[1] == origCol) {
+            matrix[row][col] = prev;
             return;
         }
 
-        prev = matrix[row][col];
-
-        matrix[row][col] = matrix[obj[0]][obj[1]];
-        traverse(obj[0], obj[1], origRow, origCol, matrix,prev);
+        if(firstTime){
+            prev = matrix[row][col];
+            matrix[row][col] = matrix[copyFrom[0]][copyFrom[1]];
+        } else {
+            int temp = matrix[row][col];
+            matrix[row][col] = prev;
+            prev = temp;
+        }
+        debug(matrix);
+        traverse(copyTo[0], copyTo[1], origRow, origCol, matrix, prev, length , false);
     }
 
-    private int[] getRowCol(int curRow, int curCol, int matrixLength) {
-
+    private int[] getCopyFromRowCol(int row, int col, int length, int startPos) {
         int obj[] = new int[2];
-        if (curRow == 0 && curCol == 0) {
-            obj[0] = matrixLength;
-            obj[1] = matrixLength;
-        } else if (curRow == 0) {
-
+        if (row == startPos && col == startPos) {
+            obj[0] = length;
+            obj[1] = startPos;
+        } else if (row == startPos && col == length) {
+            obj[0] = startPos;
+            obj[1] = startPos;
+        } else if (row == length && col == length) {
+            obj[0] = startPos;
+            obj[1] = length;
+        } else if (row == length && col == startPos) {
+            obj[0] = length;
+            obj[1] = length;
         }
 
+        return obj;
+    }
+
+    private int[] getRowCol(int row, int col, int length, int startPos) {
+
+        int obj[] = new int[2];
+        if (row == startPos && col == startPos) {
+            obj[0] = startPos;
+            obj[1] = length;
+        } else if (row == startPos && col == length) {
+            obj[0] = length;
+            obj[1] = length;
+        } else if (row == length && col == length) {
+            obj[0] = length;
+            obj[1] = startPos;
+        } else if (row == length && col == startPos) {
+            obj[0] = startPos;
+            obj[1] = startPos;
+        }
 
         return obj;
+    }
+
+    private void debug(int[][] matrix) {
+        Scanner s = new Scanner(System.in);
+        String next = s.next();
+        System.out.println();
+        printMatrix(matrix);
+    }
+
+    private void getLocation(int row, int col, int length, int startPos) {
+        if (row == startPos && col == startPos) {
+
+        } else if (row == startPos && col == length) {
+
+        } else if (row == length && col == length) {
+
+        } else if (row == length && col == startPos) {
+
+        }
     }
 
     private void approach1(int[][] matrix) {
