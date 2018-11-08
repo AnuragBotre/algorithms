@@ -66,15 +66,25 @@ public class RotateImage {
                 {13, 3, 6, 7},
                 {15, 14, 12, 16}
         });
+
+        r.testCase(new int[][]{
+                {1, 2, 3, 4, 5},
+                {6, 7, 8, 9, 10},
+                {11, 12, 13, 14, 15},
+                {16, 17, 18, 19, 20},
+                {21, 22, 23, 24, 25}
+        });
+
     }
 
     private void testCase(int[][] matrix) {
+        printMatrix(matrix);
         rotate(matrix);
-
         printMatrix(matrix);
     }
 
     private void printMatrix(int[][] matrix) {
+        System.out.println();
         for (int i = 0; i < matrix.length; i++) {
             for (int j = 0; j < matrix.length; j++) {
                 System.out.print("\t" + matrix[i][j]);
@@ -83,39 +93,26 @@ public class RotateImage {
         }
     }
 
+    //TODO : Optimize me
     public void rotate(int[][] matrix) {
-
 
         //Idea 2 rotation
         //visit each and every position
         //traverse diagonally
-
-
         int cnt = matrix.length - 1;
-        int prev = 0;
 
-        //traverse(0, 0, 0, 0, matrix, matrix[0][0], cnt,true);
-        //traverse(0, 1, 0, 1, matrix, matrix[0][1], cnt, true, 0);
-        traverse(0, 2, 0, 2, matrix, matrix[0][2], cnt, true, 0);
-        //traverse(1, 1, 1, 1, matrix, matrix[1][1], cnt-1,true);
-        /*for (int i = 0; i < matrix.length; i++, cnt--) {
-
-            traverse(i, i, i, i, matrix, matrix[i][i], cnt,true);
-
-            *//*for (int j = i; j < cnt; j++) {
-                prev = matrix[i][j];
-                int obj[] = getRowCol(i, j, matrix.length - 1);
-                matrix[i][j] = matrix[obj[0]][obj[1]];
-            }*//*
-        }*/
-        System.out.println();
+        for (int i = 0; i < matrix.length; i++, cnt--) {
+            for (int j = i, offset = 0; j < cnt; j++, offset++) {
+                traverse(i, j, i, j, matrix, matrix[i][j], cnt, true, 0, offset);
+            }
+        }
     }
 
-    private void traverse(int row, int col, int origRow, int origCol, int[][] matrix, int prev, int length, boolean firstTime, int i) {
+    private void traverse(int row, int col, int origRow, int origCol, int[][] matrix, int prev, int length, boolean firstTime, int i, int offset) {
 
-        int copyTo[] = getRowCol(row, col, length, origRow, i);
+        int copyTo[] = getRowCol(row, col, length, origRow, i, offset);
 
-        int copyFrom[] = getCopyFromRowCol(row, col, length, origRow);
+        int copyFrom[] = getCopyFromRowCol(row, col, length, origRow, i, offset);
 
         if (copyTo[0] == origRow && copyTo[1] == origCol) {
             matrix[row][col] = prev;
@@ -130,61 +127,41 @@ public class RotateImage {
             matrix[row][col] = prev;
             prev = temp;
         }
-        debug(matrix);
-        traverse(copyTo[0], copyTo[1], origRow, origCol, matrix, prev, length, false, i+1);
+        //debug(matrix);
+        traverse(copyTo[0], copyTo[1], origRow, origCol, matrix, prev, length, false, i + 1, offset);
     }
 
-    private int[] getCopyFromRowCol(int row, int col, int length, int startPos) {
+    private int[] getCopyFromRowCol(int row, int col, int length, int startPos, int i, int offset) {
         int obj[] = new int[2];
-        if (row == startPos && col == startPos) {
+        /*if (row == startPos && col == startPos) {
             obj[0] = length;
             obj[1] = startPos;
+            return obj;
         } else if (row == startPos && col == length) {
             obj[0] = startPos;
             obj[1] = startPos;
+            return obj;
         } else if (row == length && col == length) {
             obj[0] = startPos;
             obj[1] = length;
+            return obj;
         } else if (row == length && col == startPos) {
             obj[0] = length;
             obj[1] = length;
-        }
+            return obj;
+        }*/
 
-        if (row == 0) {
-            obj[0] = length - col;
-            obj[1] = startPos;
-        } else {
+        //TODO :- Use i here it can be used to substract from length
 
-        }
 
-        return obj;
-    }
-
-    private int[] getRowCol(int row, int col, int length, int startPos, int i) {
-
-        int obj[] = new int[2];
-        if (row == startPos && col == startPos) {
-            obj[0] = startPos;
-            obj[1] = length;
-        } else if (row == startPos && col == length) {
-            obj[0] = length;
-            obj[1] = length;
-        } else if (row == length && col == length) {
-            obj[0] = length;
-            obj[1] = startPos;
-        } else if (row == length && col == startPos) {
-            obj[0] = startPos;
-            obj[1] = startPos;
-        }
-
-        switch (i){
+        /*switch (i) {
             case 0:
-                obj[0] = col;
-                obj[1] = length;
+                obj[0] = length - col;
+                obj[1] = startPos;
                 break;
             case 1:
                 obj[0] = length;
-                obj[1] = length - row;
+                obj[1] = (length - row) + startPos;
                 break;
             case 2:
                 obj[0] = col;
@@ -192,21 +169,90 @@ public class RotateImage {
                 break;
             case 3:
                 obj[0] = startPos;
-                obj[1] = length - row;
+                obj[1] = (length - row) + startPos;
+                break;
+        }*/
+
+        switch (i) {
+            case 2:
+                obj[0] = startPos + row;
+                obj[1] = length;
+                break;
+            case 3:
+                obj[0] = length;
+                obj[1] = (length - row) + startPos;
+                break;
+            case 0:
+                obj[0] = (length - offset);
+                obj[1] = startPos;
+                break;
+            case 1:
+                obj[0] = startPos;
+                obj[1] = row + startPos;
                 break;
         }
 
-        /*if (row == startPos) {
-            obj[0] = col;
+        return obj;
+    }
+
+    private int[] getRowCol(int row, int col, int length, int startPos, int i, int offset) {
+
+        int obj[] = new int[2];
+        /*if (row == startPos && col == startPos) {
+            obj[0] = startPos;
             obj[1] = length;
-        } else if (col == length) {
+            return obj;
+        } else if (row == startPos && col == length) {
             obj[0] = length;
-            obj[1] = length - row;
-        } else if (row == length) {
-
-        } else if (col == startPos) {
-
+            obj[1] = length;
+            return obj;
+        } else if (row == length && col == length) {
+            obj[0] = length;
+            obj[1] = startPos;
+            return obj;
+        } else if (row == length && col == startPos) {
+            obj[0] = startPos;
+            obj[1] = startPos;
+            return obj;
         }*/
+
+        /*switch (i) {
+            case 0:
+                obj[0] = col;
+                obj[1] = length;
+                break;
+            case 1:
+                obj[0] = length;
+                obj[1] = (length - row) + startPos;
+                break;
+            case 2:
+                obj[0] = col;
+                obj[1] = startPos;
+                break;
+            case 3:
+                obj[0] = startPos;
+                obj[1] = (length - row) + startPos;
+                break;
+        }*/
+
+        switch (i) {
+            case 0:
+                obj[0] = startPos + offset;
+                obj[1] = length;
+                break;
+            case 1:
+                obj[0] = length;
+                obj[1] = (length - offset);
+                break;
+            case 2:
+                obj[0] = (length - offset);
+                obj[1] = startPos;
+                break;
+            case 3:
+                obj[0] = startPos;
+                obj[1] = offset + startPos;
+                break;
+        }
 
         return obj;
     }
