@@ -38,6 +38,7 @@
         <module>neural-networkt-tutorial</module>
         <module>classpath-maven-plugin</module>
         <module>query-dsl-study</module>
+        <module>javaq</module>
     </modules>
 
     <dependencyManagement>
