@@ -37,38 +37,49 @@ public class GroupAnagrams {
 
     public List<List<String>> groupAnagrams(String[] strs) {
 
-        //load in map
-        Map map = new HashMap<>();
-        for (int i = 0; i < strs.length; i++) {
-            map.put(strs[i], true);
-        }
 
         List finalList = new ArrayList();
         for (int i = 0; i < strs.length; i++) {
-            String str = strs[i];
-            List list = new ArrayList();
-            list.add(str);
 
-            int j;
-            for (j = i; j < strs.length ; j++) {
-                if(isAnagram(map,str,strs[j])){
-                    list.add(strs[j]);
+            if (strs[i] != null) {
+                String str = strs[i];
+                List list = new ArrayList();
+                list.add(str);
+
+                int j;
+                for (j = i+1; j < strs.length; j++) {
+                    if (strs[j] != null && isAnagram(str, strs[j])) {
+                        list.add(strs[j]);
+                        strs[j] = null;
+                    }
                 }
-            }
-            i = j;
 
-            finalList.add(list);
+                finalList.add(list);
+            }
+
         }
 
         return finalList;
     }
 
-    private boolean isAnagram(Map map, String str, String str1) {
+    private boolean isAnagram(String str, String str1) {
 
-        if(str.length() != str1.length())
+        if (str.length() != str1.length())
             return false;
 
+        int arr[] = new int[26];
 
+        for (int i = 0; i < str.length(); i++) {
+            arr[str.charAt(i) - 'a'] = arr[str.charAt(i) - 'a'] + 1;
+
+            arr[str1.charAt(i) - 'a'] = arr[str1.charAt(i) - 'a'] - 1;
+        }
+
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] != 0) {
+                return false;
+            }
+        }
 
         return true;
     }
