@@ -36,6 +36,7 @@ public class PowXToN {
         p.testCase(2, Integer.MAX_VALUE);
         p.testCase(2, -2);
         p.testCase(0.00001, 2147483647);
+        main1(null);
     }
 
     private void testCase(double x, int n) {
@@ -88,6 +89,7 @@ public class PowXToN {
         float x = 2;
         int y = -3;
         System.out.printf("%f", power(x, y));
+        System.out.printf("%f", power(2, 4));
     }
 
 }

@@ -1,5 +1,8 @@
 package com.trendcore.problems.leetcode;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * https://leetcode.com/problems/jump-game-ii/
  * <p>
@@ -32,7 +35,32 @@ public class JumpGameII {
     }
 
     public int jump(int[] nums) {
+
+        int dest = nums.length - 1;
+
+        List<List<Integer>> combinationList = new ArrayList<>();
+        //List list1 = new ArrayList();
+
+        traverse(nums, 0, combinationList);
+
         return 0;
+    }
+
+    private void traverse(int[] nums, int position, List<List<Integer>> combinationList) {
+
+
+
+        for (int i = position; i < nums[position]; i++) {
+            List list = new ArrayList();
+            list.add(nums[position]);
+            traverseFurther(nums, i, position,list);
+            combinationList.add(list);
+        }
+
+    }
+
+    private void traverseFurther(int[] nums, int i, int position, List list) {
+
     }
 
 }
