@@ -34,6 +34,47 @@ public class JumpGameII {
         System.out.println(jump(nums));
     }
 
+    class Graph {
+        Node root;
+
+        public void print() {
+            traverse(root);
+        }
+
+        private void traverse(Node root) {
+            if (root == null) {
+                System.out.println();
+                return;
+            } else if(root.list == null || root.list.isEmpty()){
+                System.out.print(" " + root.step);
+                System.out.println();
+                return;
+            }
+
+            System.out.print(" " + root.step);
+            for (Node node : root.list) {
+                traverse(node);
+            }
+        }
+
+
+    }
+
+    class Node {
+        int step;
+        List<Node> list = new ArrayList();
+
+        public Node(int num) {
+            step = num;
+        }
+
+        @Override
+        public String toString() {
+            return "" + step;
+        }
+    }
+
+
     public int jump(int[] nums) {
 
         int dest = nums.length - 1;
@@ -41,20 +82,29 @@ public class JumpGameII {
         List<List<Integer>> combinationList = new ArrayList<>();
         //List list1 = new ArrayList();
 
-        traverse(nums, 0, combinationList);
+        Graph g = new Graph();
+        g.root = new Node(0);
+
+        traverse(nums, 0, g.root, 1);
+
+        g.print();
 
         return 0;
     }
 
-    private void traverse(int[] nums, int position, List<List<Integer>> combinationList) {
+    private void traverse(int[] nums, int step, Node node, int total) {
+
+        if (total >= nums.length - 1) {
+            return;
+        }
 
 
+        for (int i = step + 1, cnt = 0; cnt < nums[step]; i++, cnt++) {
 
-        for (int i = position; i < nums[position]; i++) {
-            List list = new ArrayList();
-            list.add(nums[position]);
-            traverseFurther(nums, i, position,list);
-            combinationList.add(list);
+            Node e = new Node(i);
+            node.list.add(e);
+            int r = total + nums[e.step];
+            traverse(nums, i, e, r);
         }
 
     }
