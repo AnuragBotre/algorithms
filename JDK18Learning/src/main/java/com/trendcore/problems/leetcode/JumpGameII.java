@@ -28,6 +28,13 @@ public class JumpGameII {
     public static void main(String[] args) {
         JumpGameII j = new JumpGameII();
         j.testCase(new int[]{2, 3, 1, 1, 4});
+        j.testCase(new int[]{5, 1, 1, 1, 4});
+        j.testCase(new int[]{2, 1, 3, 2, 7, 1, 1, 1, 1, 1, 1, 1});
+        j.testCase(new int[]{0});
+        j.testCase(new int[]{1, 2});
+
+        //TODO : For this input its not working
+        j.testCase(new int[]{1});
     }
 
     private void testCase(int[] nums) {
@@ -37,23 +44,34 @@ public class JumpGameII {
     class Graph {
         Node root;
 
+        int minLength;
+        boolean minLengthInitialized;
+
         public void print() {
-            traverse(root);
+            traverse(root, 1);
         }
 
-        private void traverse(Node root) {
+        private void traverse(Node root, int length) {
             if (root == null) {
-                System.out.println();
+                //System.out.println();
                 return;
-            } else if(root.list == null || root.list.isEmpty()){
-                System.out.print(" " + root.step);
-                System.out.println();
+            } else if (root.list == null || root.list.isEmpty()) {
+                if (!minLengthInitialized) {
+                    minLength = length;
+                    minLengthInitialized = true;
+                } else {
+                    if (minLength > length) {
+                        minLength = length;
+                    }
+                }
+                /*System.out.print(" " + root.step);
+                System.out.println();*/
                 return;
             }
 
-            System.out.print(" " + root.step);
+            //System.out.print(" " + root.step);
             for (Node node : root.list) {
-                traverse(node);
+                traverse(node, length + 1);
             }
         }
 
@@ -64,8 +82,8 @@ public class JumpGameII {
         int step;
         List<Node> list = new ArrayList();
 
-        public Node(int num) {
-            step = num;
+        public Node(int step) {
+            this.step = step;
         }
 
         @Override
@@ -83,18 +101,28 @@ public class JumpGameII {
         //List list1 = new ArrayList();
 
         Graph g = new Graph();
-        g.root = new Node(0);
+        Node n = new Node(0);
 
-        traverse(nums, 0, g.root, 1);
+        traverse(nums, 0, n, 1, g);
 
         g.print();
 
-        return 0;
+        return g.minLength;
     }
 
-    private void traverse(int[] nums, int step, Node node, int total) {
+    private void traverse(int[] nums, int step, Node node, int total, Graph g) {
+
+        if (nums[node.step] <= 0) {
+            return;
+        }
+
+        if (g.root == null) {
+            g.root = node;
+        }
 
         if (total >= nums.length - 1) {
+            return;
+        } else if (step + nums[node.step] >= nums.length - 1) {
             return;
         }
 
@@ -104,7 +132,7 @@ public class JumpGameII {
             Node e = new Node(i);
             node.list.add(e);
             int r = total + nums[e.step];
-            traverse(nums, i, e, r);
+            traverse(nums, i, e, r, g);
         }
 
     }

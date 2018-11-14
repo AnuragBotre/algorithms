@@ -1,10 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="agent" />
+        <module name="child-module" />
+        <module name="classloader" />
+        <module name="classpath-maven-plugin" />
+        <module name="data-structures" />
+        <module name="database-layer" />
+        <module name="design-pattern" />
+        <module name="design-patterns" />
+        <module name="exception" />
+        <module name="generics" />
+        <module name="hibernate" />
+        <module name="java-instrument" />
+        <module name="java-unsafe" />
+        <module name="javaq" />
+        <module name="jdk-learning-1.8" />
+        <module name="jetty" />
+        <module name="kryo-study" />
+        <module name="neural-network-tutorial" />
+        <module name="off-heap-cache" />
+        <module name="plugin1" />
+        <module name="plugin2" />
+        <module name="query-dsl-study" />
+        <module name="spring" />
+        <module name="spring-boot-tutorial" />
+        <module name="spring-transaction" />
+        <module name="sql-dsl" />
+        <module name="state" />
+        <module name="thread" />
+        <module name="tomcat" />
+      </profile>
+    </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="agent" target="1.8" />
       <module name="child-module" target="1.8" />
       <module name="classloader" target="1.8" />
+      <module name="classpath-maven-plugin" target="6" />
       <module name="data-structures" target="1.8" />
       <module name="database-layer" target="1.8" />
       <module name="design-pattern" target="1.8" />
@@ -14,6 +51,7 @@
       <module name="hibernate" target="1.8" />
       <module name="java-instrument" target="1.8" />
       <module name="java-unsafe" target="1.8" />
+      <module name="javaq" target="1.8" />
       <module name="jdk-learning-1.8" target="1.8" />
       <module name="jetty" target="1.8" />
       <module name="kryo-study" target="1.8" />
@@ -22,6 +60,7 @@
       <module name="off-heap-cache" target="1.8" />
       <module name="plugin1" target="1.8" />
       <module name="plugin2" target="1.8" />
+      <module name="query-dsl-study" target="1.8" />
       <module name="service-project" target="1.8" />
       <module name="spring" target="1.8" />
       <module name="spring-boot-tutorial" target="1.8" />
