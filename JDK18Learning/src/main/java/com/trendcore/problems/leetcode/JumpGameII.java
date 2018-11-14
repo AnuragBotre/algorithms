@@ -103,9 +103,6 @@ public class JumpGameII {
             return 0;
         }
 
-        List<List<Integer>> combinationList = new ArrayList<>();
-        //List list1 = new ArrayList();
-
         Graph g = new Graph();
         Node n = new Node(0);
 
@@ -141,16 +138,16 @@ public class JumpGameII {
                     reached to end.
                 */
                 node.list.add(e);
-                int r = total + nums[e.step];
+                int r = step + nums[e.step];
                 boolean traverse = traverse(nums, i, e, r, g);
                 if (!traverse) {
                     node.list.remove(node.list.size() - 1);
                 }
-                return traverse;
+                //return traverse;
             }
         }
 
-        return false;
+        return true;
     }
 
     private void traverseFurther(int[] nums, int i, int position, List list) {
