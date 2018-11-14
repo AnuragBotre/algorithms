@@ -33,8 +33,11 @@ public class JumpGameII {
         j.testCase(new int[]{0});
         j.testCase(new int[]{1, 2});
 
-        //TODO : For this input its not working
         j.testCase(new int[]{1});
+
+        //TODO : For this input its not working
+        j.testCase(new int[]{2, 0, 2, 4, 6, 0, 0, 3});
+        j.testCase(new int[]{5, 9, 3, 2, 1, 0, 2, 3, 3, 1, 0, 0});
     }
 
     private void testCase(int[] nums) {
@@ -128,11 +131,12 @@ public class JumpGameII {
 
 
         for (int i = step + 1, cnt = 0; cnt < nums[step]; i++, cnt++) {
-
-            Node e = new Node(i);
-            node.list.add(e);
-            int r = total + nums[e.step];
-            traverse(nums, i, e, r, g);
+            if (nums[i] > 0) {
+                Node e = new Node(i);
+                node.list.add(e);
+                int r = total + nums[e.step];
+                traverse(nums, i, e, r, g);
+            }
         }
 
     }
