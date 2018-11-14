@@ -99,7 +99,9 @@ public class JumpGameII {
 
     public int jump(int[] nums) {
 
-        int dest = nums.length - 1;
+        if(nums.length < 2){
+            return 0;
+        }
 
         List<List<Integer>> combinationList = new ArrayList<>();
         //List list1 = new ArrayList();
