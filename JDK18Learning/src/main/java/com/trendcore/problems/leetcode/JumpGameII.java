@@ -39,12 +39,16 @@ public class JumpGameII {
         j.testCase(new int[]{2, 0, 2, 4, 6, 0, 0, 3});
         j.testCase(new int[]{5, 9, 3, 2, 1, 0, 2, 3, 3, 1, 0, 0});
         j.testCase(new int[]{2, 1, 1, 1, 1});
+
+        j.testCase(new int[]{5, 6, 4, 4, 6, 9, 4, 4, 7, 4, 4, 8, 2, 6, 8, 1, 5, 9, 6, 5, 2, 7, 9, 7, 9, 6, 9, 4, 1, 6, 8, 8, 4, 4, 2, 0, 3, 8, 5});
+
     }
 
     private void testCase(int[] nums) {
         System.out.println(jump(nums));
     }
 
+    //TODO :- Optimize me Out of Memory error
     class Graph {
         Node root;
 
@@ -99,7 +103,7 @@ public class JumpGameII {
 
     public int jump(int[] nums) {
 
-        if(nums.length < 2){
+        if (nums.length < 2) {
             return 0;
         }
 
@@ -130,6 +134,11 @@ public class JumpGameII {
         }
 
 
+        /**
+         * TODO :-
+         * In this loop check if destination can be reached with current step
+         */
+        boolean destCanBeReached = false;
         for (int i = step + 1, cnt = 0; cnt < nums[step]; i++, cnt++) {
             if (nums[i] > 0) {
                 Node e = new Node(i);
@@ -142,12 +151,15 @@ public class JumpGameII {
                 boolean traverse = traverse(nums, i, e, r, g);
                 if (!traverse) {
                     node.list.remove(node.list.size() - 1);
+                } else {
+                    destCanBeReached = true;
                 }
                 //return traverse;
+
             }
         }
 
-        return true;
+        return destCanBeReached;
     }
 
     private void traverseFurther(int[] nums, int i, int position, List list) {
