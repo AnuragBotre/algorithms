@@ -38,6 +38,7 @@ public class JumpGameII {
         //TODO : For this input its not working
         j.testCase(new int[]{2, 0, 2, 4, 6, 0, 0, 3});
         j.testCase(new int[]{5, 9, 3, 2, 1, 0, 2, 3, 3, 1, 0, 0});
+        j.testCase(new int[]{2, 1, 1, 1, 1});
     }
 
     private void testCase(int[] nums) {
@@ -113,10 +114,10 @@ public class JumpGameII {
         return g.minLength;
     }
 
-    private void traverse(int[] nums, int step, Node node, int total, Graph g) {
+    private boolean traverse(int[] nums, int step, Node node, int total, Graph g) {
 
         if (nums[node.step] <= 0) {
-            return;
+            return false;
         }
 
         if (g.root == null) {
@@ -124,21 +125,30 @@ public class JumpGameII {
         }
 
         if (total >= nums.length - 1) {
-            return;
+            return true;
         } else if (step + nums[node.step] >= nums.length - 1) {
-            return;
+            return true;
         }
 
 
         for (int i = step + 1, cnt = 0; cnt < nums[step]; i++, cnt++) {
             if (nums[i] > 0) {
                 Node e = new Node(i);
+                /*TODO :-
+                    While putting nodes into list need to make sure if this node can be
+                    reached to end.
+                */
                 node.list.add(e);
                 int r = total + nums[e.step];
-                traverse(nums, i, e, r, g);
+                boolean traverse = traverse(nums, i, e, r, g);
+                if (!traverse) {
+                    node.list.remove(node.list.size() - 1);
+                }
+                return traverse;
             }
         }
 
+        return false;
     }
 
     private void traverseFurther(int[] nums, int i, int position, List list) {
