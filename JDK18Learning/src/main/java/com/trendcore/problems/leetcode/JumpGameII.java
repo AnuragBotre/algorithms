@@ -35,7 +35,6 @@ public class JumpGameII {
 
         j.testCase(new int[]{1});
 
-        //TODO : For this input its not working
         j.testCase(new int[]{2, 0, 2, 4, 6, 0, 0, 3});
         j.testCase(new int[]{5, 9, 3, 2, 1, 0, 2, 3, 3, 1, 0, 0});
         j.testCase(new int[]{2, 1, 1, 1, 1});
@@ -48,7 +47,7 @@ public class JumpGameII {
         System.out.println(jump(nums));
     }
 
-    //TODO :- Optimize me Out of Memory error
+
     class Graph {
         Node root;
 
@@ -110,14 +109,40 @@ public class JumpGameII {
         Graph g = new Graph();
         Node n = new Node(0);
 
-        traverse(nums, 0, n, 1, g);
+        int length = 1;
 
-        g.print();
+        class MethodImpl implements Method{
+            boolean minLengthInitialized = false;
+            int minLength = 1;
 
-        return g.minLength;
+            @Override
+            public <T> T execute(int length) {
+                if (!minLengthInitialized) {
+                    minLength = length;
+                    minLengthInitialized = true;
+                } else {
+                    if (minLength > length) {
+                        minLength = length;
+                    }
+                }
+                return null;
+            }
+        }
+
+        MethodImpl method = new MethodImpl();
+
+        traverse(nums, 0, n, 1, g, length, method);
+
+        //g.print();
+
+        return method.minLength;
     }
 
-    private boolean traverse(int[] nums, int step, Node node, int total, Graph g) {
+    private interface Method {
+        <T> T execute(int length);
+    }
+
+    private boolean traverse(int[] nums, int step, Node node, int total, Graph g, int length, Method method) {
 
         if (nums[node.step] <= 0) {
             return false;
@@ -128,8 +153,10 @@ public class JumpGameII {
         }
 
         if (total >= nums.length - 1) {
+            method.execute(length);
             return true;
         } else if (step + nums[node.step] >= nums.length - 1) {
+            method.execute(length);
             return true;
         }
 
@@ -146,11 +173,11 @@ public class JumpGameII {
                     While putting nodes into list need to make sure if this node can be
                     reached to end.
                 */
-                node.list.add(e);
+                //node.list.add(e);
                 int r = step + nums[e.step];
-                boolean traverse = traverse(nums, i, e, r, g);
+                boolean traverse = traverse(nums, i, e, r, g, length + 1, method);
                 if (!traverse) {
-                    node.list.remove(node.list.size() - 1);
+                    //node.list.remove(node.list.size() - 1);
                 } else {
                     destCanBeReached = true;
                 }
