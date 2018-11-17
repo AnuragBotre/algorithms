@@ -37,4 +37,10 @@ public class QueryAppTest {
         //where t1.col1 >= <criteria> and t2.col2 <= <criteria>
     }
 
+    @Test
+    public void name() {
+        //need to build query as below
+
+        //select(t1.col1,t2.col1).from(t1).join(t2).on(t1.col1.eq(t2.col2) <Join Criteria>).where(t1.col.eq(1)).or(t2.col.eq(2)).and(t1.col.eq(4))
+    }
 }
