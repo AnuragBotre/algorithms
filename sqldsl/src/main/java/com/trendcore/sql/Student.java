@@ -5,6 +5,8 @@ import java.util.Date;
 
 public class Student implements Table{
 
+    public static String name = "Student";
+
     public static Column<Integer> ID = new Column<>("ID");
     public static Column<String> NAME = new Column<>("NAME");
     public static Column<Date> BIRTHDATE = new Column<>("BIRTHDATE");
@@ -44,6 +46,11 @@ public class Student implements Table{
                     }
                 });
         obj = new Object[seq.val()];
+    }
+
+    @Override
+    public String getTableName() {
+        return name;
     }
 
     interface SomeInterface{

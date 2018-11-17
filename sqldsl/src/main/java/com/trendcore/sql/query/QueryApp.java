@@ -1,5 +1,6 @@
 package com.trendcore.sql.query;
 
+import com.trendcore.sql.Column;
 import com.trendcore.sql.Table;
 
 public class QueryApp {
@@ -11,12 +12,21 @@ public class QueryApp {
             System.out.println("select * ");
             return new From();
         }
+
+        public static From select(Column... columns) {
+            return new From();
+        }
     }
 
     public static class From{
 
         public Where from(String t) {
             System.out.println(" from " + t);
+            return new Where();
+        }
+
+        public Where from(Table t) {
+            System.out.println(" from " + t.getTableName());
             return new Where();
         }
 
@@ -33,6 +43,10 @@ public class QueryApp {
     }
 
     public static <T extends Table> String as(String alias) {
+        return alias;
+    }
+
+    public static <T extends Table> String as(Table table,String alias) {
         return alias;
     }
 }
