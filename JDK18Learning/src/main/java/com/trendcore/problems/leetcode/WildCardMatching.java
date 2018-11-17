@@ -167,7 +167,6 @@ public class WildCardMatching {
         char c = p.charAt(patternPointer);
 
         if (c == '*') {
-            //TODO Need to fix this.
             //do we need to keep
             boolean traverse = traverse(s, stringPointer + 1, p, patternPointer);
 
