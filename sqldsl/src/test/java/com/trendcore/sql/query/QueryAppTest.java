@@ -54,12 +54,19 @@ public class QueryAppTest {
             )
 
         ).where(
+            //need to consider this parameter as first
+            t1.col1.eq(t2.col2),
             and(
                 t1.col1.eq(1),t2.col1.eq(2)
             ),
             or(
 
             )
+
+            //option2
+            //how to deal with this case
+            //
+            t1.col1.eq(t2.col2).and()
         ).groupBy(
             t1.col1,
             t2.col2
@@ -69,6 +76,19 @@ public class QueryAppTest {
             t1.col1.asc,
             t2.col2.desc
         ).limit().offset();*/
+
+        //for where there is another option is there
+        //need to handle this case where (c1 = 1 and c2 = 2) or c3 = 3
+        /*where(t1.col1.eq(1))
+                .and(
+                    t1.col2.eq(2)
+
+                    //exp
+                    exp(t1.col2.eq(2) ).and(t1.col3.eq(t4.col4))
+
+                ).or(
+                    t1.
+                )*/
 
     }
 }
