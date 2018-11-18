@@ -42,5 +42,33 @@ public class QueryAppTest {
         //need to build query as below
 
         //select(t1.col1,t2.col1).from(t1).join(t2).on(t1.col1.eq(t2.col2) <Join Criteria>).where(t1.col.eq(1)).or(t2.col.eq(2)).and(t1.col.eq(4))
+
+        /*select(
+
+        ).from(
+            //Option1
+            table1.as(t1).leftJoin(
+                    table2.as(t2),on(table1.col1.eq(table2.col2))
+            ).innerJoin(
+                table2.as(t4),on(table4.col.eq(table2.col2))
+            )
+
+        ).where(
+            and(
+                t1.col1.eq(1),t2.col1.eq(2)
+            ),
+            or(
+
+            )
+        ).groupBy(
+            t1.col1,
+            t2.col2
+        ).having(
+
+        ).orderBy(
+            t1.col1.asc,
+            t2.col2.desc
+        ).limit().offset();*/
+
     }
 }
