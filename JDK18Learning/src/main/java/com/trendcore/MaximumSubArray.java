@@ -27,6 +27,9 @@ public class MaximumSubArray {
     public static void main(String[] args) {
         MaximumSubArray m = new MaximumSubArray();
         m.testCase(new int[]{-2, 1, -3, 4, -1, 2, 1, -5, 4});
+        m.testCase(new int[]{-1, -2, -3});
+        m.testCase(new int[]{-3, -2, -1});
+        m.testCase(new int[]{-3, -2, -1, 0});
     }
 
     private void testCase(int[] nums) {
@@ -35,39 +38,24 @@ public class MaximumSubArray {
 
     public int maxSubArray(int[] nums) {
 
-        //idea
-        //use 2 pointer approach
-        //first pointer will start from 0
-        //second pointer will start from length
-        //if sum is getting down then remove element
-        //analyze each element
-
-        List<Integer> sums = new ArrayList<>();
-
-        int endPointer;
-        int frontPointer;
-
         int maxSum = 0;
-        boolean maxSumInitialized = false;
+        int sum = 0;
 
         for (int i = 0; i < nums.length; i++) {
-            endPointer = i;
-            int sum = nums[endPointer];
-            int j;
-            for (j = endPointer + 1; j < nums.length; j++) {
-                if (sum > nums[j]) {
-                    break;
-                }
-                sum = sum + nums[j];
-            }
-            i = j;
-            if (!maxSumInitialized) {
-                maxSum = sum;
-                maxSumInitialized = true;
+            if (i == 0) {
+                sum = nums[i];
+                maxSum = nums[i];
             } else {
-                if (maxSum < sum) {
-                    maxSum = sum;
+                int r = sum + nums[i];
+                if (r < nums[i]) {
+                    sum = nums[i];
+                } else {
+                    sum = r;
                 }
+            }
+
+            if (maxSum < sum) {
+                maxSum = sum;
             }
         }
 
