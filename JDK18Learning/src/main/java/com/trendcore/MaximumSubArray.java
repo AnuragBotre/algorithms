@@ -35,6 +35,13 @@ public class MaximumSubArray {
 
     public int maxSubArray(int[] nums) {
 
+        //idea
+        //use 2 pointer approach
+        //first pointer will start from 0
+        //second pointer will start from length
+        //if sum is getting down then remove element
+        //analyze each element
+
         List<Integer> sums = new ArrayList<>();
 
         int endPointer;
