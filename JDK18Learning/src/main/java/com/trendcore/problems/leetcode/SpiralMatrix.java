@@ -35,17 +35,21 @@ public class SpiralMatrix {
     public static void main(String[] args) {
         SpiralMatrix s = new SpiralMatrix();
 
-        s.testCase(new int[][]{
+        /*s.testCase(new int[][]{
                 {7},
                 {9},
                 {6}
         });
 
         s.testCase(new int[][]{
+                {7, 9, 6}
+        });
+
+        s.testCase(new int[][]{
                 {1, 2, 3},
                 {4, 5, 6},
                 {7, 8, 9}
-        });
+        });*/
 
         s.testCase(new int[][]{
                 {1, 2, 3, 4},
@@ -53,12 +57,12 @@ public class SpiralMatrix {
                 {9, 10, 11, 12}
         });
 
-        s.testCase(new int[][]{
+        /*s.testCase(new int[][]{
                 {1, 2, 3},
                 {4, 5, 6},
                 {7, 8, 9},
                 {10, 11, 12}
-        });
+        });*/
     }
 
     private void testCase(int[][] matrix) {
@@ -132,7 +136,7 @@ public class SpiralMatrix {
     }
 
     private boolean completeTraversal(int[][] matrix, int row, int col, int offset) {
-        if (row >= matrix.length - offset) {
+        if (row >= matrix.length - offset || col >= matrix.length || col < 0 || row < 0) {
             return true;
         }
         return false;
