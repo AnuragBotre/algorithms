@@ -88,6 +88,10 @@ public class SpiralMatrix {
         int col = 0;
         int row = 0;
 
+        int prevRow = 0;
+        int prevCol = 0;
+
+
         List<Integer> list = new ArrayList<>();
 
         for (int i = 0; i < matrix.length; ) {
@@ -128,17 +132,26 @@ public class SpiralMatrix {
 
             }
 
-            if (completeTraversal(matrix, row, col, offset)) {
+            if (completeTraversal(matrix, row, col, offset, prevRow, prevCol)) {
                 break;
             }
+
+            prevRow = row;
+            prevCol = col;
         }
         return list;
     }
 
-    private boolean completeTraversal(int[][] matrix, int row, int col, int offset) {
-        if (row >= matrix.length - offset || col >= matrix.length || col < 0 || row < 0) {
+    private boolean completeTraversal(int[][] matrix, int row, int col, int offset, int prevRow, int prevCol) {
+        /*if (row >= matrix.length - offset || col >= matrix.length || col < 0 || row < 0) {
             return true;
         }
+        return false;*/
+
+        if ((row == prevRow && prevCol == col) || col < 0 || row < 0) {
+            return true;
+        }
+
         return false;
     }
 
