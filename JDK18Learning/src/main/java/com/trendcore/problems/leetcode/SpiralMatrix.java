@@ -34,6 +34,13 @@ public class SpiralMatrix {
 
     public static void main(String[] args) {
         SpiralMatrix s = new SpiralMatrix();
+
+        /*s.testCase(new int[][]{
+                {1, 2, 3},
+                {4, 5, 6},
+                {7, 8, 9}
+        });*/
+
         s.testCase(new int[][]{
                 {1, 2, 3, 4},
                 {5, 6, 7, 8},
@@ -42,7 +49,15 @@ public class SpiralMatrix {
     }
 
     private void testCase(int[][] matrix) {
-        spiralOrder(matrix);
+        List<Integer> integers = spiralOrder(matrix);
+        printResult(integers);
+    }
+
+    private void printResult(List<Integer> integers) {
+        System.out.println();
+        for(Integer i : integers){
+            System.out.print(" " + i);
+        }
     }
 
     public List<Integer> spiralOrder(int[][] matrix) {
@@ -50,62 +65,85 @@ public class SpiralMatrix {
         //state
         int state = 0;
         int rowOffset = 0;
+        int colOffset = 0;
+        int offset = 0;
 
         int col = 0;
         int row = 0;
 
         List<Integer> list = new ArrayList<>();
 
-        boolean flag = true;
+        for (int i = 0; i < matrix.length; ) {
 
-        for (int i = 0; i < matrix.length; i++) {
             //while (flag)
             switch (state) {
-                case 0:
-                    traverseRowForward(matrix, row, col, rowOffset, list);
+                case 0: {
                     state = 1;
-                    col = matrix.length - rowOffset;
-                    row = row + 1;
+                    col = traverseRowForward(matrix, row, col, offset, list);
                     rowOffset++;
-                    break;
-                case 1:
-                    traverseColumnDownard(matrix, row, col, rowOffset, list);
+                    row = row + 1;
+                }
+                break;
+                case 1: {
+
+                    row = traverseColumnDownard(matrix, row, col, offset, list);
+                    col = col - 1;
+                    colOffset++;
                     state = 2;
-                    row = matrix.length - rowOffset;
-                    col = matrix.length - rowOffset;
-                    break;
-                case 2:
-                    col = traverseRowBackward(matrix, row, col, rowOffset, list);
-                    row = matrix.length - rowOffset;
+                }
+                break;
+                case 2: {
+
+                    col = traverseRowBackward(matrix, row, col, offset, list);
                     state = 3;
-                    break;
+                    row = row - 1;
+                }
+                break;
                 case 3:
-                    //traverseColumnUpward();
+
+                    offset++;
+                    row = traverseColumnUpward(matrix, row, col, offset, list);
+                    col = col + 1;
                     state = 0;
+                    i++;
+
                     break;
+
             }
         }
-        return null;
+        return list;
+    }
+
+    private int traverseColumnUpward(int[][] matrix, int row, int col, int rowOffset, List<Integer> list) {
+        int i;
+        for (i = row; i >= rowOffset; i--) {
+            list.add(matrix[i][col]);
+        }
+        return i+1;
     }
 
     private int traverseRowBackward(int[][] matrix, int row, int col, int rowOffset, List<Integer> list) {
         int i;
-        for (i = col; i > rowOffset; i--) {
+        for (i = col; i >= rowOffset; i--) {
             list.add(matrix[row][i]);
         }
-        return i;
+        return i+1;
     }
 
-    private void traverseColumnDownard(int[][] matrix, int row, int col, int rowOffset, List<Integer> list) {
-        for (int i = row; i < matrix[0].length - rowOffset; i++) {
+    private int traverseColumnDownard(int[][] matrix, int row, int col, int rowOffset, List<Integer> list) {
+        int i;
+        for (i = row; i < matrix.length - rowOffset; i++) {
             list.add(matrix[i][col]);
         }
+        return i-1;
     }
 
-    private void traverseRowForward(int[][] matrix, int curRow, int curCol, int rowOffset, List<Integer> list) {
-        for (int i = curCol; i < matrix.length - rowOffset; i++) {
+    private int traverseRowForward(int[][] matrix, int curRow, int curCol, int rowOffset, List<Integer> list) {
+        int i;
+        for (i = curCol; i < matrix[curRow].length - rowOffset; i++) {
             list.add(matrix[curRow][i]);
         }
+        return i-1;
     }
 
 }
