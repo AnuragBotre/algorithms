@@ -94,10 +94,18 @@ public class SpiralMatrix {
 
         List<Integer> list = new ArrayList<>();
 
-        for (int i = 0; i < matrix.length; ) {
+        for (int i = 0; i < matrix.length - 1; i++) {
+
+            row = i;
+            col = i;
+
+            col = traverseRowForward(matrix, row, col, offset, list);
+            row = traverseColumnDownard(matrix, row+1, col, offset, list);
+            col = traverseRowBackward(matrix, row, col-1, offset, list);
+            row = traverseColumnUpward(matrix, row-1, col, offset, list);
 
             //while (flag)
-            switch (state) {
+            /*switch (state) {
                 case 0: {
                     state = 1;
                     col = traverseRowForward(matrix, row, col, offset, list);
@@ -137,7 +145,7 @@ public class SpiralMatrix {
             }
 
             prevRow = row;
-            prevCol = col;
+            prevCol = col;*/
         }
         return list;
     }
