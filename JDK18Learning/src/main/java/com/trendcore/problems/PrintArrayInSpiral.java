@@ -9,13 +9,17 @@ public class PrintArrayInSpiral {
 
     public static void main(String[] args) {
 
-        int inputArray[][] = new int[4][4];
+        /*int inputArray[][] = new int[4][4];
 
         inputArray[0] = new int[]{1, 2, 3, 4};
         inputArray[1] = new int[]{5, 6, 7, 8};
         inputArray[2] = new int[]{9, 10, 11, 12};
-        inputArray[3] = new int[]{13, 14, 15, 16};
+        inputArray[3] = new int[]{13, 14, 15, 16};*/
 
+        int inputArray[][]  = new int[][]{
+                {2,5,8},
+                {4,0,-1}
+        };
 
         printArrayInSpiral(inputArray);
     }
@@ -42,7 +46,7 @@ public class PrintArrayInSpiral {
         int horizontalPointer = 0;
         int verticalPointer = 0;
 
-        int horizontalWindowSize = inputArray.length;
+        int horizontalWindowSize = inputArray[0].length;
         int verticalWindowSize = inputArray.length;
 
         for (int k = 0; horizontalWindowSize >= 0 && verticalWindowSize >= 0; k++) {

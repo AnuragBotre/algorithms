@@ -35,7 +35,7 @@ public class SpiralMatrix {
     public static void main(String[] args) {
         SpiralMatrix s = new SpiralMatrix();
 
-        /*s.testCase(new int[][]{
+        s.testCase(new int[][]{
                 {7},
                 {9},
                 {6}
@@ -46,10 +46,15 @@ public class SpiralMatrix {
         });
 
         s.testCase(new int[][]{
+                {2,5,8},
+                {4,0,-1}
+        });
+
+        s.testCase(new int[][]{
                 {1, 2, 3},
                 {4, 5, 6},
                 {7, 8, 9}
-        });*/
+        });
 
         s.testCase(new int[][]{
                 {1, 2, 3, 4},
@@ -57,12 +62,12 @@ public class SpiralMatrix {
                 {9, 10, 11, 12}
         });
 
-        /*s.testCase(new int[][]{
+        s.testCase(new int[][]{
                 {1, 2, 3},
                 {4, 5, 6},
                 {7, 8, 9},
                 {10, 11, 12}
-        });*/
+        });
     }
 
     private void testCase(int[][] matrix) {
@@ -94,10 +99,32 @@ public class SpiralMatrix {
 
         List<Integer> list = new ArrayList<>();
 
-        for (int i = 0; i < matrix.length; ) {
+        for (int i = 0; i < matrix.length; i++) {
+
+            row = i;
+            col = i;
+            offset = i;
+
+
+            col = traverseRowForward(matrix, row, col, offset, list);
+            row = row+1;
+            if(row >= matrix.length - i){
+                break;
+            }
+            row = traverseColumnDownard(matrix, row, col, offset, list);
+            col = col-1;
+            if(col < i){
+                break;
+            }
+            col = traverseRowBackward(matrix, row, col, offset, list);
+            row = row - 1;
+            if(row >= i){
+                break;
+            }
+            row = traverseColumnUpward(matrix, row, col, offset, list);
 
             //while (flag)
-            switch (state) {
+            /*switch (state) {
                 case 0: {
                     state = 1;
                     col = traverseRowForward(matrix, row, col, offset, list);
@@ -137,7 +164,7 @@ public class SpiralMatrix {
             }
 
             prevRow = row;
-            prevCol = col;
+            prevCol = col;*/
         }
         return list;
     }
@@ -157,7 +184,7 @@ public class SpiralMatrix {
 
     private int traverseColumnUpward(int[][] matrix, int row, int col, int rowOffset, List<Integer> list) {
         int i;
-        for (i = row; i >= rowOffset; i--) {
+        for (i = row; i > rowOffset; i--) {
             list.add(matrix[i][col]);
         }
         return i + 1;
