@@ -11,3 +11,10 @@ https://dzone.com/articles/adding-java-8-lambda-goodness
 https://www.db4free.net/phpMyAdmin/db_structure.php?db=sql_dsl_testing
 Username :- sql_dsl_testing
 Password :- sql_dsl_testing
+
+
+https://github.com/mariushe/exercise/tree/master/transactions
+Transactions using execute around method pattern and lambdas
+
+https://www.jetbrains.com/help/idea/using-language-injections-in-sql.html
+- Langauge injection can be done in intellij
