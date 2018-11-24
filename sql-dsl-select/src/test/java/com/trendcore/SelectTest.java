@@ -8,6 +8,13 @@ public class SelectTest {
     public void selectDefinition() {
         Query query = new Query();
 
-        Object select = query.select.from().innerJoin().leftJoin().where().groupBy().having();
+        Object select = query.
+                        select.
+                        from().
+                        innerJoin().
+                        leftJoin().
+                        where().
+                        groupBy().
+                        having();
     }
 }
