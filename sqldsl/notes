@@ -18,3 +18,16 @@ Transactions using execute around method pattern and lambdas
 
 https://www.jetbrains.com/help/idea/using-language-injections-in-sql.html
 - Langauge injection can be done in intellij
+
+http://scalikejdbc.org/documentation/query-dsl.html
+QueryDSL
+val orders: List[Order] = withSQL {
+  select
+    .from(Order as o)
+    .innerJoin(Product as p).on(o.productId, p.id)
+    .leftJoin(Account as a).on(o.accountId, a.id)
+    .where.eq(o.productId, 123)
+    .orderBy(o.id).desc
+    .limit(4)
+    .offset(0)
+  }.map(Order(o, p, a)).list.apply()
