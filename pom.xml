@@ -40,6 +40,7 @@
         <module>query-dsl-study</module>
         <module>javaq</module>
         <module>sql-dsl-select</module>
+        <module>transaction-management</module>
     </modules>
 
     <dependencyManagement>

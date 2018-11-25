@@ -32,9 +32,11 @@
         <module name="spring-boot-tutorial" />
         <module name="spring-transaction" />
         <module name="sql-dsl" />
+        <module name="sql-dsl-select" />
         <module name="state" />
         <module name="thread" />
         <module name="tomcat" />
+        <module name="transaction-management" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -66,9 +68,11 @@
       <module name="spring-boot-tutorial" target="1.8" />
       <module name="spring-transaction" target="1.8" />
       <module name="sql-dsl" target="1.8" />
+      <module name="sql-dsl-select" target="1.8" />
       <module name="state" target="1.8" />
       <module name="thread" target="1.7" />
       <module name="tomcat" target="1.8" />
+      <module name="transaction-management" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>
