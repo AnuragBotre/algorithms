@@ -85,21 +85,29 @@ public class SpiralMatrix {
     public List<Integer> spiralOrder(int[][] matrix) {
 
         //state
-        int state = 0;
-        int rowOffset = 0;
-        int colOffset = 0;
+        int rowCount = 0;
+        int colCount = 0;
+
+        boolean initilzed = false;
+
         int offset = 0;
 
         int col = 0;
         int row = 0;
 
-        int prevRow = 0;
-        int prevCol = 0;
+
 
 
         List<Integer> list = new ArrayList<>();
 
         for (int i = 0; i < matrix.length; i++) {
+
+            if(!initilzed){
+                rowCount = matrix.length;
+                colCount = matrix[0].length;
+                initilzed = true;
+            }
+
 
             row = i;
             col = i;
@@ -107,21 +115,25 @@ public class SpiralMatrix {
 
 
             col = traverseRowForward(matrix, row, col, offset, list);
+            rowCount--;
             row = row+1;
             if(row >= matrix.length - i){
                 break;
             }
             row = traverseColumnDownard(matrix, row, col, offset, list);
+            colCount--;
             col = col-1;
             if(col < i){
                 break;
             }
             col = traverseRowBackward(matrix, row, col, offset, list);
+            rowCount--;
             row = row - 1;
             if(row >= i){
                 break;
             }
             row = traverseColumnUpward(matrix, row, col, offset, list);
+            colCount--;
 
             //while (flag)
             /*switch (state) {
