@@ -85,86 +85,47 @@ public class SpiralMatrix {
     public List<Integer> spiralOrder(int[][] matrix) {
 
         //state
-        int state = 0;
-        int rowOffset = 0;
-        int colOffset = 0;
+        int rowCount = 0;
+        int colCount = 0;
+
+        boolean initilzed = false;
+
         int offset = 0;
 
         int col = 0;
         int row = 0;
-
-        int prevRow = 0;
-        int prevCol = 0;
 
 
         List<Integer> list = new ArrayList<>();
 
         for (int i = 0; i < matrix.length; i++) {
 
+            if (!initilzed) {
+                rowCount = matrix.length;
+                colCount = matrix[0].length;
+                initilzed = true;
+            }
+
+
             row = i;
             col = i;
             offset = i;
 
 
-            col = traverseRowForward(matrix, row, col, offset, list);
-            row = row+1;
-            if(row >= matrix.length - i){
-                break;
-            }
-            row = traverseColumnDownard(matrix, row, col, offset, list);
-            col = col-1;
-            if(col < i){
-                break;
-            }
-            col = traverseRowBackward(matrix, row, col, offset, list);
+            col = traverseRowForward(matrix, row, col, offset, list, rowCount, colCount);
+            rowCount--;
+            row = row + 1;
+
+            row = traverseColumnDownard(matrix, row, col, offset, list, rowCount, colCount);
+            colCount--;
+            col = col - 1;
+
+            col = traverseRowBackward(matrix, row, col, offset, list, rowCount, colCount);
+            rowCount--;
             row = row - 1;
-            if(row >= i){
-                break;
-            }
-            row = traverseColumnUpward(matrix, row, col, offset, list);
 
-            //while (flag)
-            /*switch (state) {
-                case 0: {
-                    state = 1;
-                    col = traverseRowForward(matrix, row, col, offset, list);
-                    rowOffset++;
-                    row = row + 1;
-                }
-                break;
-                case 1: {
-
-                    row = traverseColumnDownard(matrix, row, col, offset, list);
-                    col = col - 1;
-                    colOffset++;
-                    state = 2;
-                }
-                break;
-                case 2: {
-
-                    col = traverseRowBackward(matrix, row, col, offset, list);
-                    state = 3;
-                    row = row - 1;
-                }
-                break;
-                case 3:
-
-                    offset++;
-                    row = traverseColumnUpward(matrix, row, col, offset, list);
-                    col = col + 1;
-                    state = 0;
-                    i++;
-
-                    break;
-
-            }
-
-            if (completeTraversal(matrix, row, col, offset, prevRow, prevCol)) {
-                break;
-            }
-
-            prevRow = row;
-            prevCol = col;*/
+            row = traverseColumnUpward(matrix, row, col, offset, list, rowCount, colCount);
+            colCount--;
         }
         return list;
     }
@@ -182,34 +143,46 @@ public class SpiralMatrix {
         return false;
     }
 
-    private int traverseColumnUpward(int[][] matrix, int row, int col, int rowOffset, List<Integer> list) {
-        int i;
-        for (i = row; i > rowOffset; i--) {
-            list.add(matrix[i][col]);
+    private int traverseColumnUpward(int[][] matrix, int row, int col, int rowOffset, List<Integer> list, int rowCount, int colCount) {
+        int i = row;
+        int cnt;
+        if (colCount > 0) {
+            for (cnt = 0; i > rowOffset && cnt < rowCount; i--, cnt++) {
+                list.add(matrix[i][col]);
+            }
         }
         return i + 1;
     }
 
-    private int traverseRowBackward(int[][] matrix, int row, int col, int rowOffset, List<Integer> list) {
-        int i;
-        for (i = col; i >= rowOffset; i--) {
-            list.add(matrix[row][i]);
+    private int traverseRowBackward(int[][] matrix, int row, int col, int rowOffset, List<Integer> list, int rowCount, int colCount) {
+        int i = col;
+        int cnt;
+        if (rowCount > 0) {
+            for (cnt = 0; i >= rowOffset && cnt < colCount; i--, cnt++) {
+                list.add(matrix[row][i]);
+            }
         }
         return i + 1;
     }
 
-    private int traverseColumnDownard(int[][] matrix, int row, int col, int rowOffset, List<Integer> list) {
-        int i;
-        for (i = row; i < matrix.length - rowOffset; i++) {
-            list.add(matrix[i][col]);
+    private int traverseColumnDownard(int[][] matrix, int row, int col, int rowOffset, List<Integer> list, int rowCount, int colCount) {
+        int i = row;
+        int cnt;
+        if (colCount > 0) {
+            for (i = row, cnt = 0; i < matrix.length - rowOffset && cnt < rowCount; i++, cnt++) {
+                list.add(matrix[i][col]);
+            }
         }
         return i - 1;
     }
 
-    private int traverseRowForward(int[][] matrix, int curRow, int curCol, int rowOffset, List<Integer> list) {
-        int i;
-        for (i = curCol; i < matrix[curRow].length - rowOffset; i++) {
-            list.add(matrix[curRow][i]);
+    private int traverseRowForward(int[][] matrix, int curRow, int curCol, int rowOffset, List<Integer> list, int rowCount, int colCount) {
+        int i = curCol;
+        int cnt;
+        if (rowCount > 0) {
+            for (cnt = 0; i < matrix[curRow].length - rowOffset && cnt < colCount; i++, cnt++) {
+                list.add(matrix[curRow][i]);
+            }
         }
         return i - 1;
     }

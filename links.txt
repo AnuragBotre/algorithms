@@ -1,3 +1,6 @@
+https://linuxtechlab.com/use-apache-reverse-proxy-as-load-balancer/
+- How to use Apache reverse proxy as Load Balancer
+
 https://github.com/shekhargulati/99-problems/tree/master/java8
 Java 8 Problem Statements
 
