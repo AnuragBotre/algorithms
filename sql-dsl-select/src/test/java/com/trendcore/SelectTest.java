@@ -33,6 +33,9 @@ public class SelectTest {
 
         //https://www.javacodegeeks.com/2018/05/java-stream-orm-now-with-joins.html
 
+        //language=MYSQL-SQL
+        String sql = "select * from actor a where a.actor_id = ?";
+
         List list = new ArrayList<>();
         list.add(1);
         list.add(2);

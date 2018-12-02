@@ -1,14 +1,11 @@
 package com.trendcore.transaction;
 
-import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
-public class Transaction {
+public interface Transaction {
 
-    private DataSource dataSource;
-
-    public Transaction(DataSource dataSource) {
-        this.dataSource = dataSource;
-    }
-
-
+    public void execute(Connection connection) throws SQLException;
 }
