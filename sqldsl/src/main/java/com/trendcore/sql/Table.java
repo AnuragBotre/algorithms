@@ -15,26 +15,8 @@ public interface Table {
     Object[] getRow();
 
     default void approach1() {
-        List<Column> columns = getColumns();
 
-        PreparedStatement preparedStatement;
-        //language=MYSQL-SQL
-        String insert = "INSERT INTO " + getTableName() + " ";
-        String columnsString = "";
-        String values = "";
 
-        for (int i = 0; i < columns.size(); i++) {
-            if (i < columns.size() - 1) {
-                columnsString = columnsString + columns.get(i).name() + ",";
-                values = values + "?" + ",";
-            } else {
-                columnsString = columnsString + columns.get(i).name();
-                values = values + "?";
-            }
-        }
-
-        insert = insert + "( " + columnsString + " ) VALUES (" + values + ")";
-        System.out.println(insert);
     }
 
     default List<Column> getColumns() {

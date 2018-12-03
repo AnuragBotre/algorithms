@@ -26,7 +26,8 @@ public class TranscationTest {
         TransactionHandler t = new TransactionHandler(new MockDataSource());
 
         t.run(connection -> {
-            student.insert(connection);
+            DefaultInsertCommand d = new DefaultInsertCommand(connection);
+            d.insert(student);
         });
     }
 }

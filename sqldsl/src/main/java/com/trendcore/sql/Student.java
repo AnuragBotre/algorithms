@@ -9,11 +9,11 @@ public class Student implements Table{
 
     public static String name = "Student";
 
-    public static Column<Integer> ID = new Column<>("ID");
-    public static Column<String> NAME = new Column<>("NAME");
-    public static Column<Date> BIRTHDATE = new Column<>("BIRTHDATE");
+    public static Column<Integer> ID = new Column<>("ID",Integer.class);
+    public static Column<String> NAME = new Column<>("NAME",String.class);
+    public static Column<Date> BIRTHDATE = new Column<>("BIRTHDATE",Date.class);
 
-    public static Column<Integer> USER_DETAILS = new Column<>("USERDETAILS");
+    public static Column<Integer> USER_DETAILS = new Column<>("USERDETAILS",Integer.class);
 
     public static Relation<Column> FOREIGN_KEY = new Relation<>();
 

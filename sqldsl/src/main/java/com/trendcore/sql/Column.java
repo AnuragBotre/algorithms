@@ -1,14 +1,16 @@
 package com.trendcore.sql;
 
+import java.lang.reflect.ParameterizedType;
+
 public class Column<T> {
 
-//    private Class<T> type;
+    private Class<T> type;
     private String name;
 
     private int index;
 
-    public Column(String name) {
-//        this.type = type;
+    public Column(String name,Class<T> type) {
+        this.type =  type;
         this.name = name;
     }
 
@@ -34,5 +36,9 @@ public class Column<T> {
 
     public T val(Row row) {
         return row.get(index);
+    }
+
+    public Class<?> getType() {
+        return type;
     }
 }

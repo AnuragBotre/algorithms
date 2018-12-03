@@ -1,24 +1,49 @@
 package com.trendcore;
 
+import com.trendcore.sql.Column;
 import com.trendcore.sql.Table;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.List;
 
 public class DefaultInsertCommand {
 
-    public static void insert(Connection connection, String sql, Table table) {
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            table.getColumns().forEach(column -> {
+    private Connection connection;
 
-            });
-        } catch (SQLException e) {
-            //e.printStackTrace();
-            //TODO need to do exception handling
+    public DefaultInsertCommand(Connection connection) {
+        this.connection = connection;
+    }
+
+    public void insert(Table table) {
+
+        //Need to analyze table for primary key generation
+
+        List<Column> columns = table.getColumns();
+
+        PreparedStatement preparedStatement;
+        //language=MYSQL-SQL
+        String insert = "INSERT INTO " + table.getTableName() + " ";
+        String columnsString = "";
+        String values = "";
+
+        for (int i = 0; i < columns.size(); i++) {
+            if (i < columns.size() - 1) {
+                columnsString = columnsString + columns.get(i).name() + ",";
+                values = values + "?" + ",";
+            } else {
+                columnsString = columnsString + columns.get(i).name();
+                values = values + "?";
+            }
         }
+
+        insert = insert + "( " + columnsString + " ) VALUES (" + values + ")";
+
+        PreparedStatementBlock.insert(connection,insert,table);
+
+
     }
 
 }
