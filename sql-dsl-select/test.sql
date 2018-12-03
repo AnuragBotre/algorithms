@@ -1,0 +1,1 @@
+select * from actor a where a.actor_id = 1;

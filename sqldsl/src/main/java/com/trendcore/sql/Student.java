@@ -1,7 +1,9 @@
 package com.trendcore.sql;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 public class Student implements Table{
 
@@ -14,6 +16,8 @@ public class Student implements Table{
     public static Column<Integer> USER_DETAILS = new Column<>("USERDETAILS");
 
     public static Relation<Column> FOREIGN_KEY = new Relation<>();
+    
+    public static List list = new ArrayList();
 
     Object obj[];
 
@@ -40,12 +44,18 @@ public class Student implements Table{
                         if(field.get(this) instanceof Column) {
                             Column o = (Column) field.get(this);
                             o.setIndex(seq.next());
+                            list.add(o);
                         }
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
                 });
         obj = new Object[seq.val()];
+    }
+
+    @Override
+    public List<Column> getColumns() {
+        return list;
     }
 
     @Override
