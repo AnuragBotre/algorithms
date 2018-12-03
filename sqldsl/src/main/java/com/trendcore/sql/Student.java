@@ -16,7 +16,7 @@ public class Student implements Table{
     public static Column<Integer> USER_DETAILS = new Column<>("USERDETAILS");
 
     public static Relation<Column> FOREIGN_KEY = new Relation<>();
-    
+
     public static List list = new ArrayList();
 
     Object obj[];
@@ -61,6 +61,11 @@ public class Student implements Table{
     @Override
     public String getTableName() {
         return name;
+    }
+
+    @Override
+    public Object[] getRow() {
+        return obj;
     }
 
     interface SomeInterface{

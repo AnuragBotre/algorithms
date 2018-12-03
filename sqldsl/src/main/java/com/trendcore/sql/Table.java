@@ -12,6 +12,8 @@ public interface Table {
         approach1();
     }
 
+    Object[] getRow();
+
     default void approach1() {
         List<Column> columns = getColumns();
 
