@@ -9,6 +9,9 @@ public class SelectTest {
 
     @Test
     public void selectDefinition() {
+
+        String json = "{\"test\":\"1\"}";
+
         Query query = new Query();
 
         Object select = query.
@@ -34,7 +37,14 @@ public class SelectTest {
         //https://www.javacodegeeks.com/2018/05/java-stream-orm-now-with-joins.html
 
         //language=MYSQL-SQL
-        String sql = "select * from actor a where a.actor_id = 2";
+        String sql = "select * from address a where a.address = 1 ";
+
+        //language=JSON
+        String json = "{\n" +
+                "  \"temp\" : 1,\n" +
+                "  \"config\" : 1,\n" +
+                "  \"arr\" : []\n" +
+                "}";
 
         List list = new ArrayList<>();
         list.add(1);

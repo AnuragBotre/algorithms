@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -20,11 +21,10 @@ public class PreparedStatementBlock {
             } catch (SQLException e) {
                 //TODO Exception handling
             }
-            return null;
         });
     }
 
-    public static <R> void insert(Connection connection, String sql, Table table, BiFunction<PreparedStatement,String,R> function) {
+    public static void insert(Connection connection, String sql, Table table, BiConsumer<PreparedStatement,String> function) {
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
@@ -32,7 +32,7 @@ public class PreparedStatementBlock {
                 System.out.println(column.getType());
             });
 
-            function.apply(preparedStatement,sql);
+            function.accept(preparedStatement,sql);
 
         } catch (SQLException e) {
             //e.printStackTrace();

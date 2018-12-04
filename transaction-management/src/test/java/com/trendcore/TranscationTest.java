@@ -12,7 +12,7 @@ public class TranscationTest {
     public void basicTransactionSetup() throws Exception {
         TransactionHandler t = new TransactionHandler(new MockDataSource());
 
-        t.run(connection -> {
+        t.execute(connection -> {
             System.out.println("inserting into tables..");
         });
     }
@@ -25,7 +25,7 @@ public class TranscationTest {
         student.val(Student.BIRTHDATE , new Date());
         TransactionHandler t = new TransactionHandler(new MockDataSource());
 
-        t.run(connection -> {
+        t.execute(connection -> {
             DefaultInsertCommand d = new DefaultInsertCommand(connection);
             d.insert(student);
         });

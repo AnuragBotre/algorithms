@@ -23,7 +23,6 @@ public class DefaultInsertCommand {
 
         List<Column> columns = table.getColumns();
 
-        PreparedStatement preparedStatement;
         //language=MYSQL-SQL
         String insert = "INSERT INTO " + table.getTableName() + " ";
         String columnsString = "";

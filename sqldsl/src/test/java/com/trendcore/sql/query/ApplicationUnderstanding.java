@@ -4,7 +4,6 @@ import com.thoughtworks.sql.Field;
 import com.thoughtworks.sql.Function;
 import com.thoughtworks.sql.Query;
 import com.thoughtworks.sql.Table;
-import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -16,8 +15,7 @@ import static com.thoughtworks.sql.Order.asc;
 import static com.thoughtworks.sql.Order.desc;
 import static com.thoughtworks.sql.Query.select;
 import static com.thoughtworks.sql.Table.table;
-
-import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 
 public class ApplicationUnderstanding {

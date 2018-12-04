@@ -13,7 +13,7 @@ public class TransactionHandler {
         this.dataSource = dataSource;
     }
 
-    public void run(Transaction transaction) throws Exception {
+    public void execute(Transaction transaction) throws Exception {
 
         Connection connection = dataSource.getConnection();
         connection.setAutoCommit(false);
