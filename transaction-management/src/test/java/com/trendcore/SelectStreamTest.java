@@ -6,6 +6,8 @@ import org.junit.Test;
 
 import javax.sql.DataSource;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
 import java.util.stream.Stream;
 
 public class SelectStreamTest {
@@ -16,7 +18,21 @@ public class SelectStreamTest {
 
         SelectStream select = new SelectStream(dataSource);
 
-        select.stream(ResultSet.class,"select * from address a where a.address = ?",1);
+        Stream<ResultSetCursor> stream = select.stream("select * from address a where a.address = ?", 1);
+
+        stream.forEach(resultSetCursor -> {
+            try {
+                ResultSetMetaData metaData = resultSetCursor.getResultSet().getMetaData();
+
+                for (int i = 0, cnt = 1; i < metaData.getColumnCount(); i++, cnt++) {
+                    System.out.println(resultSetCursor.getResultSet().getObject(cnt));
+                }
+
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
 
         /*Stream<Row> select = SQL.select(dataSource.getConnection(), );
         select.forEach(row -> {
