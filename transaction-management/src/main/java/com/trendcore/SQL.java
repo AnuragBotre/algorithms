@@ -27,7 +27,7 @@ public class SQL {
                                     cnt++;
                                 }
                             } catch (SQLException e) {
-                                e.printStackTrace();
+                                //TODO Exception handling
                             }
 
                             return preparedStatement;
