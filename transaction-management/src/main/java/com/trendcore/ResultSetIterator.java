@@ -1,6 +1,7 @@
 package com.trendcore;
 
 import com.trendcore.sql.Row;
+import com.trendcore.sql.Table;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,12 +10,13 @@ import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.function.Supplier;
 
-public class ResultSetIterator implements Iterator<Row> {
+public class ResultSetIterator implements Iterator {
 
     private ResultSet rs;
     private PreparedStatement ps;
     private Connection connection;
     private Supplier<PreparedStatement> preparedStatementSupplier;
+    private ResultSetCursor resultSetCursor;
 
     public ResultSetIterator(Connection connection, Supplier<PreparedStatement> supplier) {
         assert connection != null;
@@ -26,6 +28,8 @@ public class ResultSetIterator implements Iterator<Row> {
         try {
             ps = preparedStatementSupplier.get();
             rs = ps.executeQuery();
+
+            resultSetCursor = new ResultSetCursor(rs);
 
         } catch (SQLException e) {
             close();
@@ -72,15 +76,11 @@ public class ResultSetIterator implements Iterator<Row> {
     }
 
     @Override
-    public Row next() {
+    public ResultSetCursor next() {
         try {
-            Row row = new Row() {
-                @Override
-                public <T> T get(int index) {
-                    return null;
-                }
-            };
-            return row;
+            int i = 0;
+
+            return resultSetCursor;
         } catch (Exception e) {
             close();
             throw e;
