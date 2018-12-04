@@ -7,24 +7,24 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Iterator;
+import java.util.function.Supplier;
 
 public class ResultSetIterator implements Iterator<Row> {
 
     private ResultSet rs;
     private PreparedStatement ps;
     private Connection connection;
-    private String sql;
+    private Supplier<PreparedStatement> preparedStatementSupplier;
 
-    public ResultSetIterator(Connection connection, String sql) {
+    public ResultSetIterator(Connection connection, Supplier<PreparedStatement> supplier) {
         assert connection != null;
-        assert sql != null;
         this.connection = connection;
-        this.sql = sql;
+        this.preparedStatementSupplier = supplier;
     }
 
     public void init() {
         try {
-            ps = connection.prepareStatement(sql);
+            ps = preparedStatementSupplier.get();
             rs = ps.executeQuery();
 
         } catch (SQLException e) {
@@ -58,7 +58,7 @@ public class ResultSetIterator implements Iterator<Row> {
             try {
                 rs.close();
             } catch (SQLException e) {
-
+                //TODO - log exception
             }
         }
         try {
@@ -67,6 +67,7 @@ public class ResultSetIterator implements Iterator<Row> {
             }
         } catch (SQLException e) {
             //nothing we can do here
+            //TODO - log exception
         }
     }
 

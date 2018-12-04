@@ -43,7 +43,7 @@ public class SelectTest {
         String json = "{\n" +
                 "  \"temp\" : 1,\n" +
                 "  \"config\" : 1,\n" +
-                "  \"arr\" : []\n" +
+                "  \"arr\" : [1,2,3,4]\n" +
                 "}";
 
         List list = new ArrayList<>();

@@ -1,33 +1,38 @@
 package com.trendcore;
 
+import com.trendcore.sql.Row;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Spliterators;
 import java.util.function.BiConsumer;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 public class SQL {
 
-    public static void select(Connection connection, String sql, BiConsumer<ResultSet,Long> consumer, Object... params) {
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            int cnt = 0;
-            for (Object param : params) {
-                ps.setObject(++cnt, param);
-            }
-            try (ResultSet rs = ps.executeQuery()) {
-                long rowCnt = 0;
-                rs.getMetaData();
-                while (rs.next()) {
-                    consumer.accept(rs, rowCnt++);
-                }
-            } catch (SQLException e) {
-                //TODO exception handling
-                //throw new DataAccessException(e);
-            }
-        } catch (SQLException e) {
-            //TODO exception handling
-            //throw new DataAccessException(e);
-        }
+    public static Stream<Row> select(Connection connection, String sql,Object... params) {
+        Stream<Row> stream = StreamSupport
+                .stream(Spliterators.spliteratorUnknownSize(
+                        new ResultSetIterator(connection, () -> {
+                            PreparedStatement preparedStatement = null;
+                            try {
+                                preparedStatement = connection.prepareStatement(sql);
+                                int cnt = 1;
+                                for(Object param : params){
+                                    preparedStatement.setObject(cnt,param);
+                                    cnt++;
+                                }
+                            } catch (SQLException e) {
+                                e.printStackTrace();
+                            }
+
+                            return preparedStatement;
+                        }), 0), false);
+        return stream;
     }
 
 }
