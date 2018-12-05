@@ -1,6 +1,6 @@
 package com.trendcore.sql;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public enum TableDeclarationUsingEnum implements Table{
 
@@ -18,8 +18,23 @@ public enum TableDeclarationUsingEnum implements Table{
     }
 
     @Override
-    public Object[] getRow() {
-        return new Object[0];
+    public Row getRow() {
+        return null;
+    }
+
+    @Override
+    public List<Column<?>> getColumns() {
+        return null;
+    }
+
+    @Override
+    public <T> void val(Column<T> id, T t) {
+
+    }
+
+    @Override
+    public <T> T val(Column<T> id) {
+        return null;
     }
 
     TableDeclarationUsingEnum(Class<?> t) {
@@ -37,4 +52,6 @@ public enum TableDeclarationUsingEnum implements Table{
             System.out.println(v+" " + v.type);
         }
     }
+
+
 }

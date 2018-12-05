@@ -21,7 +21,7 @@ public class DefaultInsertCommand {
 
         //Need to analyze table for primary key generation
 
-        List<Column> columns = table.getColumns();
+        List<Column<?>> columns = table.getColumns();
 
         //language=MYSQL-SQL
         String insert = "INSERT INTO " + table.getTableName() + " ";

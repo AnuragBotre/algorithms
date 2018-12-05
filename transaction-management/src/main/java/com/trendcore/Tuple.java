@@ -16,4 +16,9 @@ public class Tuple implements Row {
     public Object get(int index) {
         return tuple[index];
     }
+
+    @Override
+    public <T> void set(int index, T t) {
+        tuple[index] = t;
+    }
 }

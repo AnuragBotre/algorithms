@@ -63,8 +63,8 @@ public class Student implements Table{
     }
 
     @Override
-    public Object[] getRow() {
-        return obj;
+    public Row getRow() {
+        return null;
     }
 
     interface SomeInterface{

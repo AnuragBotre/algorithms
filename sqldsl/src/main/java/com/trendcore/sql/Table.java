@@ -31,7 +31,7 @@ public interface Table {
         approach1();
     }
 
-    Object[] getRow();
+    Row getRow();
 
     default void approach1() {
 
@@ -39,4 +39,8 @@ public interface Table {
     }
 
     List<Column<?>> getColumns();
+
+    <T> void val(Column<T> id, T t);
+
+    <T> T val(Column<T> id);
 }
