@@ -36,6 +36,6 @@ public interface Table {
     }
 
     default <T> T val(Column<T> id){
-        return getRow().get(id.getIndex());
+        return (T) getRow().get(id.getIndex());
     }
 }
