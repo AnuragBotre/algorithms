@@ -20,14 +20,14 @@ public class Actor implements Table {
 
     public static Seq seq = new Seq();
 
-    private static List<Column<?>> colums = new ArrayList<>();
+    private static List<Column<?>> columns = new ArrayList<>();
 
     private Row row;
 
     static
     {
         Class currentClass = Actor.class;
-        Table.init(currentClass,seq,colums);
+        Table.init(currentClass,seq, columns);
     }
 
     public Actor() {
@@ -46,6 +46,6 @@ public class Actor implements Table {
 
     @Override
     public List<Column<?>> getColumns() {
-        return colums;
+        return columns;
     }
 }
