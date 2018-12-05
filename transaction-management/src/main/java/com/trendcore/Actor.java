@@ -48,14 +48,4 @@ public class Actor implements Table {
     public List<Column<?>> getColumns() {
         return colums;
     }
-
-    @Override
-    public <T> void val(Column<T> id, T t) {
-        row.set(id.getIndex(),t);
-    }
-
-    @Override
-    public <T> T val(Column<T> id) {
-        return row.get(id.getIndex());
-    }
 }

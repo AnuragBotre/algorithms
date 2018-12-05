@@ -27,20 +27,15 @@ public interface Table {
 
     String getTableName();
 
-    default void insert(Connection connection) {
-        approach1();
-    }
-
     Row getRow();
-
-    default void approach1() {
-
-
-    }
 
     List<Column<?>> getColumns();
 
-    <T> void val(Column<T> id, T t);
+    default <T> void val(Column<T> id, T t){
+        getRow().set(id.getIndex(),t);
+    }
 
-    <T> T val(Column<T> id);
+    default <T> T val(Column<T> id){
+        return getRow().get(id.getIndex());
+    }
 }
