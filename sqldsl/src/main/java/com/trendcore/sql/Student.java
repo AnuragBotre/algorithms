@@ -1,5 +1,6 @@
 package com.trendcore.sql;
 
+import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -9,13 +10,10 @@ public class Student implements Table{
 
     public static String name = "Student";
 
-    public static Column<Integer> ID = new Column<>("ID",Integer.class);
-    public static Column<String> NAME = new Column<>("NAME",String.class);
-    public static Column<Date> BIRTHDATE = new Column<>("BIRTHDATE",Date.class);
-
-    public static Column<Integer> USER_DETAILS = new Column<>("USERDETAILS",Integer.class);
-
-    public static Relation<Column> FOREIGN_KEY = new Relation<>();
+    public static Column<Integer> ID;
+    public static Column<String> NAME;
+    public static Column<Date> BIRTHDATE;
+    public static Column<Integer> USER_DETAILS;
 
     public static List list = new ArrayList();
 
@@ -38,14 +36,15 @@ public class Student implements Table{
         Class currentClass = this.getClass();
 
         Seq seq = new Seq();
-        Arrays.asList(currentClass.getFields()).stream().filter(field -> field.getType().isAssignableFrom(Column.class))
+        Arrays.asList(currentClass.getDeclaredFields()).stream().filter(field -> field.getType().isAssignableFrom(Column.class))
                 .forEach(field -> {
                     try {
-                        if(field.get(this) instanceof Column) {
-                            Column o = (Column) field.get(this);
-                            o.setIndex(seq.next());
-                            list.add(o);
-                        }
+                        Column c = new Column();
+                        c.setName(field.getName());
+                        c.setType((Class) ((ParameterizedType)field.getGenericType()).getActualTypeArguments()[0]);
+                        c.setIndex(seq.next());
+                        field.set(null,c);
+                        list.add(c);
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }

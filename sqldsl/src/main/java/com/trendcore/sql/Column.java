@@ -1,6 +1,7 @@
 package com.trendcore.sql;
 
 import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 
 public class Column<T> {
 
@@ -9,9 +10,11 @@ public class Column<T> {
 
     private int index;
 
-    public Column(String name,Class<T> type) {
+    public Column() {
+    }
+
+    public Column(Class<T> type) {
         this.type =  type;
-        this.name = name;
     }
 
     public int getIndex() {
@@ -40,5 +43,9 @@ public class Column<T> {
 
     public Class<?> getType() {
         return type;
+    }
+
+    public void setType(Class<T> type) {
+        this.type = type;
     }
 }
