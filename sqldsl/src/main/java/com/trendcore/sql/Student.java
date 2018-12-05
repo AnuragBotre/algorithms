@@ -53,7 +53,7 @@ public class Student implements Table{
     }
 
     @Override
-    public List<Column> getColumns() {
+    public List<Column<?>> getColumns() {
         return list;
     }
 

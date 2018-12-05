@@ -40,10 +40,7 @@ public class SelectStreamTest {
             }
         });
 
-        /*Stream<Row> select = SQL.select(dataSource.getConnection(), );
-        select.forEach(row -> {
-            System.out.println(row);
-        });*/
+
     }
 
     @Test
