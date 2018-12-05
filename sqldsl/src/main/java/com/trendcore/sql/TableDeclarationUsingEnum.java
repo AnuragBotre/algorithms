@@ -2,14 +2,25 @@ package com.trendcore.sql;
 
 import java.util.ArrayList;
 
-public enum TableDeclarationUsingEnum {
+public enum TableDeclarationUsingEnum implements Table{
 
     ID(Integer.class),
     ADDRESS1(String.class),
     ADDRESS(String.class);
 
+    public static String name = "Address";
+
     Class type;
 
+    @Override
+    public String getTableName() {
+        return name;
+    }
+
+    @Override
+    public Object[] getRow() {
+        return new Object[0];
+    }
 
     TableDeclarationUsingEnum(Class<?> t) {
         type = t;
@@ -25,8 +36,5 @@ public enum TableDeclarationUsingEnum {
                 values) {
             System.out.println(v+" " + v.type);
         }
-
-
-
     }
 }
