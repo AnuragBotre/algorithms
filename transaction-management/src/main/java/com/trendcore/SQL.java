@@ -12,10 +12,11 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
+@Deprecated
 public class SQL {
 
     public static Stream<Row> select(Connection connection, String sql,Object... params) {
-        Stream<Row> stream = StreamSupport
+        /*Stream<Row> stream = StreamSupport
                 .stream(Spliterators.spliteratorUnknownSize(
                         new ResultSetIterator(connection, () -> {
                             PreparedStatement preparedStatement = null;
@@ -31,7 +32,8 @@ public class SQL {
                             }
 
                             return preparedStatement;
-                        }), 0), false);
+                        }), 0), false);*/
+        Stream<Row> stream = null;
         return stream;
     }
 

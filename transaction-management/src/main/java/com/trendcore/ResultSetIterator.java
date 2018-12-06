@@ -1,50 +1,57 @@
 package com.trendcore;
 
-import com.trendcore.sql.Row;
-import com.trendcore.sql.Table;
-
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.Iterator;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public class ResultSetIterator implements Iterator {
+public class ResultSetIterator<T> implements Iterator {
 
-    private ResultSet rs;
+    private BiFunction<ResultSetMetaData, ResultSet, T> mapper;
+    private SingleResultSetWrapper rs;
     private PreparedStatement ps;
-    private Connection connection;
-    private Supplier<PreparedStatement> preparedStatementSupplier;
-    private ResultSetCursor resultSetCursor;
+    private Supplier<SingleResultSetWrapper> resultSetSupplier;
+    private Consumer<SingleResultSetWrapper> onClose;
+    private ResultSetMetaData metaData;
 
-    public ResultSetIterator(Connection connection, Supplier<PreparedStatement> supplier) {
-        assert connection != null;
-        this.connection = connection;
-        this.preparedStatementSupplier = supplier;
+    public ResultSetIterator() {
+
+    }
+
+    public ResultSetIterator resultSet(Supplier<SingleResultSetWrapper> supplier) {
+        this.resultSetSupplier = supplier;
+        return this;
+    }
+
+    public ResultSetIterator resultSetMapper(BiFunction<ResultSetMetaData, ResultSet, T> mapper) {
+        this.mapper = mapper;
+        return this;
+    }
+
+    public ResultSetIterator onClose(Consumer<SingleResultSetWrapper> onClose) {
+        this.onClose = onClose;
+        return this;
     }
 
     public void init() {
-        try {
-            ps = preparedStatementSupplier.get();
-            rs = ps.executeQuery();
-
-            resultSetCursor = new ResultSetCursor(rs);
-
-        } catch (SQLException e) {
-            close();
-            //throw new DataAccessException(e);
-            throw new RuntimeException();
-        }
+        rs = resultSetSupplier.get();
     }
 
     @Override
     public boolean hasNext() {
-        if (ps == null) {
-            init();
-        }
+
         try {
-            boolean hasMore = rs.next();
+
+            if (rs == null) {
+                init();
+                metaData = rs.getResultSet().getMetaData();
+            }
+
+            boolean hasMore = rs.getResultSet().next();
             if (!hasMore) {
                 close();
             }
@@ -58,29 +65,13 @@ public class ResultSetIterator implements Iterator {
     }
 
     void close() {
-        if (rs != null) {
-            try {
-                rs.close();
-            } catch (SQLException e) {
-                //TODO - log exception
-            }
-        }
-        try {
-            if (ps != null) {
-                ps.close();
-            }
-        } catch (SQLException e) {
-            //nothing we can do here
-            //TODO - log exception
-        }
+        onClose.accept(rs);
     }
 
     @Override
-    public ResultSetCursor next() {
+    public T next() {
         try {
-            int i = 0;
-
-            return resultSetCursor;
+            return mapper.apply(metaData, rs.getResultSet());
         } catch (Exception e) {
             close();
             throw e;

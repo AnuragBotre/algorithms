@@ -33,29 +33,19 @@ public class SelectStreamTest {
     public void basicSelect() throws Exception {
         SelectStream select = new SelectStream(dataSource);
 
-        Stream<ResultSetCursor> stream = select.stream("select * from address a where a.address = ?", 1);
+        Stream<Row> stream = select.stream("select * from address a where a.address = ?", 1);
 
-        stream.forEach(resultSetCursor -> {
-            try {
-                ResultSet resultSet = resultSetCursor.getResultSet();
-                ResultSetMetaData metaData = resultSet.getMetaData();
-
-                for (int i = 0, cnt = 1; i < metaData.getColumnCount(); i++, cnt++) {
-                    System.out.println(resultSet.getObject(cnt));
-                }
-
-
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+        stream.forEach(actorRow -> {
+            Column id = new Column();
+            id.setIndex(1);
+            System.out.println(actorRow.get(id));
         });
-
 
     }
 
     @Test
     public void tableAsStream() throws Exception {
-        class Result{
+        class Result {
             public Column<Integer> ID;
             public Column<String> NAME;
             public Column<Date> BIRTHDATE;
@@ -72,19 +62,19 @@ public class SelectStreamTest {
         long count = Arrays.asList(currentClass.getDeclaredFields()).stream().filter(field -> field.getType().isAssignableFrom(Column.class))
                 .count();
 
-        Assert.assertEquals(count,4);
+        Assert.assertEquals(count, 4);
     }
 
     @Test(expected = Exception.class)
     public void collectSelectResultInListShouldResultInError() throws SQLException {
         SelectStream select = new SelectStream(dataSource);
 
-        Stream<ResultSetCursor> stream = select.stream("select * from address a where a.address = ?", 1);
+        Stream<Row<Actor>> stream = select.stream(Actor.class, "select * from address a where a.address = ?", 1);
 
-        List<ResultSetCursor> collect = stream.collect(Collectors.toList());
+        List<Row<Actor>> collect = stream.collect(Collectors.toList());
 
-        for(ResultSetCursor r : collect){
-            System.out.println(r.getResultSet().getObject(1));
+        for (Row<Actor> r : collect) {
+            //System.out.println(r.getResultSet().getObject(1));
         }
 
     }

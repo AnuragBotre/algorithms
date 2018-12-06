@@ -1,10 +1,12 @@
 package com.trendcore;
 
+import com.trendcore.sql.Row;
+import com.trendcore.sql.Table;
+
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.Spliterators;
+import java.util.function.BiFunction;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -16,46 +18,67 @@ public class SelectStream {
         this.dataSource = dataSource;
     }
 
-    public Stream<ResultSetCursor> stream(String sql, Object... params) {
+    public <T extends Table> Stream<Row<T>> stream(Class<T> t, String sql, Object... params) {
 
-        try {
-            Connection connection = dataSource.getConnection();
+        ProxyConnectionForStream proxyConnectionForStream = new ProxyConnectionForStream();
 
-            Stream<ResultSetCursor> stream = StreamSupport
-                    .stream(Spliterators.spliteratorUnknownSize(
-                            new ResultSetIterator(connection, () -> {
-                                PreparedStatement preparedStatement = null;
-                                try {
-                                    preparedStatement = connection.prepareStatement(sql);
-                                    int cnt = 1;
-                                    for (Object param : params) {
-                                        preparedStatement.setObject(cnt, param);
-                                        cnt++;
-                                    }
-                                } catch (SQLException e) {
-                                    //TODO Exception handling
-                                }
+        ResultSetIterator<Row<T>> resultSetIterator = new ResultSetIterator<>()
+                                        .resultSet(() -> {
+                                            try {
+                                                Connection connection = dataSource.getConnection();
+                                                proxyConnectionForStream.setConnection(connection);
+                                                SingleResultSetWrapper resultSet = proxyConnectionForStream.getResultSet(sql, params);
+                                                return resultSet;
+                                            } catch (SQLException e) {
+                                                e.printStackTrace();
+                                            }
+                                            return null;
+                                        })
+                                        .resultSetMapper((o, o2) -> null)
+                                        .onClose(singleResultSetWrapper -> {
+                                            proxyConnectionForStream.close();
+                                        });
 
-                                return preparedStatement;
-                            }), 0), false);
+        Stream<Row<T>> stream = StreamSupport
+                .stream(Spliterators.spliteratorUnknownSize(resultSetIterator, 0), false);
 
-            stream.onClose(() -> {
-                try {
-                    if (connection != null) {
-                        connection.close();
+        stream.onClose(() -> {
+            proxyConnectionForStream.close();
+        });
+
+        return stream;
+    }
+
+    public Stream<Row> stream(String sql, Object... params) {
+        ProxyConnectionForStream proxyConnectionForStream = new ProxyConnectionForStream();
+
+        BiFunction<ResultSetMetaData, ResultSet, Row> mapper = (metaData, resultSet) -> Table.row(metaData,resultSet);
+
+
+        ResultSetIterator<Row> resultSetIterator = new ResultSetIterator<Row>()
+                .resultSet(() -> {
+                    try {
+                        Connection connection = dataSource.getConnection();
+                        proxyConnectionForStream.setConnection(connection);
+                        SingleResultSetWrapper resultSet = proxyConnectionForStream.getResultSet(sql, params);
+                        return resultSet;
+                    } catch (SQLException e) {
+                        throw new RuntimeException();
                     }
-                } catch (SQLException e) {
-                    //TODO exception handling
-                }
-            });
 
-            return stream;
+                })
+                .resultSetMapper(mapper)
+                .onClose(singleResultSetWrapper -> {
+                    proxyConnectionForStream.close();
+                });
 
-        } catch (SQLException e) {
-            //e.printStackTrace();
-            //TODO : Exception handling
-            throw new RuntimeException();
-        }
+        Stream<Row> stream = StreamSupport
+                .stream(Spliterators.spliteratorUnknownSize(resultSetIterator, 0), false);
 
+        stream.onClose(() -> {
+            proxyConnectionForStream.close();
+        });
+
+        return stream;
     }
 }

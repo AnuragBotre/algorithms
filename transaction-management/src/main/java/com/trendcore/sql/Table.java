@@ -6,6 +6,9 @@ import com.trendcore.Tuple;
 
 import java.lang.reflect.ParameterizedType;
 import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -69,6 +72,18 @@ public interface Table {
         }
 
         throw new RuntimeException("table descriptor not found");
+    }
+
+    static Row row(ResultSetMetaData metaData, ResultSet resultSet) {
+        Row row = null;
+        try {
+            row = new Tuple(metaData.getColumnCount());
+            row.populate(resultSet);
+            return row;
+        } catch (SQLException e) {
+            //TODO Exception handling
+            throw new RuntimeException();
+        }
     }
 
     String getTableName();
