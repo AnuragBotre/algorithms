@@ -1,6 +1,12 @@
+https://stackoverflow.com/questions/6514876/most-efficient-conversion-of-resultset-to-json
+- Most efficient conversion of ResultSet to JSON?
+- Read this blog this also contains code for SQL Types.
+
+https://www.javacodegeeks.com/2018/09/streaming-jdbc-resultset-json.html
+- Result Set to JSON Stream
+
 https://www.db4free.net/phpMyAdmin/index.php
 - Mysql
-
 
 
 https://dzone.com/articles/adding-java-8-lambda-goodness
