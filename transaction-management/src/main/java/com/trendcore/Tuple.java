@@ -13,12 +13,12 @@ public class Tuple implements Row {
     }
 
     @Override
-    public Object get(int index) {
-        return tuple[index];
+    public void set(Column column, Object o) {
+        tuple[column.getIndex()] = o;
     }
 
     @Override
-    public void set(int index, Object t) {
-        tuple[index] = t;
+    public Object get(Column id) {
+        return tuple[id.getIndex()];
     }
 }

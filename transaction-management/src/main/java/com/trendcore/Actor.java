@@ -5,13 +5,12 @@ import com.trendcore.sql.Row;
 import com.trendcore.sql.Seq;
 import com.trendcore.sql.Table;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class Actor implements Table {
 
-    public static String name = "Student";
+    public static String name = "Actor";
 
     public static Column<Integer> ID;
     public static Column<String> NAME;
@@ -20,14 +19,13 @@ public class Actor implements Table {
 
     public static Seq seq = new Seq();
 
-    private static List<Column<?>> columns = new ArrayList<>();
+    private static TableDescriptor tableDescriptor = new TableDescriptor();
 
     private Row row;
 
-    static
-    {
+    static {
         Class currentClass = Actor.class;
-        Table.init(currentClass,seq, columns);
+        Table.init(currentClass, seq, tableDescriptor);
     }
 
     public Actor() {
@@ -46,6 +44,6 @@ public class Actor implements Table {
 
     @Override
     public List<Column<?>> getColumns() {
-        return columns;
+        return null;
     }
 }

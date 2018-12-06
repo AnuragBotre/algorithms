@@ -38,7 +38,7 @@ public class Column<T> {
     }
 
     public T val(Row row) {
-        return (T) row.get(index);
+        return (T) row.get(this);
     }
 
     public Class<?> getType() {

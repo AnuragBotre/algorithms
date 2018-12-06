@@ -25,7 +25,7 @@ public class Person implements SQLField {
 
     public static void main(String[] args) throws NoSuchFieldException {
 
-        DataSet<Student> d = new DataSet(Student.class);
+
 
         /*Row<Student> s = d.get(0);
 
