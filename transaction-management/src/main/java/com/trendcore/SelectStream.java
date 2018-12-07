@@ -20,46 +20,23 @@ public class SelectStream {
     }
 
 
-    public <T extends Table> Stream<Row<T>> stream(Class<T> t, String sql, Object... params) {
-
-        ProxyConnectionForStream proxyConnectionForStream = new ProxyConnectionForStream();
-
-        @SuppressWarnings(value = {"unchecked"})
-        ResultSetIterator<Row<T>> resultSetIterator = new ResultSetIterator<>()
-                                        .resultSet(() -> {
-                                            try {
-                                                Connection connection = dataSource.getConnection();
-                                                proxyConnectionForStream.setConnection(connection);
-                                                SingleResultSetWrapper resultSet = proxyConnectionForStream.getResultSet(sql, params);
-                                                return resultSet;
-                                            } catch (SQLException e) {
-                                                e.printStackTrace();
-                                            }
-                                            return null;
-                                        })
-                                        .resultSetMapper((o, o2) -> null)
-                                        .onClose(singleResultSetWrapper -> {
-                                            proxyConnectionForStream.close();
-                                        });
-
-        Stream<Row<T>> stream = StreamSupport
-                .stream(Spliterators.spliteratorUnknownSize(resultSetIterator, 0), false);
-
-        stream.onClose(proxyConnectionForStream::close);
-
-        return stream;
+    public <T> Stream<Row<T>> stream(BiFunction<ResultSetMetaData, ResultSet, Row<T>> mapper, String sql, Object... params) {
+        return getStream(sql,mapper,params);
     }
 
     public Stream<Row> stream(String sql, Object... params) {
-        ProxyConnectionForStream proxyConnectionForStream = new ProxyConnectionForStream();
-
         BiFunction<ResultSetMetaData, ResultSet, Row> mapper = Table::row;
+        return getStream(sql, mapper, params);
+    }
+
+    private <T> Stream<T> getStream(String sql, BiFunction<ResultSetMetaData, ResultSet, T> mapper, Object[] params) {
 
         Consumer<SingleResultSetWrapper> singleResultSetWrapperConsumer = SingleResultSetWrapper::close;
 
+        ProxyConnectionForStream proxyConnectionForStream = new ProxyConnectionForStream();
         @SuppressWarnings(value = {"unchecked"})
-        ResultSetIterator<Row> resultSetIterator = new ResultSetIterator<Row>()
-                .resultSet(() -> {
+        ResultSetIterator<T> resultSetIterator = new ResultSetIterator<T>()
+                .resultSetSupplier(() -> {
                     try {
                         Connection connection = dataSource.getConnection();
                         proxyConnectionForStream.setConnection(connection);
@@ -73,7 +50,7 @@ public class SelectStream {
                 .resultSetMapper(mapper)
                 .onClose(singleResultSetWrapperConsumer);
 
-        Stream<Row> stream = StreamSupport
+        Stream<T> stream = StreamSupport
                 .stream(Spliterators.spliteratorUnknownSize(resultSetIterator, 0), false);
 
         stream.onClose(proxyConnectionForStream::close);

@@ -10,9 +10,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import javax.sql.DataSource;
-import java.lang.reflect.ParameterizedType;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Date;
@@ -65,17 +62,35 @@ public class SelectStreamTest {
         Assert.assertEquals(count, 4);
     }
 
-    @Test(expected = Exception.class)
+    public static class Result {
+        public static Column<Integer> ADDRESS_ID;
+    }
+
+    @Test
     public void collectSelectResultInListShouldResultInError() throws SQLException {
         SelectStream select = new SelectStream(dataSource);
 
-        Stream<Row<Actor>> stream = select.stream(Actor.class, "select * from address a where a.address = ?", 1);
 
-        List<Row<Actor>> collect = stream.collect(Collectors.toList());
+        Stream<Row<Result>> stream = select.stream((metaData, resultSet) -> {
+            Row<Result> r = new Tuple<Result>(metaData);
+            r.populate(resultSet);
+            return r;
+        }, "select " + columns(Result.class) + " from address a where a.address_id = ?", 2);
 
-        for (Row<Actor> r : collect) {
-            //System.out.println(r.getResultSet().getObject(1));
+        List<Row> collect = stream.collect(Collectors.toList());
+
+        Column<Integer> c = new Column<>(Integer.class, 1);
+
+        for (Row<Result> r : collect) {
+            Integer integer = r.get(Result.ADDRESS_ID);
+            System.out.println(integer);
         }
 
     }
+
+    private <T> String columns(Class<T> aClass) {
+        TableDescriptor tableDescriptor = Table.init(aClass);
+        return tableDescriptor.getColums().stream().map(column -> column.name()).collect(Collectors.joining(","));
+    }
+
 }

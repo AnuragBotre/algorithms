@@ -22,7 +22,7 @@ public class ResultSetIterator<T> implements Iterator {
 
     }
 
-    public ResultSetIterator resultSet(Supplier<SingleResultSetWrapper> supplier) {
+    public ResultSetIterator resultSetSupplier(Supplier<SingleResultSetWrapper> supplier) {
         this.resultSetSupplier = supplier;
         return this;
     }

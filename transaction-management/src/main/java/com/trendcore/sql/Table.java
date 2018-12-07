@@ -57,6 +57,8 @@ public interface Table {
                             throw new RuntimeException(e);
                         }
                     });
+
+            //TODO : Do we need to put in table descriptor
             tableDescriptors.put(aClass,finalTableDescriptor);
         }
 

@@ -13,6 +13,11 @@ public class Column<T> {
     public Column() {
     }
 
+    public Column(Class<T> type,int index) {
+        this.type =  type;
+        this.index = index;
+    }
+
     public Column(Class<T> type) {
         this.type =  type;
     }

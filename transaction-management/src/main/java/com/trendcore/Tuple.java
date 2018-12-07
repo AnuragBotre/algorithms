@@ -8,12 +8,21 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 
-public class Tuple implements Row {
+public class Tuple<T> implements Row {
 
     Object tuple[];
 
     public Tuple(int columnCount) {
         tuple = new Object[columnCount];
+    }
+
+    public Tuple(ResultSetMetaData metaData) {
+        try {
+            tuple = new Object[metaData.getColumnCount()];
+        } catch (SQLException e) {
+            //TODO exception handling
+            throw new RuntimeException();
+        }
     }
 
     @Override
