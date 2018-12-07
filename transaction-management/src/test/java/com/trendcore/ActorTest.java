@@ -13,10 +13,11 @@ public class ActorTest {
 
     @Test
     public void checkSyntaxForTable() {
-        Actor actorRow = new Actor();
-        actorRow.val(actorRow.ID,1);
+        Actor actor = new Actor();
+        Row<Actor> row = Table.row(Actor.class);
+        row.set(actor.ID,1);
 
-        System.out.println(actorRow.val(actorRow.ID));
+        System.out.println(row.get(actor.ID));
     }
 
     @Test

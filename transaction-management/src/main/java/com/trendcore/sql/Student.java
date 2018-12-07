@@ -62,7 +62,7 @@ public class Student implements Table{
         return name;
     }
 
-    @Override
+    //@Override
     public Row getRow() {
         return null;
     }

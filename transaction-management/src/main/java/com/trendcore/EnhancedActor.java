@@ -32,7 +32,7 @@ public class EnhancedActor implements Table {
         return name;
     }
 
-    @Override
+    //@Override
     public Row getRow() {
         return row;
     }

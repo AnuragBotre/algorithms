@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 public interface Table {
 
@@ -41,7 +42,7 @@ public interface Table {
                         }
                     });
 
-            if(aClass.isInstance(Table.class)) {
+            if(Table.class.isAssignableFrom(aClass)) {
                 tableDescriptors.put(aClass, finalTableDescriptor);
             }
         }
@@ -49,19 +50,17 @@ public interface Table {
         return tableDescriptor;
     }
 
-    static <T extends Table> Row<T> row(Class<T> aClass) {
+    static <R> Row<R> row(Class<? extends Table> aClass) {
         TableDescriptor tableDescriptor = tableDescriptors.get(aClass);
-
-        if(tableDescriptor != null){
-            Row<T> row = new Tuple(tableDescriptor.getColums().size());
-            return row;
+        if(tableDescriptor == null){
+            tableDescriptor = Table.init(aClass);
         }
-
-        throw new RuntimeException("table descriptor not found");
+        Row<R> row = new Tuple(tableDescriptor.getColums().size());
+        return row;
     }
 
     static Row row(ResultSetMetaData metaData, ResultSet resultSet) {
-        Row row = null;
+        Row row;
         try {
             row = new Tuple(metaData.getColumnCount());
             row.populate(resultSet);
@@ -74,15 +73,15 @@ public interface Table {
 
     String getTableName();
 
-    Row getRow();
+    /*Row getRow();*/
 
     List<Column<?>> getColumns();
 
-    default <T> void val(Column<T> id, T t){
+    /*default <T> void val(Column<T> id, T t){
         getRow().set(id,t);
     }
 
     default <T> T val(Column<T> id){
         return (T) getRow().get(id);
-    }
+    }*/
 }

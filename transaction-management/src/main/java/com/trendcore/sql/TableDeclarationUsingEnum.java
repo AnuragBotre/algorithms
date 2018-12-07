@@ -17,7 +17,7 @@ public enum TableDeclarationUsingEnum implements Table{
         return name;
     }
 
-    @Override
+    //@Override
     public Row getRow() {
         return null;
     }
@@ -27,12 +27,12 @@ public enum TableDeclarationUsingEnum implements Table{
         return null;
     }
 
-    @Override
+    //@Override
     public <T> void val(Column<T> id, T t) {
 
     }
 
-    @Override
+    //@Override
     public <T> T val(Column<T> id) {
         return null;
     }

@@ -37,7 +37,7 @@ public class Actor implements Table {
         return name;
     }
 
-    @Override
+    //@Override
     public Row getRow() {
         return row;
     }
