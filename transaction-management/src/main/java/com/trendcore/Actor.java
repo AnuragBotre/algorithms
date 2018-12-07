@@ -25,7 +25,7 @@ public class Actor implements Table {
 
     static {
         Class currentClass = Actor.class;
-        Table.init(currentClass, seq, tableDescriptor);
+        Table.init(currentClass);
     }
 
     public Actor() {

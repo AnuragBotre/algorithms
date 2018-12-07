@@ -17,23 +17,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public interface Table {
 
-    static Seq init(Class aClass, Seq seq, TableDescriptor colums) {
-
-        Arrays.asList(aClass.getDeclaredFields()).stream().filter(field -> field.getType().isAssignableFrom(Column.class))
-                .forEach(field -> {
-                    try {
-                        Column c = new Column();
-                        c.setName(field.getName());
-                        c.setType((Class) ((ParameterizedType)field.getGenericType()).getActualTypeArguments()[0]);
-                        c.setIndex(seq.next());
-                        field.set(null,c);
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
-                });
-        return seq;
-    }
-
     Map<Class<Table>,TableDescriptor> tableDescriptors = new ConcurrentHashMap<>();
 
     static TableDescriptor init(Class aClass) {
@@ -58,8 +41,9 @@ public interface Table {
                         }
                     });
 
-            //TODO : Do we need to put in table descriptor
-            tableDescriptors.put(aClass,finalTableDescriptor);
+            if(aClass.isInstance(Table.class)) {
+                tableDescriptors.put(aClass, finalTableDescriptor);
+            }
         }
 
         return tableDescriptor;
