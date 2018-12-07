@@ -2,6 +2,11 @@ https://stackoverflow.com/questions/6514876/most-efficient-conversion-of-results
 - Most efficient conversion of ResultSet to JSON?
 - Read this blog this also contains code for SQL Types.
 
+*** Must see
+https://dzone.com/articles/efficiently-transforming-jdbc-query-results-to-jso
+- Efficiently Transforming JDBC Query Results to JSON
+
+
 https://www.javacodegeeks.com/2018/09/streaming-jdbc-resultset-json.html
 - Result Set to JSON Stream
 
