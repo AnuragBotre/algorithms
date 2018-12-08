@@ -42,6 +42,7 @@
         <module>sql-dsl-select</module>
         <module>transaction-management</module>
         <module>http-rpc-study</module>
+        <module>sql-batch</module>
     </modules>
 
     <dependencyManagement>
