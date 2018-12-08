@@ -17,6 +17,7 @@
         <module name="exception" />
         <module name="generics" />
         <module name="hibernate" />
+        <module name="http-rpc-study" />
         <module name="java-instrument" />
         <module name="java-unsafe" />
         <module name="javaq" />
@@ -51,6 +52,7 @@
       <module name="exception" target="1.8" />
       <module name="generics" target="1.8" />
       <module name="hibernate" target="1.8" />
+      <module name="http-rpc-study" target="1.8" />
       <module name="java-instrument" target="1.8" />
       <module name="java-unsafe" target="1.8" />
       <module name="javaq" target="1.8" />
