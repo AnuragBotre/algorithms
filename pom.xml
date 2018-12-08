@@ -41,6 +41,7 @@
         <module>javaq</module>
         <module>sql-dsl-select</module>
         <module>transaction-management</module>
+        <module>http-rpc-study</module>
     </modules>
 
     <dependencyManagement>

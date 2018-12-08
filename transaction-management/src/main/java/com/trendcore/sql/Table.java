@@ -38,6 +38,7 @@ public interface Table {
                             field.set(null,c);
                             finalTableDescriptor.add(c);
                         } catch (Exception e) {
+                            //TODO Exception handling
                             throw new RuntimeException(e);
                         }
                     });
@@ -71,11 +72,17 @@ public interface Table {
         }
     }
 
+    static <T> T as(Class<? extends T> actorClass) {
+        return null;
+    }
+
     String getTableName();
 
     /*Row getRow();*/
 
     List<Column<?>> getColumns();
+
+
 
     /*default <T> void val(Column<T> id, T t){
         getRow().set(id,t);

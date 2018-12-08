@@ -93,4 +93,10 @@ public class SelectStreamTest {
         return tableDescriptor.getColums().stream().map(column -> column.name()).collect(Collectors.joining(","));
     }
 
+    @Test
+    public void syntacticSugarForTableAlias() {
+        Actor a = new Actor();
+        Actor b = Table.as(Actor.class);
+        System.out.println(b.ID);
+    }
 }
