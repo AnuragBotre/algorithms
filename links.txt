@@ -1,3 +1,9 @@
+https://github.com/monitorjbl/excel-streaming-reader
+-  If you've used Apache POI in the past to read in Excel files, you probably noticed that it's not very memory efficient. Reading in an entire workbook will cause a severe memory usage spike, which can wreak havoc on a server.
+
+
+
+
 https://github.com/gk-brown/HTTP-RPC
 -HTTP-RPC is an open-source framework for implementing and interacting with RESTful and REST-like web services in Java. It is extremely lightweight and requires only a Java runtime environment and a servlet container. The entire framework is distributed as a single JAR file that is less than 70KB in size, making it an ideal choice for applications where a minimal footprint is desired.
 
