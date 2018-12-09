@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -48,9 +49,13 @@ public class ImportXLS {
     private void processSheets(Sheet sheet) {
         Stream<Row> stream = StreamSupport.stream(sheet.spliterator(), false);
         stream.skip(1).forEach(cells -> {
-            for(Cell c : cells){
-                System.out.println(c.getStringCellValue());
-            }
+
+
+            Stream<Cell> cellStream = StreamSupport.stream(
+                    Spliterators.spliteratorUnknownSize(cells.cellIterator(), Spliterator.NONNULL),
+                    false);
+
+            cellStream.forEach(cell -> System.out.println(cell.getStringCellValue()));
         });
     }
 }
