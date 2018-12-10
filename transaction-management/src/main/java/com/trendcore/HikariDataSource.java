@@ -2,8 +2,7 @@ package com.trendcore;
 
 import com.zaxxer.hikari.HikariConfig;
 
-import java.sql.Connection;
-import java.sql.SQLException;
+import javax.sql.DataSource;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -47,7 +46,7 @@ public class HikariDataSource {
         return hikariDataSource;
     }
 
-    public com.zaxxer.hikari.HikariDataSource getDataSource() {
+    public DataSource getDataSource() {
         return ds;
     }
 }

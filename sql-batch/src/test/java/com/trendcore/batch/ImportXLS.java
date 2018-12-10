@@ -1,12 +1,15 @@
 package com.trendcore.batch;
 
 import com.monitorjbl.xlsx.StreamingReader;
+import com.trendcore.DatabaseOperationStrategy;
+import com.trendcore.HikariDataSource;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.junit.Test;
 
+import javax.sql.DataSource;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Spliterator;
@@ -57,5 +60,43 @@ public class ImportXLS {
 
             cellStream.forEach(cell -> System.out.println(cell.getStringCellValue()));
         });
+    }
+
+    @Test
+    public void testDatabaseOperationStrategy() throws Exception {
+        DatabaseOperationStrategy d = new DatabaseOperationStrategy();
+        d.dataSource(HikariDataSource.get().getDataSource());
+
+        //language=JSON
+        String json = "{\n" +
+                "  //This is with ids  \n" +
+                "  \"actor\" : {\n" +
+                "      \"fields\" : [\"firstname\",\"lastname\"],\n" +
+                "      \"data\" : [\n" +
+                "        [\"PENELOPE\",\"GUINESS\"],\n" +
+                "        [\"NICK\",\"WAHLBERG\"],\n" +
+                "        [\"ED\",\"CHASE\"]    \n" +
+                "      ]\n" +
+                "            \n" +
+                "  },\n" +
+                "  \"film\" : {\n" +
+                "      \"fields\" : [\"film_id\",\"title\",\"desc\"],\n" +
+                "      \"data\" : [\n" +
+                "        [\"seqGenerator()\" , \"VARSITY TRIP\" , \"Action Packed\"],\n" +
+                "        [\"seqGenerator()\" , \"NEWSIES STORY\" , \"Action Packed\"]\n" +
+                "      ]\n" +
+                "  },\n" +
+                "  \"file_actor\" : {\n" +
+                "    \"fields\" : [\"actor_id\",\"film_id\"],\n" +
+                "    \"data\" : [\n" +
+                "      [\"foreignKeyActorId()\" , \"foreignKeyFilmId()\"]\n" +
+                "    ]\n" +
+                "  }\n" +
+                "}\n" +
+                "  \n";
+
+
+        //d.inputStream();
+
     }
 }
