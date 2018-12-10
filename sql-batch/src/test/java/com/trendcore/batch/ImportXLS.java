@@ -9,7 +9,6 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.junit.Test;
 
-import javax.sql.DataSource;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Spliterator;
@@ -22,11 +21,7 @@ public class ImportXLS {
     @Test
     public void readXLSAndPrintOnConsole() throws FileNotFoundException {
 
-        InputStream is = ImportXLS.class.getClassLoader().getResourceAsStream("actor-new.xlsx");
-        Workbook workbook = StreamingReader.builder()
-                .rowCacheSize(100)    // number of rows to keep in memory (defaults to 10)
-                .bufferSize(4096)     // buffer size to use when reading InputStream to file (defaults to 1024)
-                .open(is);
+        Workbook workbook = getWorkbook();
 
         for (Sheet sheet : workbook) {
             System.out.println(sheet.getSheetName());
@@ -40,13 +35,17 @@ public class ImportXLS {
 
     @Test
     public void creatingInputStream() {
+        Workbook workbook = getWorkbook();
+
+        workbook.sheetIterator().forEachRemaining(sheets -> processSheets(sheets));
+    }
+
+    public Workbook getWorkbook() {
         InputStream is = ImportXLS.class.getClassLoader().getResourceAsStream("actor-new.xlsx");
-        Workbook workbook = StreamingReader.builder()
+        return StreamingReader.builder()
                 .rowCacheSize(100)    // number of rows to keep in memory (defaults to 10)
                 .bufferSize(4096)     // buffer size to use when reading InputStream to file (defaults to 1024)
                 .open(is);
-
-        workbook.sheetIterator().forEachRemaining(sheets -> processSheets(sheets));
     }
 
     private void processSheets(Sheet sheet) {
@@ -97,6 +96,48 @@ public class ImportXLS {
 
 
         //d.inputStream();
+
+        Workbook workbook = getWorkbook();
+
+
+        //Imperative code
+
+        //analyze table and make prepare statement for them
+        //needs to be done in batch
+
+        //https://stackoverflow.com/questions/515278/insert-rows-parent-and-children-programmatically
+        /*
+
+            prepareStatement for all tables
+
+            actor -> is prepare statement is present else compile
+                stream ->
+                    single record
+                        enter ids
+                    store id
+                        enter its childs
+                            address ->
+
+
+                            table strucutre
+                            //works well in case of one to one and one to many
+
+                            actor ->
+                                fields ->
+                                data ->
+                                    row 1 ->
+                                        relational data ->
+                                            address ->
+                                                fields ->
+                                                row1 ->
+                                                row1 ->
+        * */
+
+
+
+        workbook.sheetIterator().forEachRemaining(sheet -> {
+            Stream<Row> stream = StreamSupport.stream(sheet.spliterator(), false);
+        });
 
     }
 }
