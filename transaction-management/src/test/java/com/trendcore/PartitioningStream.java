@@ -6,9 +6,7 @@ import com.trendcore.sql.Table;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class PartitioningStream {
@@ -24,7 +22,7 @@ public class PartitioningStream {
         TableDescriptor tableDescriptor = Table.init(Address.class);
         Address a = Table.as(Address.class);
         for(int i = 0 ; i < 50 ; i++){
-            Row<Address> e = new Tuple<>(tableDescriptor.getColums().size());
+            Row<Address> e = new Tuple<>(tableDescriptor.getColumns().size());
             e.set(a.addressId , i+1);
             e.set(a.address , "Street " + (i+1));
             list.add(e);

@@ -1,8 +1,11 @@
 package com.trendcore.batch;
 
 import com.monitorjbl.xlsx.StreamingReader;
-import com.trendcore.DatabaseOperationStrategy;
-import com.trendcore.HikariDataSource;
+import com.trendcore.*;
+import com.trendcore.sql.Column;
+import com.trendcore.sql.Seq;
+import com.trendcore.sql.Table;
+import com.trendcore.transaction.TransactionHandler;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -63,8 +66,6 @@ public class ImportXLS {
 
     @Test
     public void testDatabaseOperationStrategy() throws Exception {
-        DatabaseOperationStrategy d = new DatabaseOperationStrategy();
-        d.dataSource(HikariDataSource.get().getDataSource());
 
         //language=JSON
         String json = "{\n" +
@@ -134,10 +135,45 @@ public class ImportXLS {
         * */
 
 
+        TransactionHandler transactionHandler = new TransactionHandler(HikariDataSource.get().getDataSource());
 
-        workbook.sheetIterator().forEachRemaining(sheet -> {
-            Stream<Row> stream = StreamSupport.stream(sheet.spliterator(), false);
+        TableDescriptor actorTableDescriptor = Table.init(Actor.class);
+
+
+        transactionHandler.execute(connection -> {
+
+
+            Seq seq = new Seq(0);
+
+            DefaultInsertCommand d = new DefaultInsertCommand(connection);
+
+
+            workbook.sheetIterator().forEachRemaining(sheets -> {
+                Stream<Row> stream = StreamSupport.stream(sheets.spliterator(), false);
+                stream.skip(1).map(cells -> {
+
+                    Cell firstnameCell = cells.getCell(1);
+                    Cell lastnameCell = cells.getCell(2);
+
+                    com.trendcore.sql.Row<Actor> row = new Tuple(4);
+                    row.set(Actor.actor_id, seq.next());
+                    row.set(Actor.first_name, firstnameCell.getStringCellValue());
+                    row.set(Actor.last_name, lastnameCell.getStringCellValue());
+                    row.set(Actor.last_update, System.currentTimeMillis());
+
+                    return row;
+                }).forEach(row -> {
+                    d.insert(actorTableDescriptor,row);
+                });
+            });
         });
 
+    }
+
+    static class Actor {
+        public static Column<Integer> actor_id;
+        public static Column<String> first_name;
+        public static Column<String> last_name;
+        public static Column<Long> last_update;
     }
 }

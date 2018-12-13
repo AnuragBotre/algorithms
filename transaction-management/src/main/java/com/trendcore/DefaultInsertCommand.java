@@ -1,12 +1,10 @@
 package com.trendcore;
 
 import com.trendcore.sql.Column;
+import com.trendcore.sql.Row;
 import com.trendcore.sql.Table;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.util.Arrays;
 import java.util.List;
 
 public class DefaultInsertCommand {
@@ -45,4 +43,26 @@ public class DefaultInsertCommand {
 
     }
 
+    public <T> void insert(TableDescriptor tableDescriptor, Row<T> row) {
+        List<Column> columns = tableDescriptor.getColumns();
+
+        //language=MYSQL-SQL
+        String insert = "INSERT INTO " + tableDescriptor.getTablename() + " ";
+        String columnsString = "";
+        String values = "";
+
+        for (int i = 0; i < columns.size(); i++) {
+            if (i < columns.size() - 1) {
+                columnsString = columnsString + columns.get(i).name() + ",";
+                values = values + "?" + ",";
+            } else {
+                columnsString = columnsString + columns.get(i).name();
+                values = values + "?";
+            }
+        }
+
+        insert = insert + "( " + columnsString + " ) VALUES (" + values + ")";
+
+        PreparedStatementBlock.insert(connection,insert,tableDescriptor,row);
+    }
 }

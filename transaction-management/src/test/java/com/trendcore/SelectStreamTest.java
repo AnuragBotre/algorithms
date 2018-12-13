@@ -90,7 +90,7 @@ public class SelectStreamTest {
 
     private <T> String columns(Class<T> aClass) {
         TableDescriptor tableDescriptor = Table.init(aClass);
-        return tableDescriptor.getColums().stream().map(column -> column.name()).collect(Collectors.joining(","));
+        return tableDescriptor.getColumns().stream().map(column -> column.name()).collect(Collectors.joining(","));
     }
 
     @Test

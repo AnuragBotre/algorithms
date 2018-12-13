@@ -2,14 +2,22 @@ package com.trendcore.sql;
 
 public class Seq {
 
-    private int i;
+    private int val;
+
+    public Seq() {
+
+    }
+
+    public Seq(int i) {
+        this.val = i;
+    }
 
     public Integer next(){
-        return i++;
+        return val++;
     }
 
     public Integer val(){
-        return i;
+        return val;
     }
 
 }
