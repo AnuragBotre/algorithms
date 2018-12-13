@@ -14,6 +14,7 @@ import org.junit.Test;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.sql.Timestamp;
 import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.stream.Stream;
@@ -137,7 +138,7 @@ public class ImportXLS {
 
         TransactionHandler transactionHandler = new TransactionHandler(HikariDataSource.get().getDataSource());
 
-        TableDescriptor actorTableDescriptor = Table.init(Actor.class);
+        TableDescriptor actorTableDescriptor = Table.init(Actor.class,"actor");
 
 
         transactionHandler.execute(connection -> {
@@ -159,7 +160,7 @@ public class ImportXLS {
                     row.set(Actor.actor_id, seq.next());
                     row.set(Actor.first_name, firstnameCell.getStringCellValue());
                     row.set(Actor.last_name, lastnameCell.getStringCellValue());
-                    row.set(Actor.last_update, System.currentTimeMillis());
+                    row.set(Actor.last_update, new Timestamp(System.currentTimeMillis()));
 
                     return row;
                 }).forEach(row -> {
@@ -170,10 +171,10 @@ public class ImportXLS {
 
     }
 
-    static class Actor {
+    public static class Actor {
         public static Column<Integer> actor_id;
         public static Column<String> first_name;
         public static Column<String> last_name;
-        public static Column<Long> last_update;
+        public static Column<Timestamp> last_update;
     }
 }

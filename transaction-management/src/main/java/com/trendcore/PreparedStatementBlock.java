@@ -46,7 +46,7 @@ public class PreparedStatementBlock {
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
-            Seq seq = new Seq();
+            Seq seq = new Seq(1);
             tableDescriptor.getColumns().forEach(column -> {
                 bindPreparedStatement(preparedStatement, column, row, seq.next());
             });
@@ -54,7 +54,7 @@ public class PreparedStatementBlock {
             function.accept(preparedStatement, sql);
 
         } catch (SQLException e) {
-            //e.printStackTrace();
+            e.printStackTrace();
             //TODO need to do exception handling
         }
     }
@@ -75,6 +75,8 @@ public class PreparedStatementBlock {
                 preparedStatement.setDate(index, (Date) o);
             } else if (column.getType().isAssignableFrom(Double.class)) {
                 preparedStatement.setDouble(index, (Double) o);
+            } else if (column.getType().isAssignableFrom(Timestamp.class)) {
+                preparedStatement.setTimestamp(index, (Timestamp) o);
             } else if (column.getType().isAssignableFrom(Clob.class)) {
                 //TODO Need to handle clob
             }
@@ -92,6 +94,7 @@ public class PreparedStatementBlock {
             try {
                 preparedStatement.execute();
             } catch (SQLException e) {
+                e.printStackTrace();
                 //TODO Exception handling
             }
         });

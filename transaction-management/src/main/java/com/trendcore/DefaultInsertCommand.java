@@ -44,7 +44,7 @@ public class DefaultInsertCommand {
     }
 
     public <T> void insert(TableDescriptor tableDescriptor, Row<T> row) {
-        List<Column> columns = tableDescriptor.getColumns();
+        List<Column<?>> columns = tableDescriptor.getColumns();
 
         //language=MYSQL-SQL
         String insert = "INSERT INTO " + tableDescriptor.getTablename() + " ";

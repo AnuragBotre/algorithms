@@ -72,6 +72,12 @@ public interface Table {
         return null;
     }
 
+    static <T> TableDescriptor init(Class<T> clazz, String tablename) {
+        TableDescriptor tableDescriptor = init(clazz);
+        tableDescriptor.setTablename(tablename);
+        return tableDescriptor;
+    }
+
     String getTableName();
 
     /*Row getRow();*/
