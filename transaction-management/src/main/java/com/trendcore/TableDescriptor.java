@@ -3,11 +3,15 @@ package com.trendcore;
 import com.trendcore.sql.Column;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class TableDescriptor {
 
-    private List<Column<?>> list = new ArrayList();
+    private Set<Column<?>> list = new HashSet<>();
+
+    private Set<Column<?>> primaryKeys = new HashSet<>(2);
 
     private String tablename = "";
 
@@ -15,7 +19,7 @@ public class TableDescriptor {
         list.add(c);
     }
 
-    public List<Column<?>> getColumns() {
+    public Set<Column<?>> getColumns() {
         return list;
     }
 
@@ -25,5 +29,10 @@ public class TableDescriptor {
 
     public void setTablename(String tablename) {
         this.tablename = tablename;
+    }
+
+    public void setPrimaryKey(Column<Integer> id) {
+        primaryKeys.add(id);
+        id.setPrimaryKey(true);
     }
 }

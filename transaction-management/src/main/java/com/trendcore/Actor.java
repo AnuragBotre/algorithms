@@ -19,13 +19,14 @@ public class Actor implements Table {
 
     public static Seq seq = new Seq();
 
-    private static TableDescriptor tableDescriptor = new TableDescriptor();
+    private static TableDescriptor tableDescriptor;
 
     private Row row;
 
     static {
         Class currentClass = Actor.class;
-        Table.init(currentClass);
+        tableDescriptor = Table.init(currentClass);
+        tableDescriptor.setPrimaryKey(ID);
     }
 
     public Actor() {

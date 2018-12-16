@@ -10,6 +10,8 @@ public class Column<T> {
 
     private int index;
 
+    private boolean primaryKey;
+
     public Column() {
     }
 
@@ -52,5 +54,13 @@ public class Column<T> {
 
     public void setType(Class<T> type) {
         this.type = type;
+    }
+
+    public boolean isPrimaryKey() {
+        return primaryKey;
+    }
+
+    public void setPrimaryKey(boolean b) {
+        primaryKey = b;
     }
 }
