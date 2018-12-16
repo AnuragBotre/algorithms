@@ -135,8 +135,8 @@ public class ImportXLS {
                                                 row1 ->
         * */
 
-
-        TransactionHandler transactionHandler = new TransactionHandler(HikariDataSource.get().getDataSource());
+        HikariDataSource hikariDataSource = HikariDataSource.get("test");
+        TransactionHandler transactionHandler = new TransactionHandler(hikariDataSource.getDataSource());
 
         TableDescriptor actorTableDescriptor = Table.init(Actor.class,"actor");
 
