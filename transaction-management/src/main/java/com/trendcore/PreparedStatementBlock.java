@@ -6,9 +6,11 @@ import com.trendcore.sql.Seq;
 import com.trendcore.sql.Table;
 
 import java.sql.*;
+import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class PreparedStatementBlock {
 
@@ -47,9 +49,7 @@ public class PreparedStatementBlock {
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
             Seq seq = new Seq(1);
-            tableDescriptor.getColumns().forEach(column -> {
-                bindPreparedStatement(preparedStatement, column, row, seq.next());
-            });
+            tableDescriptor.getColumns().forEach(column -> bindPreparedStatement(preparedStatement, column, row, seq.next()));
 
             function.accept(preparedStatement, sql);
 
@@ -98,5 +98,34 @@ public class PreparedStatementBlock {
                 //TODO Exception handling
             }
         });
+    }
+
+    public static void update(Connection connection, String query, TableDescriptor tableDescriptor, List<Row> rows) {
+        update(connection,query,tableDescriptor,rows, (preparedStatement, s) -> {
+            try {
+                preparedStatement.executeBatch();
+            } catch (SQLException e) {
+                //TODO Exception handling
+                e.printStackTrace();
+            }
+        });
+    }
+
+    private static void update(Connection connection, String sql, TableDescriptor tableDescriptor, List<Row> rows, BiConsumer<PreparedStatement, String> biConsumer) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            for (Row row : rows) {
+                Seq seq = new Seq(1);
+                tableDescriptor.getColumns().stream().filter(column -> !column.isPrimaryKey()).forEach(column -> bindPreparedStatement(preparedStatement, column, row, seq.next()));
+
+                tableDescriptor.getPrimaryKeys().stream().forEach(column -> bindPreparedStatement(preparedStatement, column, row, seq.next()));
+
+            }
+            biConsumer.accept(preparedStatement, sql);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            //TODO need to do exception handling
+        }
     }
 }

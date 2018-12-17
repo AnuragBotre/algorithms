@@ -47,7 +47,7 @@ public interface Table {
         return tableDescriptor;
     }
 
-    static <R> Row<R> row(Class<? extends Table> aClass) {
+    static <R extends Table> Row<R> row(Class<R> aClass) {
         TableDescriptor tableDescriptor = tableDescriptors.get(aClass);
         if(tableDescriptor == null){
             tableDescriptor = Table.init(aClass);
