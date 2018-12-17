@@ -119,7 +119,7 @@ public class PreparedStatementBlock {
                 tableDescriptor.getColumns().stream().filter(column -> !column.isPrimaryKey()).forEach(column -> bindPreparedStatement(preparedStatement, column, row, seq.next()));
 
                 tableDescriptor.getPrimaryKeys().stream().forEach(column -> bindPreparedStatement(preparedStatement, column, row, seq.next()));
-
+                preparedStatement.addBatch();
             }
             biConsumer.accept(preparedStatement, sql);
 
