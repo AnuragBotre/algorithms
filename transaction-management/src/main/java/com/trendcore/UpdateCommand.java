@@ -16,6 +16,8 @@ public class UpdateCommand {
                 .filter(column -> !column.isPrimaryKey())
                 .map(column -> column.name() + "=?").collect(Collectors.joining(","));
 
-        query = query + collect + " WHERE ";
+        String where = tableDescriptor.getPrimaryKeys().stream().map(column -> column.name() + " = ? ").collect(Collectors.joining(" AND "));
+
+        query = query + collect + " WHERE " + where;
     }
 }

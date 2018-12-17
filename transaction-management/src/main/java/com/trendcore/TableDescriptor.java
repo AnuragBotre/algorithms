@@ -2,9 +2,7 @@ package com.trendcore;
 
 import com.trendcore.sql.Column;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class TableDescriptor {
@@ -34,5 +32,9 @@ public class TableDescriptor {
     public void setPrimaryKey(Column<Integer> id) {
         primaryKeys.add(id);
         id.setPrimaryKey(true);
+    }
+
+    public Set<Column<?>> getPrimaryKeys() {
+        return primaryKeys;
     }
 }
