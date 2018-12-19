@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class PreparedStatementBlock {
@@ -100,8 +101,8 @@ public class PreparedStatementBlock {
         });
     }
 
-    public static void update(Connection connection, String query, TableDescriptor tableDescriptor, List<Row> rows) {
-        update(connection,query,tableDescriptor,rows, (preparedStatement, s) -> {
+    public static void update(Connection connection, String query, TableDescriptor tableDescriptor, List<Row> rows, Predicate<Column<?>> columnPredicate, Function<Column<?>, String> whereClause) {
+        update(connection,query,tableDescriptor,rows,columnPredicate,whereClause, (preparedStatement, s) -> {
             try {
                 preparedStatement.executeBatch();
             } catch (SQLException e) {
@@ -111,12 +112,12 @@ public class PreparedStatementBlock {
         });
     }
 
-    private static void update(Connection connection, String sql, TableDescriptor tableDescriptor, List<Row> rows, BiConsumer<PreparedStatement, String> biConsumer) {
+    private static void update(Connection connection, String sql, TableDescriptor tableDescriptor, List<Row> rows, Predicate<Column<?>> columnPredicate, Function<Column<?>, String> whereClause, BiConsumer<PreparedStatement, String> biConsumer) {
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
             for (Row row : rows) {
                 Seq seq = new Seq(1);
-                tableDescriptor.getColumns().stream().filter(column -> !column.isPrimaryKey()).forEach(column -> bindPreparedStatement(preparedStatement, column, row, seq.next()));
+                tableDescriptor.getColumns().stream().filter(columnPredicate).forEach(column -> bindPreparedStatement(preparedStatement, column, row, seq.next()));
 
                 tableDescriptor.getPrimaryKeys().stream().forEach(column -> bindPreparedStatement(preparedStatement, column, row, seq.next()));
                 preparedStatement.addBatch();
