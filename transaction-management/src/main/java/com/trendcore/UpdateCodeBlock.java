@@ -8,6 +8,7 @@ import javax.sql.DataSource;
 import java.sql.*;
 import java.util.*;
 import java.util.Date;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -113,10 +114,15 @@ public class UpdateCodeBlock {
                             }
 
                         }
+                        ps.addBatch();
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }
+
                 });
+
+                ps.executeUpdate();
+
             } catch (SQLException e) {
                 e.printStackTrace();
             }
