@@ -8,9 +8,7 @@ import javax.sql.DataSource;
 import java.sql.*;
 import java.util.*;
 import java.util.Date;
-import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 public class UpdateCodeBlock {
@@ -36,20 +34,30 @@ public class UpdateCodeBlock {
 
         Actor actor = new Actor();
         Table.init(Actor.class);
+        row.set(actor.actor_id, 1);
         row.set(actor.first_name, "Anurag");
         row.set(actor.last_name, "B");
         row.set(actor.last_update, new Timestamp(System.currentTimeMillis()));
 
+        //This is working
         queryExecutor.execute("update actor set first_name = ?, last_name = ? where actor_id = ?", Stream.of(row),
                 actor.first_name::val,
                 actor.last_name::val,
                 actor.actor_id::val);
 
 
-        List rows = new ArrayList();
+        //Need to work on this.
+        queryExecutor.table(Actor.class).values(new Column[]{actor.first_name, actor.last_name}).where( eq(actor.actor_id) + " AND " + eq(actor.last_update) ).on(Stream.of(row));
+
+
+        /*List rows = new ArrayList();
         rows.add(row);
 
-        queryExecutor.execute("update actor set first_name = ?, last_name = ? where actor_id = ?", rows.stream(), actor.first_name, actor.last_name, actor.actor_id);
+        queryExecutor.execute("update actor set first_name = ?, last_name = ? where actor_id = ?", rows.stream(), actor.first_name, actor.last_name, actor.actor_id);*/
+    }
+
+    private static <T> String eq(Column<T> actor_id) {
+        return null;
     }
 
 
@@ -65,6 +73,28 @@ public class UpdateCodeBlock {
 
         private Map<Class, TypeInfoHolder> functionMap = new HashMap(10);
         private Map<Class<String>, Integer> sqlTypes = new HashMap<Class<String>, Integer>(10);
+
+        private String table;
+        private Column<?> setClause[];
+
+        public QueryExecutor table(Class<Actor> actor) {
+            table = Table.init(actor).getTablename();
+            return this;
+        }
+
+        public <T> QueryExecutor values(Column<T>[] columns){
+            setClause = columns;
+            return this;
+        }
+
+        public QueryExecutor where(String s) {
+            return this;
+        }
+
+
+        public <T> void on(Stream<T> row) {
+
+        }
 
         private static class TypeInfoHolder<T> {
             private PreparedStatementSetter<T> preparedStatementSetter;
@@ -144,8 +174,6 @@ public class UpdateCodeBlock {
                             //set null in prepared statement
                             ps.setNull(cnt, functionMap.get(values[i].getType()).type);
                         }
-
-                        //ps.setInt(cnt,o);
                     }
 
 
