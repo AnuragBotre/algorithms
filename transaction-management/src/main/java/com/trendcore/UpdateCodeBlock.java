@@ -39,7 +39,10 @@ public class UpdateCodeBlock {
         row.set(actor.last_name, "B");
         row.set(actor.last_update, new Timestamp(System.currentTimeMillis()));
 
-        queryExecutor.execute("update actor set first_name = ?, last_name = ? where actor_id = ?", () -> actor.first_name.val(row), () -> actor.last_name.val(row), () -> actor.actor_id.val(row));
+        queryExecutor.execute("update actor set first_name = ?, last_name = ? where actor_id = ?", Stream.of(row),
+                actor.first_name::val,
+                actor.last_name::val,
+                actor.actor_id::val);
 
 
         List rows = new ArrayList();
@@ -59,24 +62,34 @@ public class UpdateCodeBlock {
 
         private Connection connection;
 
-        private Map<Class, PreparedStatementSetter> functionMap = new HashMap(10);
+        private Map<Class, TypeInfoHolder> functionMap = new HashMap(10);
         private Map<Class<String>, Integer> sqlTypes = new HashMap<Class<String>, Integer>(10);
+
+        private static class TypeInfoHolder<T> {
+            private PreparedStatementSetter<T> preparedStatementSetter;
+            private int type;
+
+            public TypeInfoHolder(PreparedStatementSetter preparedStatementSetter, int type) {
+                this.preparedStatementSetter = preparedStatementSetter;
+                this.type = type;
+            }
+        }
 
         {
             Function<Date, java.sql.Date> dateConverter = date -> new java.sql.Date(date.getTime());
 
-            functionMap.put(String.class, (PreparedStatementSetter<String>) PreparedStatement::setString);
-            functionMap.put(Integer.class, (PreparedStatementSetter<Integer>) PreparedStatement::setInt);
-            functionMap.put(Long.class, (PreparedStatementSetter<Long>) PreparedStatement::setLong);
+            functionMap.put(String.class, new TypeInfoHolder((PreparedStatementSetter<String>) PreparedStatement::setString, Types.VARCHAR));
+            functionMap.put(Integer.class, new TypeInfoHolder((PreparedStatementSetter<Integer>) PreparedStatement::setInt, Types.INTEGER));
+            functionMap.put(Long.class, new TypeInfoHolder((PreparedStatementSetter<Long>) PreparedStatement::setLong, Types.NUMERIC));
 
             PreparedStatementSetter<Date> datePreparedStatementSetter = (preparedStatement, i, date) -> preparedStatement.setDate(i, dateConverter.apply(date));
-            functionMap.put(Date.class, datePreparedStatementSetter);
+            functionMap.put(Date.class, new TypeInfoHolder(datePreparedStatementSetter, Types.DATE));
 
-            functionMap.put(Timestamp.class, (PreparedStatementSetter<Timestamp>) PreparedStatement::setTimestamp);
-            functionMap.put(Double.class, (PreparedStatementSetter<Double>) PreparedStatement::setDouble);
-            functionMap.put(Float.class, (PreparedStatementSetter<Float>) PreparedStatement::setFloat);
+            functionMap.put(Timestamp.class, new TypeInfoHolder((PreparedStatementSetter<Timestamp>) PreparedStatement::setTimestamp, Types.TIMESTAMP));
+            functionMap.put(Double.class, new TypeInfoHolder((PreparedStatementSetter<Double>) PreparedStatement::setDouble, Types.DOUBLE));
+            functionMap.put(Float.class, new TypeInfoHolder((PreparedStatementSetter<Float>) PreparedStatement::setFloat, Types.FLOAT));
 
-            sqlTypes.put(String.class,Types.VARCHAR);
+            sqlTypes.put(String.class, Types.VARCHAR);
         }
 
 
@@ -84,8 +97,29 @@ public class UpdateCodeBlock {
             this.connection = connection;
         }
 
-        public void execute(String query, Supplier... suppliers) {
+        public <T, R> void execute(String query, Stream<T> stream, Function<T, R>... functions) {
 
+            try (PreparedStatement ps = connection.prepareStatement(query)) {
+                stream.forEach(t -> {
+                    try {
+                        for (int i = 0, cnt = 1; i < functions.length; i++, cnt++) {
+                            R r = functions[i].apply(t);
+
+                            if (r != null) {
+                                functionMap.get(r.getClass()).preparedStatementSetter.set(ps, cnt, r);
+                            } else {
+                                //set null in prepared statement
+                                ps.setNull(cnt, Types.JAVA_OBJECT);
+                            }
+
+                        }
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                });
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
 
         public void execute(String s, Stream<Row> rows, Column... values) {
@@ -99,11 +133,10 @@ public class UpdateCodeBlock {
                         Object o = values[i].val(row);
 
                         if (o != null) {
-
-                            functionMap.get(o.getClass()).set(ps, cnt, o);
+                            functionMap.get(o.getClass()).preparedStatementSetter.set(ps, cnt, o);
                         } else {
                             //set null in prepared statement
-                            ps.setNull(cnt, sqlTypes.get(values[i].getType()));
+                            ps.setNull(cnt, functionMap.get(values[i].getType()).type);
                         }
 
                         //ps.setInt(cnt,o);
