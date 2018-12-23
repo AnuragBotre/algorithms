@@ -47,7 +47,7 @@ public class UpdateCodeBlock {
 
 
         //Need to work on this.
-        queryExecutor.table(Actor.class).values(new Column[]{actor.first_name, actor.last_name}).where( eq(actor.actor_id) + " AND " + eq(actor.last_update) ).on(Stream.of(row));
+        queryExecutor.table(Actor.class).set(new Column[]{actor.first_name, actor.last_name}).where( eq(actor.actor_id) + " AND " + eq(actor.last_update) ).on(Stream.of(row));
 
 
         /*List rows = new ArrayList();
@@ -82,7 +82,7 @@ public class UpdateCodeBlock {
             return this;
         }
 
-        public <T> QueryExecutor values(Column<T>[] columns){
+        public <T> QueryExecutor set(Column<T>[] columns){
             setClause = columns;
             return this;
         }
