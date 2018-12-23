@@ -24,6 +24,7 @@
         <module name="jdk-learning-1.8" />
         <module name="jetty" />
         <module name="kryo-study" />
+        <module name="mps-testing" />
         <module name="neural-network-tutorial" />
         <module name="off-heap-cache" />
         <module name="plugin1" />
@@ -59,6 +60,7 @@
       <module name="jdk-learning-1.8" target="1.8" />
       <module name="jetty" target="1.8" />
       <module name="kryo-study" target="1.8" />
+      <module name="mps-testing" target="1.8" />
       <module name="multi-module" target="1.8" />
       <module name="neural-network-tutorial" target="1.8" />
       <module name="off-heap-cache" target="1.8" />
