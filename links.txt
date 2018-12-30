@@ -1,7 +1,11 @@
+http://groovy-lang.org/databases.html
+- Database
+
+https://github.com/antlr/grammars-v4/blob/master/mysql/MySqlParser.g4
+- Mysql parser
+
 https://github.com/monitorjbl/excel-streaming-reader
 -  If you've used Apache POI in the past to read in Excel files, you probably noticed that it's not very memory efficient. Reading in an entire workbook will cause a severe memory usage spike, which can wreak havoc on a server.
-
-
 
 
 https://github.com/gk-brown/HTTP-RPC
