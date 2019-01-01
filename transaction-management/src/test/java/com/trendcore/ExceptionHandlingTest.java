@@ -10,6 +10,8 @@ import org.junit.Test;
 import javax.sql.DataSource;
 import java.util.stream.Stream;
 
+import static com.trendcore.DatabaseErrorCode.DATA_ACCESS_EXCEPTION;
+
 public class ExceptionHandlingTest {
 
     private DataSource dataSource;
@@ -63,9 +65,9 @@ public class ExceptionHandlingTest {
             });
         }, SystemException.class).handle(e -> {
             if(e.getErrorCode() != null){
-                switch (e.getErrorCode().getNumber()){
-                    case 1:
-                        System.out.println("Database Error.");
+                switch (e.getErrorCode().getErrorCode()){
+                    case DATA_ACCESS_EXCEPTION:
+                        System.out.println("Error occurred while accessing data..");
                         break;
                     default:
                         System.out.println("Error occurred while fetching data.");

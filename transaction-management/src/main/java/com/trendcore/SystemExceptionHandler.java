@@ -14,6 +14,7 @@ public class SystemExceptionHandler implements ExceptionHandler<SystemException>
 
     @Override
     public void handle(Consumer<SystemException> consumer) {
+        System.out.println(systemException.getErrorCategory() + "  " + systemException.getErrorCode().getErrorCode());
         consumer.accept(systemException);
     }
 }

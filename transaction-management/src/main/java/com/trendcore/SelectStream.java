@@ -4,7 +4,9 @@ import com.trendcore.sql.Row;
 import com.trendcore.sql.Table;
 
 import javax.sql.DataSource;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.util.Spliterators;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
@@ -21,7 +23,7 @@ public class SelectStream {
 
 
     public <T> Stream<Row<T>> stream(BiFunction<ResultSetMetaData, ResultSet, Row<T>> mapper, String sql, Object... params) {
-        return getStream(sql,mapper,params);
+        return getStream(sql, mapper, params);
     }
 
     public Stream<Row> stream(String sql, Object... params) {
@@ -37,15 +39,10 @@ public class SelectStream {
         @SuppressWarnings(value = {"unchecked"})
         ResultSetIterator<T> resultSetIterator = new ResultSetIterator<T>()
                 .resultSetSupplier(() -> {
-                    try {
-                        Connection connection = dataSource.getConnection();
-                        proxyConnectionForStream.setConnection(connection);
-                        SingleResultSetWrapper resultSet = proxyConnectionForStream.getResultSet(sql, params);
-                        return resultSet;
-                    } catch (SQLException e) {
-                        throw new RuntimeException();
-                    }
-
+                    Connection connection = DataSourceWrapper.getConnection(dataSource);
+                    proxyConnectionForStream.setConnection(connection);
+                    SingleResultSetWrapper resultSet = proxyConnectionForStream.getResultSet(sql, params);
+                    return resultSet;
                 })
                 .resultSetMapper(mapper)
                 .onClose(singleResultSetWrapperConsumer);

@@ -1,5 +1,8 @@
 package com.trendcore;
 
+import com.trendcore.exception.ErrorCode;
+import com.trendcore.exception.SystemException;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -58,8 +61,7 @@ public class ResultSetIterator<T> implements Iterator {
             return hasMore;
         } catch (SQLException e) {
             close();
-            throw new RuntimeException();
-            //throw new DataAccessException(e);
+            throw SystemException.wrap(e, () -> DatabaseErrorCode.DATA_ACCESS_EXCEPTION , DatabaseErrorCode.CATEGORY);
         }
 
     }

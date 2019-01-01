@@ -10,6 +10,7 @@ public class SystemException extends RuntimeException {
 
     private ErrorCode errorCode;
     private Map<String, Object> properties = new TreeMap<>();
+    private String errorCategory;
 
     public SystemException(ErrorCode errorCode) {
         this.errorCode = errorCode;
@@ -25,30 +26,39 @@ public class SystemException extends RuntimeException {
         this.errorCode = errorCode;
     }
 
-    public SystemException(String message, Throwable cause, ErrorCode errorCode) {
+    public SystemException(String message, Throwable cause, ErrorCode errorCode,String errorCategory) {
         super(message, cause);
         this.errorCode = errorCode;
+        this.errorCategory = errorCategory;
     }
 
-    public static SystemException wrap(Throwable exception, ErrorCode errorCode) {
+    public static SystemException wrap(Throwable exception, ErrorCode errorCode,String errorCategory) {
         if (exception instanceof SystemException) {
             SystemException se = (SystemException) exception;
-            if (errorCode != null && errorCode != se.getErrorCode()) {
-                return new SystemException(exception.getMessage(), exception, errorCode);
+            if (errorCode != null && errorCode != se.getErrorCode() && errorCategory != null && !errorCategory.equals(se.getErrorCategory())) {
+                return new SystemException(exception.getMessage(), exception, errorCode , errorCategory);
             }
             return se;
         } else {
-            return new SystemException(exception.getMessage(), exception, errorCode);
+            return new SystemException(exception.getMessage(), exception, errorCode , errorCategory);
         }
     }
 
     public static SystemException wrap(Throwable exception) {
-        return wrap(exception, null);
+        return wrap(exception, null , null);
     }
 
 
     public ErrorCode getErrorCode() {
         return errorCode;
+    }
+
+    public String getErrorCategory() {
+        return errorCategory;
+    }
+
+    public void setErrorCategory(String errorCategory) {
+        this.errorCategory = errorCategory;
     }
 
     public SystemException setErrorCode(ErrorCode errorCode) {

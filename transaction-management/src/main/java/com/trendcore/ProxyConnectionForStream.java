@@ -1,5 +1,7 @@
 package com.trendcore;
 
+import com.trendcore.exception.SystemException;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -43,9 +45,9 @@ public class ProxyConnectionForStream {
     }
 
     private void closePreparedStatementsOnThisConnection() {
-        if(resultSets != null && !resultSets.isEmpty()){
+        if (resultSets != null && !resultSets.isEmpty()) {
             Iterator<ResultSetHolder> iterator = resultSets.iterator();
-            while (iterator.hasNext()){
+            while (iterator.hasNext()) {
                 ResultSetHolder resultSetHolder = iterator.next();
                 resultSetHolder.close();
                 iterator.remove();
@@ -59,26 +61,47 @@ public class ProxyConnectionForStream {
     }
 
     public SingleResultSetWrapper getResultSet(String sql, Object[] params) {
-        if(resultSets == null){
+        if (resultSets == null) {
             resultSets = new ArrayList<>(2);
         }
 
+
+        System.out.println("Executing Query :- " + sql);
+        PreparedStatement preparedStatement = getPreparedStatement(sql);
+        setValuesOnPreparedStatement(params, preparedStatement);
+
+        ResultSet resultSet = getResultSet(preparedStatement);
+        SingleResultSetWrapper resultSetWrapper = new SingleResultSetWrapper(resultSet, preparedStatement);
+        resultSets.add(new ResultSetHolder(resultSetWrapper));
+        return resultSetWrapper;
+
+    }
+
+    public ResultSet getResultSet(PreparedStatement preparedStatement) {
         try {
-            System.out.println("Executing Query :- " + sql);
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            return preparedStatement.executeQuery();
+        } catch (SQLException e) {
+            throw SystemException.wrap(e, () -> DatabaseErrorCode.QUERY_EXECUTION , DatabaseErrorCode.CATEGORY);
+        }
+    }
+
+    public void setValuesOnPreparedStatement(Object[] params, PreparedStatement preparedStatement) {
+        try {
             int cnt = 1;
             for (Object param : params) {
                 preparedStatement.setObject(cnt, param);
                 cnt++;
             }
-
-            ResultSet resultSet = preparedStatement.executeQuery();
-            SingleResultSetWrapper resultSetWrapper = new SingleResultSetWrapper(resultSet,preparedStatement);
-            resultSets.add(new ResultSetHolder(resultSetWrapper));
-            return resultSetWrapper;
         } catch (SQLException e) {
-            //TODO : Exception handling
-            throw new RuntimeException();
+            throw SystemException.wrap(e, () -> DatabaseErrorCode.INVALID_PARAMS_FOR_PREPARED_STATEMENT , DatabaseErrorCode.CATEGORY);
+        }
+    }
+
+    public PreparedStatement getPreparedStatement(String sql) {
+        try {
+            return connection.prepareStatement(sql);
+        } catch (SQLException e) {
+            throw SystemException.wrap(e, () -> DatabaseErrorCode.INVALID_QUERY , DatabaseErrorCode.CATEGORY);
         }
     }
 }

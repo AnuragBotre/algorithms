@@ -7,14 +7,14 @@ import com.trendcore.exception.ErrorCode;
  */
 public class MySQLErrorCode implements ErrorCode{
 
-    private int errorCode;
+    private String errorCode;
 
-    public MySQLErrorCode(int errorCode) {
+    public MySQLErrorCode(String errorCode) {
         this.errorCode = errorCode;
     }
 
     @Override
-    public int getNumber() {
+    public String getErrorCode() {
         return errorCode;
     }
 }

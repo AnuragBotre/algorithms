@@ -106,8 +106,8 @@ public class DatabaseSqlUtils {
             cmdPreparedStatement.executeQuery(ps);
 
         } catch (SQLException e) {
-            MySQLErrorCode errorCode = new MySQLErrorCode(e.getErrorCode());
-            throw SystemException.wrap(e,errorCode);
+            MySQLErrorCode errorCode = new MySQLErrorCode(String.valueOf(e.getErrorCode()));
+            throw SystemException.wrap(e,errorCode,"Mysql");
         }
     }
 
