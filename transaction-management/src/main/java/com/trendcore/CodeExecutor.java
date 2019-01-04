@@ -4,12 +4,12 @@ import com.trendcore.exception.SystemException;
 
 public class CodeExecutor {
 
-    public static <T> ExceptionHandler<T> execute(Runnable runnable,Class<T> t) {
+    public static <T> ExceptionHandler<SystemException> execute(Runnable runnable) {
         try {
             runnable.run();
             return new NoExceptionHandler();
         }catch (Exception e) {
-            return (ExceptionHandler<T>) new SystemExceptionHandler(SystemException.wrap(e));
+            return new SystemExceptionHandler(SystemException.wrap(e));
         }
     }
 }

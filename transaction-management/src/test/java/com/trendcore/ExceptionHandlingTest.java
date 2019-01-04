@@ -34,7 +34,7 @@ public class ExceptionHandlingTest {
                 id.setIndex(1);
                 System.out.println(actorRow.get(id));
             });
-        }, SystemException.class).handle(e -> Assert.assertTrue(true));
+        }).handle(e -> Assert.assertTrue(true));
     }
 
     @Test
@@ -49,7 +49,7 @@ public class ExceptionHandlingTest {
                 id.setIndex(1);
                 System.out.println(actorRow.get(id));
             });
-        }, SystemException.class).handle(e -> Assert.assertTrue(false));
+        }).handle(e -> Assert.assertTrue(false));
         Assert.assertTrue(true);
     }
 
@@ -63,7 +63,7 @@ public class ExceptionHandlingTest {
                 id.setIndex(1);
                 System.out.println(actorRow.get(id));
             });
-        }, SystemException.class).handle(e -> {
+        }).handle(e -> {
             if(e.getErrorCode() != null){
                 switch (e.getErrorCode().getErrorCode()){
                     case DATA_ACCESS_EXCEPTION:
