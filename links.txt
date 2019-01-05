@@ -1,3 +1,7 @@
+https://github.com/mleibman/SlickGrid
+- Slick Grid
+- Free can be used
+
 http://groovy-lang.org/databases.html
 - Database
 
