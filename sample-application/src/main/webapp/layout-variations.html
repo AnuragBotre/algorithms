@@ -1,29 +1,78 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<title>Layout Example</title>
-<script type="text/javascript" src="/components/jquery/jquery-3.3.1.js"></script>
-<script type="text/javascript" src="/components/layout/js/jquery.layout-latest.js"></script>
-<script type="text/javascript">
-$(document).ready(function () {
-	$('body').layout({ 
-        applyDemoStyles: true ,
+    <title>Layout Example</title>
 
-        closable:					false	// pane can open & close
-		,	resizable:					false	// when open, pane can be resized 
-		,	slidable:					false	// when closed, pane can 'slide' open over other panes - closes on mouse-out
-		,	livePaneResizing:			false
+    <link rel="stylesheet" href="/components/slickgrid/slick.grid.css" type="text/css" />
+    <link rel="stylesheet" href="/components/slickgrid/css/smoothness/jquery-ui-1.8.16.custom.css" type="text/css" />
 
-    });
-});
-</script>
+    <link rel="stylesheet" href="/components/slickgrid/examples/examples.css"/>
 </head>
+
 <body>
-<div class="ui-layout-center">Center	
-</div>
-<div class="ui-layout-north">North</div>
-<div class="ui-layout-south">South</div>
-<div class="ui-layout-east">East</div>
-<div class="ui-layout-west">West</div>
+    <div class="ui-layout-center">
+        <div id="slickgrid" style="width:99%;height:99%;border: 1px solid gray"></div>
+    </div>
+    <div class="ui-layout-north">North</div>
+    <div class="ui-layout-south">South</div>
+    <div class="ui-layout-east">East</div>
+    <div class="ui-layout-west">West</div>
+
+
+    <script type="text/javascript" src="/components/slickgrid/lib/jquery-1.7.min.js"></script>
+    <script type="text/javascript" src="/components/layout/js/jquery.layout-latest.js"></script>
+
+    <script type="text/javascript" src="/components/slickgrid/lib/jquery.event.drag-2.2.js"></script>
+
+    <script type="text/javascript" src="/components/slickgrid/slick.core.js"></script>
+    <script type="text/javascript" src="/components/slickgrid/slick.grid.js"></script>
+
+    <script type="text/javascript">
+
+        $('body').layout({
+            applyDemoStyles: false,
+
+            closable: false	// pane can open & close
+            , resizable: false	// when open, pane can be resized 
+            , slidable: false	// when closed, pane can 'slide' open over other panes - closes on mouse-out
+            , livePaneResizing: false
+
+        });
+
+        var grid;
+        var columns = [
+            { id: "title", name: "Title", field: "title" },
+            { id: "duration", name: "Duration", field: "duration" },
+            { id: "%", name: "% Complete", field: "percentComplete" },
+            { id: "start", name: "Start", field: "start" },
+            { id: "finish", name: "Finish", field: "finish" },
+            { id: "effort-driven", name: "Effort Driven", field: "effortDriven" }
+        ];
+
+        var options = {
+            enableCellNavigation: true,
+            enableColumnReorder: false
+        };
+
+        $(function () {
+            var data = [];
+            for (var i = 0; i < 500; i++) {
+                data[i] = {
+                    title: "Task " + i,
+                    duration: "5 days",
+                    percentComplete: Math.round(Math.random() * 100),
+                    start: "01/01/2009",
+                    finish: "01/05/2009",
+                    effortDriven: (i % 5 == 0)
+                };
+            }
+
+            grid = new Slick.Grid("#slickgrid", data, columns, options);
+        })
+
+    </script>
+
 </body>
+
 </html>
