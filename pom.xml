@@ -44,6 +44,7 @@
         <module>http-rpc-study</module>
         <module>sql-batch</module>
         <module>mps-testing</module>
+        <module>sample-application</module>
     </modules>
 
     <dependencyManagement>
