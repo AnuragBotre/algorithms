@@ -6,7 +6,15 @@
 <script type="text/javascript" src="/components/layout/js/jquery.layout-latest.js"></script>
 <script type="text/javascript">
 $(document).ready(function () {
-	$('body').layout({ applyDemoStyles: true });
+	$('body').layout({ 
+        applyDemoStyles: true ,
+
+        closable:					false	// pane can open & close
+		,	resizable:					false	// when open, pane can be resized 
+		,	slidable:					false	// when closed, pane can 'slide' open over other panes - closes on mouse-out
+		,	livePaneResizing:			false
+
+    });
 });
 </script>
 </head>
