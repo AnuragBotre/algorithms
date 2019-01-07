@@ -32,7 +32,32 @@
 
     <script>
         var grid;
-        var loader = new Slick.Data.RemoteModel();
+        var onDataLoaded = new Slick.Event();
+        var loader = new Slick.Data.RemoteModel({
+            url: "http://localhost:8080/components/slickgrid/grid-data-response.json?1=1",
+            onSuccess: function (resp) {
+
+                resp = eval(resp);
+
+                var from = resp.request.start, to = from + resp.results.length;
+                data.length = Math.min(parseInt(resp.hits), 1000); // limitation of the API
+
+                for (var i = 0; i < resp.results.length; i++) {
+                    var item = resp.results[i].item;
+
+                    // Old IE versions can't parse ISO dates, so change to universally-supported format.
+                    item.create_ts = item.create_ts.replace(/^(\d+)-(\d+)-(\d+)T(\d+:\d+:\d+)Z$/, "$2/$3/$1 $4 UTC");
+                    item.create_ts = new Date(item.create_ts);
+
+                    data[from + i] = item;
+                    data[from + i].index = from + i;
+                }
+
+                req = null;
+
+                onDataLoaded.notify({ from: from, to: to });
+            }
+        });
 
         var storyTitleFormatter = function (row, cell, value, columnDef, dataContext) {
             s = "<b><a href='" + dataContext["url"] + "' target=_blank>" +
@@ -60,7 +85,8 @@
             rowHeight: 64,
             editable: false,
             enableAddRow: false,
-            enableCellNavigation: false
+            enableCellNavigation: false,
+            enableColumnReorder : false
         };
 
         var loadingIndicator = null;
@@ -83,7 +109,7 @@
             loader.onDataLoading.subscribe(function () {
                 if (!loadingIndicator) {
                     loadingIndicator = $("<span class='loading-indicator'><label>Buffering...</label></span>").appendTo(document.body);
-                    var $g = $("#myGrid");
+                    var $g = $("#slickgrid");
 
                     loadingIndicator
                         .css("position", "absolute")
