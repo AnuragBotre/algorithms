@@ -30,14 +30,43 @@
     <script type="text/javascript" src="/components/slickgrid/slick.grid.js"></script>
 
 
-    <script>
+    <script type="text/javascript">
+
+        $('body').layout({
+            applyDemoStyles: false,
+
+            closable: false	// pane can open & close
+            , resizable: false	// when open, pane can be resized 
+            , slidable: false	// when closed, pane can 'slide' open over other panes - closes on mouse-out
+            , livePaneResizing: false
+
+        });
+
         var grid;
         var onDataLoaded = new Slick.Event();
-        var loader = new Slick.Data.RemoteModel({
-            url: "http://localhost:8080/components/slickgrid/grid-data-response.json?1=1",
-            onSuccess: function (resp) {
+        var data = { length: 0 };
 
-                resp = eval(resp);
+        var gridOptions = {
+            url: "http://localhost:8080/components/slickgrid/grid-data-response.json?1=1",
+            onSuccess: function (r,fromPage,toPage) {
+
+
+                var resp = {
+                    request: {
+                        start: fromPage,
+                        toPage: toPage
+                    },
+                    hits: 10,
+                    results: [
+
+                    ]
+                }
+                resp.results[0] = {
+                    item: {
+
+                    }
+                }
+
 
                 var from = resp.request.start, to = from + resp.results.length;
                 data.length = Math.min(parseInt(resp.hits), 1000); // limitation of the API
@@ -46,8 +75,9 @@
                     var item = resp.results[i].item;
 
                     // Old IE versions can't parse ISO dates, so change to universally-supported format.
-                    item.create_ts = item.create_ts.replace(/^(\d+)-(\d+)-(\d+)T(\d+:\d+:\d+)Z$/, "$2/$3/$1 $4 UTC");
-                    item.create_ts = new Date(item.create_ts);
+                    //item.create_ts = item.create_ts.replace(/^(\d+)-(\d+)-(\d+)T(\d+:\d+:\d+)Z$/, "$2/$3/$1 $4 UTC");
+                    //item.create_ts = new Date(item.create_ts);
+                    item.create_ts = new Date();
 
                     data[from + i] = item;
                     data[from + i].index = from + i;
@@ -56,8 +86,11 @@
                 req = null;
 
                 onDataLoaded.notify({ from: from, to: to });
-            }
-        });
+            },
+            onDataLoaded: onDataLoaded
+        }
+
+        var loader = new Slick.Data.RemoteModel(gridOptions);
 
         var storyTitleFormatter = function (row, cell, value, columnDef, dataContext) {
             s = "<b><a href='" + dataContext["url"] + "' target=_blank>" +
@@ -86,7 +119,7 @@
             editable: false,
             enableAddRow: false,
             enableCellNavigation: false,
-            enableColumnReorder : false
+            enableColumnReorder: false
         };
 
         var loadingIndicator = null;

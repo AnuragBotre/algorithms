@@ -1,3 +1,6 @@
+https://blueprintjs.com/docs/
+- Blueprint is a React-based UI toolkit for the web.
+
 http://layout.jquery-dev.com/demos.cfm
 - This plug-in was inspired by the extJS border-layout, and recreates that
 functionality as a jQuery plug-in.

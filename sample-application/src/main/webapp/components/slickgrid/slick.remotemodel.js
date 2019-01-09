@@ -5,6 +5,13 @@
    * easily be extended to support any JSONP-compatible backend that accepts paging parameters.
    */
   function RemoteModel(options) {
+
+    var defaultOptions = {
+      onDataLoading : new Slick.Event()
+    }
+
+    options = $.extend(true, defaultOptions, options);
+
     // private
     var PAGESIZE = 50;
     var data = { length: 0 };
@@ -15,8 +22,10 @@
     var req = null; // ajax request
 
     // events
-    var onDataLoading = new Slick.Event();
-    var onDataLoaded = new Slick.Event();
+    /* var onDataLoading = new Slick.Event();
+    var onDataLoaded = new Slick.Event(); */
+    var onDataLoading = options.onDataLoading;
+    var onDataLoaded = options.onDataLoaded;
 
 
     function init() {
@@ -92,8 +101,10 @@
 
         req = $.ajax({
           url: url,          
-          cache: true,
-          success: options.onSuccess,
+          dataType: "json",
+          success: function (resp) {
+            options.onSuccess(resp,fromPage, toPage);
+          },
           error: function () {
             onError(fromPage, toPage)
           }
@@ -105,7 +116,23 @@
 
 
     function onError(fromPage, toPage) {
-      alert("error loading pages " + fromPage + " to " + toPage);
+      //alert("error loading pages " + fromPage + " to " + toPage);
+      var resp = {
+        request:{
+          start : fromPage,
+          toPage : toPage
+        },
+        hits : 10,
+        results : [
+          
+        ]
+      }
+      resp.results[0] =  {
+        item : {
+          
+        }
+      }
+      onSuccess(resp);
     }
 
     function onSuccess(resp) {
@@ -116,8 +143,8 @@
         var item = resp.results[i].item;
 
         // Old IE versions can't parse ISO dates, so change to universally-supported format.
-        item.create_ts = item.create_ts.replace(/^(\d+)-(\d+)-(\d+)T(\d+:\d+:\d+)Z$/, "$2/$3/$1 $4 UTC");
-        item.create_ts = new Date(item.create_ts);
+        //item.create_ts = item.create_ts.replace(/^(\d+)-(\d+)-(\d+)T(\d+:\d+:\d+)Z$/, "$2/$3/$1 $4 UTC");
+        item.create_ts = new Date();
 
         data[from + i] = item;
         data[from + i].index = from + i;
