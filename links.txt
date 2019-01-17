@@ -1,3 +1,8 @@
+http://golden-layout.com/tutorials/slickgrid.html
+http://golden-layout.com/
+- This can be used for layout this is more powerful
+- Also explore react js react is also more powerful.
+
 https://blog.treeloop.com/modern-web-stack-npm-typescript-webpack/
 - Modern Web Stack - npm, TypeScript, and webpack
 
