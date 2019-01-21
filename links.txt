@@ -1,3 +1,7 @@
+http://slickgrid.net/Index.html
+https://github.com/6pac/SlickGrid/wiki/Examples
+This is new Slickgrid site and also supports jQuery 1,2,3+
+
 http://golden-layout.com/tutorials/slickgrid.html
 http://golden-layout.com/
 - This can be used for layout this is more powerful
