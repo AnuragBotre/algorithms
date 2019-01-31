@@ -1,3 +1,11 @@
+https://www.youtube.com/watch?v=sbVIEQgrU2k
+https://k21academy.com/oracle-accesss-manager/video-oracle-identity-and-access-management-oracle-identity-federation/
+- Overview Of Oracle IDM (OIM and OAM)
+- SAML
+- Integration with 3rd Party
+- What is mean by federation.
+
+
 https://developer.ibm.com/articles/j-5things16/
 - Apache Maven plugins
 - Tips for mastering modern Maven plugins
