@@ -48,6 +48,7 @@ public class UpdateCommandTest {
             updateCommand.execute(tableDescriptor,rows);
         });
 
-
+        //language=MYSQL-SQL
+        String sql = "select * from actor a where a.actor_id = 1";
     }
 }
