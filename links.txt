@@ -21,7 +21,7 @@ http://golden-layout.com/tutorials/slickgrid.html
 http://golden-layout.com/
 - This can be used for layout this is more powerful
 - Also explore react js react is also more powerful.
-- Type Defination for golden layout
+- Type Definition for golden layout
     - https://github.com/basarat/typed-golden-layout
 
 https://blog.treeloop.com/modern-web-stack-npm-typescript-webpack/
