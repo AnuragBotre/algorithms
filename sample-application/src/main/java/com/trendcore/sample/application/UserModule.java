@@ -4,6 +4,7 @@ import com.trendcore.HikariDataSource;
 import com.trendcore.SelectStream;
 import com.trendcore.sample.application.approach1.DAO;
 import com.trendcore.sample.application.approach1.DAOSpecs;
+import com.trendcore.sample.application.approach1.MockHttpRequest;
 import com.trendcore.sql.Column;
 import com.trendcore.sql.Row;
 
@@ -14,6 +15,8 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
+import static com.trendcore.sample.application.approach1.DefineApplication.application;
+
 public class UserModule {
 
     public static class ActorResult {
@@ -23,19 +26,9 @@ public class UserModule {
         public static Column<Timestamp> last_update;
     }
 
+    static
     {
-        Application application = new Application("mysql");
-
-        Module module = application.defineModule("module1");
-        module.baseUrl("/user");
-        module.serve("/add", (Function<HttpServletRequest, Stream>) req -> {
-            SelectCode s = new SelectCode();
-            Supplier<Stream<Row>> supplier = s.executeMysql("select * from address a where a.address = ?", 1);
-
-            return supplier.get();
-        });
-
-        module.registerDao("mysql", new DAOSpecs() {
+        DAOSpecs mysqlDao = new DAOSpecs() {
             @Override
             public Stream getUsers() {
                 System.out.println("Inside Mysql Implementation -> Get Users");
@@ -46,9 +39,21 @@ public class UserModule {
             public void insertUsers() {
                 System.out.println("Inside Mysql Implementation -> Insert Users");
             }
+        };
+
+        Module module = application.defineModule("module1");
+        module.baseUrl("/user");
+        module.serve("/add", (Function<HttpServletRequest, Stream>) req -> {
+            /*SelectCode s = new SelectCode();
+            Supplier<Stream<Row>> supplier = s.executeMysql("select * from address a where a.address = ?", 1);
+
+            return supplier.get();*/
+            return mysqlDao.getUsers();
         });
 
-        module.registerDao("oracle", new DAOSpecs() {
+        application.registerDao("mysql", mysqlDao);
+
+        application.registerDao("oracle", new DAOSpecs() {
             @Override
             public Stream getUsers() {
                 System.out.println("Inside Oracle Implementation -> Get Users");
@@ -65,5 +70,10 @@ public class UserModule {
     public Stream getUsers() {
         System.out.println("This is common method...");
         return null;
+    }
+
+    public static void main(String[] args) {
+        UserModule userModule = new UserModule();
+        application.invoke("/user/add",new MockHttpRequest());
     }
 }
