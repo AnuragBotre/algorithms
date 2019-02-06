@@ -5,6 +5,12 @@ https://k21academy.com/oracle-accesss-manager/video-oracle-identity-and-access-m
 - Integration with 3rd Party
 - What is mean by federation.
 
+How can I connect the Spring SAML example application to a Weblogic IDP?
+- https://stackoverflow.com/questions/30913648/how-can-i-connect-the-spring-saml-example-application-to-a-weblogic-idp?rq=1
+
+Steps to configure SAML 2.0 with Weblogic Server (using embedded LDAP as a security store - Only for Dev Environment)...
+- https://blogs.oracle.com/blogbypuneeth/steps-to-configure-saml-20-with-weblogic-server-using-embedded-ldap-as-a-security-store-only-for-dev-environment
+
 - http://prasaddomala.com/how-to-integrate-oracle-identity-manager-and-oracle-access-manager/
 - https://www.youtube.com/watch?v=R5ewnObq3Qs
 
