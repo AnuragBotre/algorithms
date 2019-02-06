@@ -5,6 +5,9 @@ https://k21academy.com/oracle-accesss-manager/video-oracle-identity-and-access-m
 - Integration with 3rd Party
 - What is mean by federation.
 
+https://www.youtube.com/watch?v=g5CKXB2XZ_k
+- Learn Oracle Identity Manager Connectors in 30 min (Part III) || OIM-OUD Integration Part I
+
 How can I connect the Spring SAML example application to a Weblogic IDP?
 - https://stackoverflow.com/questions/30913648/how-can-i-connect-the-spring-saml-example-application-to-a-weblogic-idp?rq=1
 
