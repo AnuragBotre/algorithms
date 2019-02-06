@@ -21,8 +21,7 @@ public class Algorithm<T,R> {
 
     private Function<T,DatabaseContext> databaseContextSupplier;
 
-    public Algorithm(T t) {
-        input = t;
+    public Algorithm() {
     }
 
     public static class QueryContext{
@@ -85,16 +84,16 @@ public class Algorithm<T,R> {
         return (Algorithm<I, V>) this;
     }
 
-    public Optional<Stream<Row>> execute() {
+    public Optional<Stream<Row>> execute(T input) {
         Object apply = map.apply(input);
         DataSource dataSource = HikariDataSource.get().getDataSource();
         SelectStream select = new SelectStream(dataSource);
 
         Algorithm.QueryContext queryContext = null;
         DatabaseContext databaseContext = databaseContextSupplier.apply((T) apply);
-        if (type.equals("mysql")) {
+        if (type.equals("mysql") && databaseContext.mysql != null) {
             queryContext = databaseContext.mysql.get();
-        } else if(type.equals("oracle")) {
+        } else if(type.equals("oracle") && databaseContext.oracle != null) {
             queryContext = databaseContext.oracle.get();
         }
 

@@ -8,6 +8,15 @@ https://k21academy.com/oracle-accesss-manager/video-oracle-identity-and-access-m
 https://www.youtube.com/watch?v=g5CKXB2XZ_k
 - Learn Oracle Identity Manager Connectors in 30 min (Part III) || OIM-OUD Integration Part I
 
+
+https://docs.spring.io/spring-security-saml/docs/1.0.x-SNAPSHOT/reference/htmlsingle/#section-what-this-manual-covers
+- This manual describes Spring Security SAML Extension component, its uses, installation, configuration, design and integration possibilities.
+- The extension enables both new and existing applications to act as a Service Provider in federations based on Web Single Sign-On and
+- Single Logout profiles of SAML 2.0 protocol. The extension allows seamless combination of SAML 2.0
+- and other authentication and federation mechanisms in a single application.
+- All products supporting SAML 2.0 in Identity Provider mode (e.g. ADFS, Okta, Shibboleth, OpenAM, Efecte EIM or Ping Federate) can be used with the extension.
+
+
 How can I connect the Spring SAML example application to a Weblogic IDP?
 - https://stackoverflow.com/questions/30913648/how-can-i-connect-the-spring-saml-example-application-to-a-weblogic-idp?rq=1
 
