@@ -5,8 +5,8 @@ import com.trendcore.SelectStream;
 import com.trendcore.exception.SystemException;
 import com.trendcore.sql.Row;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.sql.DataSource;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -85,7 +85,7 @@ public class Algorithm<T,R> {
         return (Algorithm<I, V>) this;
     }
 
-    public Stream<Row> execute() {
+    public Optional<Stream<Row>> execute() {
         Object apply = map.apply(input);
         DataSource dataSource = HikariDataSource.get().getDataSource();
         SelectStream select = new SelectStream(dataSource);
@@ -102,7 +102,7 @@ public class Algorithm<T,R> {
             throw new SystemException("Could not retrieve query context for " + type, () -> "1000");
         }
 
-        return select.stream(queryContext.getQuery(), queryContext.getArgs());
+        return Optional.of(select.stream(queryContext.getQuery(), queryContext.getArgs()));
     }
 
 }

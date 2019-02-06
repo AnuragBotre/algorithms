@@ -5,6 +5,9 @@ https://k21academy.com/oracle-accesss-manager/video-oracle-identity-and-access-m
 - Integration with 3rd Party
 - What is mean by federation.
 
+- http://prasaddomala.com/how-to-integrate-oracle-identity-manager-and-oracle-access-manager/
+- https://www.youtube.com/watch?v=R5ewnObq3Qs
+
 
 https://developer.ibm.com/articles/j-5things16/
 - Apache Maven plugins

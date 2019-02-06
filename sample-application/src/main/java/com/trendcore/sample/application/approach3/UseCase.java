@@ -5,6 +5,7 @@ import com.trendcore.sample.application.approach1.MockHttpRequest;
 import com.trendcore.sql.Row;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 public class UseCase {
@@ -13,11 +14,14 @@ public class UseCase {
 
         Algorithm<HttpServletRequest,Stream<Row>> algorithm = new Algorithm(request);
 
-        Stream<Row> stream = algorithm.map(req -> req.getParameterMap())
+        Optional<Stream<Row>> execute = algorithm.map(req -> req.getParameterMap())
                 .fetch(stringMap -> new Algorithm.DatabaseContext().mysql(this::getMysqlQuery))
                 .execute();
 
-        return stream;
+        execute.ifPresent(rowStream -> {
+
+        });
+        return null;
     }
 
     private Algorithm.QueryContext getMysqlQuery() {
