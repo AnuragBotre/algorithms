@@ -1,3 +1,16 @@
+SAML SSO Oracle Integration
+https://www.youtube.com/watch?v=HyG-7T17fmU
+http://www.ateam-oracle.com/exploring-oams-saml-identity-assertion/
+- 
+
+
+
+
+https://docs.secureauth.com/display/SIIG/Oracle+Access+Manager+%28SP-initiated%29+integration+guide
+- Oracle Access Manager (SP-initiated) integration guide
+- 
+
+
 https://blog.imaginea.com/implementing-java-single-signon-with-saml/
 https://github.com/lakshmiabinaya/saml-java
 - Implementing Single-Signon in Java with SAML
