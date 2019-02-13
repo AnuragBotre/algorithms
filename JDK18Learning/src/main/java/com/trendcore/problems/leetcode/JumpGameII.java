@@ -193,4 +193,18 @@ public class JumpGameII {
 
     }
 
+    /**
+     * Algo
+     * from step 0 find out the no of options
+     * then select furthest step that can be reached
+     * repeat the same procedure and check if destination can be reached
+     * if yes then this is shortest path.
+     * for the given input
+     *  2,3,1,0,4
+     *
+     *  2
+     *  2 3
+     *  output should be
+     */
+
 }
