@@ -1,5 +1,8 @@
 package com.trendcore.problems.leetcode;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * https://leetcode.com/problems/jump-game/
  * 55. Jump Game
@@ -38,27 +41,52 @@ public class JumpGame {
 
     public boolean canJump(int[] nums) {
 
-        int intermediateStages[] = new int[nums.length + 1];
+        List<Integer> list = new ArrayList();
 
         /*for (int i = 0; i < intermediateStages.length; i++) {
             intermediateStages[i] = Integer.MAX_VALUE;
         }*/
-
-        for (int currentStep = 0; currentStep < nums.length - 1; currentStep++) {
+        int currentStep = 0;
+        for (; currentStep < nums.length - 1; ) {
             //can we jump from the current step and how many jump allowed
             int allowedJumps = nums[currentStep];
 
-            if (intermediateStages[currentStep] != Integer.MAX_VALUE && intermediateStages[currentStep] + allowedJumps + 1 >= nums.length) {
+            if (allowedJumps + (currentStep + 1) >= nums.length) {
                 return true;
+            } else if (allowedJumps == 0) {
+                currentStep = list.remove(0);
             }
 
             for (int j = currentStep + 1; j <= currentStep + allowedJumps; j++) {
-                if(nums[j] != 0) {
-                    intermediateStages[j] = currentStep + nums[j];
-                }else{
-                    intermediateStages[j] = Integer.MAX_VALUE;
+
+                if (nums[j] != 0) {
+
+                    if (list.isEmpty()) {
+                        list.add(j);
+                    } else {
+                        Integer removedStep = list.remove(list.size() - 1);
+                        int canJumpFromTheRemovedStep = (removedStep + 1) + nums[removedStep];
+
+                        int canJumpFromTheJthStep = (j + 1) + nums[j];
+
+                        if (canJumpFromTheRemovedStep > canJumpFromTheJthStep) {
+                            list.add(removedStep);
+                            list.add(j);
+                        } else {
+                            list.add(j);
+                            list.add(removedStep);
+                        }
+                    }
                 }
             }
+
+            if (list.isEmpty()) {
+                //Dest cannot be reached.
+                return false;
+            } else {
+                currentStep = list.remove(0);
+            }
+
 
         }
 
