@@ -7,6 +7,8 @@ http://www.ateam-oracle.com/exploring-oams-saml-identity-assertion/
 
 
 https://docs.secureauth.com/display/SIIG/Oracle+Access+Manager+%28SP-initiated%29+integration+guide
+http://omnine.blogspot.com/2016/08/dualshield-integrates-with-oracle.html
+https://blogs.oracle.com/dcarru/using-test-sp-app-in-oif-sp
 - Oracle Access Manager (SP-initiated) integration guide
 - 
 
