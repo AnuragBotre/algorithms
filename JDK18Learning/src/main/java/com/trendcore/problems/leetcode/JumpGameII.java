@@ -201,10 +201,10 @@ public class JumpGameII {
      * if yes then this is shortest path.
      * for the given input
      *  2,3,1,0,4
-     *
+     *  output should be
      *  2
      *  2 3
-     *  output should be
+     *  If from any step dest cannot be reached then algo should continue with other options.
      */
 
 }
