@@ -1,6 +1,8 @@
 package com.trendcore.problems.leetcode;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.List;
 
 /**
@@ -44,7 +46,12 @@ public class JumpGameII {
     }
 
     private void testCase(int[] nums) {
-        System.out.println(jump(nums));
+        /*int x = dequeueApproach(nums);
+        int jump = jump(nums);
+        System.out.println(x + " " + jump);*/
+        //int jump = jump(nums);
+        //System.out.println(jumpUsingDP(nums) + " " + jump);
+        System.out.println(jumpUsingDP(nums));
     }
 
 
@@ -111,7 +118,7 @@ public class JumpGameII {
 
         int length = 1;
 
-        class MethodImpl implements Method{
+        class MethodImpl implements Method {
             boolean minLengthInitialized = false;
             int minLength = 1;
 
@@ -206,5 +213,56 @@ public class JumpGameII {
      *  2 3
      *  If from any step dest cannot be reached then algo should continue with other options.
      */
+
+
+    class Pair{
+        int first;
+        int second;
+
+        public Pair(int i, int num) {
+            this.first = i;
+            this.second = num;
+        }
+    }
+
+    public int dequeueApproach(int[] nums) {
+        int m = nums.length;
+        if (m < 2)
+            return 0;
+
+        Deque<Pair> deque = new ArrayDeque();
+
+        deque.push(new Pair(0, nums[0]));
+        //dq.push_back(make_pair(0, nums[0]));
+        for (int i = 1; i < m; i++) {
+            if (deque.getFirst().second < i)
+                deque.removeFirst();
+            int r = i + nums[i];
+            if (r > deque.peekLast().second)
+                deque.push(new Pair(deque.peekFirst().first + 1, r));
+        }
+        return 1 + deque.peekFirst().first;
+    }
+
+
+    public int jumpUsingDP(int[] nums) {
+        int[] dp = new int[nums.length+1];
+
+        for (int i = nums.length-2; i >= 0; --i){
+            int k = nums[i];
+            if (k + i >= nums.length - 1) { /* At last element */
+                dp[i] = 1;
+                continue;
+            }
+
+            dp[i] = Integer.MAX_VALUE;
+
+            for (; k > 0; --k) {
+                if (dp[i+k] != Integer.MAX_VALUE)
+                    dp[i] = Math.min(dp[i+k]+1, dp[i]);
+            }
+        }
+        return dp[0] == Integer.MAX_VALUE ? 0 : dp[0];
+    }
 
 }
