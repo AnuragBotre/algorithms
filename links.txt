@@ -1,9 +1,20 @@
+https://github.com/kaikramer/keystore-explorer
+- Examine Keystore and certificate software
+
+
+https://nulli.com/blog/how-to-export-a-certificate-from-oam-11gr2-so-that-it-can-participate-in-a-circle-of-trust/
+- exporting .oamkeystore to 3rd party application.
+- http://ajmerasunny.blogspot.com/2014/03/how-to-configure-cert-mode.html
+- https://www.tutionbooks.com/problem-in-getting-oam-keystore-password-listcred-mapoam_storekeyjks-traceback-innermost-last-file-line-1-in-nameerror-listcred/
+--> In PS3, listCred is no longer used to retrieve OAM Keystore password, instead MBean operation getPortableCredential is used to retrieve OAM Keystore password.
+
+
 SAML SSO Oracle Integration
 https://www.youtube.com/watch?v=HyG-7T17fmU
 http://www.ateam-oracle.com/exploring-oams-saml-identity-assertion/
-- 
-
-
+-  https://blogs.oracle.com/dcarru/creating-saml-20-sp-partners-in-oif-idp
+** SAMLv2 Authenticated application
+- https://github.com/Endeios/samlv2app
 
 
 https://docs.secureauth.com/display/SIIG/Oracle+Access+Manager+%28SP-initiated%29+integration+guide
