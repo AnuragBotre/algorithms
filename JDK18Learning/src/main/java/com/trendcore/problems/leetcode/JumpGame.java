@@ -41,7 +41,8 @@ public class JumpGame {
     }
 
     private void testCase(int[] nums, boolean expected) {
-        System.out.println(canJump(nums) + " " + expected);
+        Solution s = new Solution();
+        System.out.println(s.canJump(nums) + " " + expected);
     }
 
     public boolean canJump(int[] nums) {

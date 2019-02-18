@@ -37,6 +37,10 @@ public class JumpGameII {
 
         j.testCase(new int[]{1});
 
+        j.testCase(new int[]{0, 2, 3});
+
+        j.testCase(new int[]{2, 0, 0, 0, 4});
+
         j.testCase(new int[]{2, 0, 2, 4, 6, 0, 0, 3});
         j.testCase(new int[]{5, 9, 3, 2, 1, 0, 2, 3, 3, 1, 0, 0});
         j.testCase(new int[]{2, 1, 1, 1, 1});
@@ -46,12 +50,15 @@ public class JumpGameII {
     }
 
     private void testCase(int[] nums) {
-        /*int x = dequeueApproach(nums);
+        //int x = dequeueApproach(nums);
         int jump = jump(nums);
-        System.out.println(x + " " + jump);*/
+        System.out.println(" " + jump);
         //int jump = jump(nums);
         //System.out.println(jumpUsingDP(nums) + " " + jump);
-        System.out.println(jumpUsingDP(nums));
+        //System.out.println(jumpUsingDP(nums));
+        //Solution solution = new Solution();
+        //System.out.println(jump(nums) + " " + solution.jump(nums));
+        //System.out.println(solution.jump(nums));
     }
 
 
@@ -207,15 +214,15 @@ public class JumpGameII {
      * repeat the same procedure and check if destination can be reached
      * if yes then this is shortest path.
      * for the given input
-     *  2,3,1,0,4
-     *  output should be
-     *  2
-     *  2 3
-     *  If from any step dest cannot be reached then algo should continue with other options.
+     * 2,3,1,0,4
+     * output should be
+     * 2
+     * 2 3
+     * If from any step dest cannot be reached then algo should continue with other options.
      */
 
 
-    class Pair{
+    class Pair {
         int first;
         int second;
 
@@ -246,9 +253,9 @@ public class JumpGameII {
 
 
     public int jumpUsingDP(int[] nums) {
-        int[] dp = new int[nums.length+1];
+        int[] dp = new int[nums.length + 1];
 
-        for (int i = nums.length-2; i >= 0; --i){
+        for (int i = nums.length - 2; i >= 0; --i) {
             int k = nums[i];
             if (k + i >= nums.length - 1) { /* At last element */
                 dp[i] = 1;
@@ -258,11 +265,39 @@ public class JumpGameII {
             dp[i] = Integer.MAX_VALUE;
 
             for (; k > 0; --k) {
-                if (dp[i+k] != Integer.MAX_VALUE)
-                    dp[i] = Math.min(dp[i+k]+1, dp[i]);
+                if (dp[i + k] != Integer.MAX_VALUE)
+                    dp[i] = Math.min(dp[i + k] + 1, dp[i]);
             }
         }
         return dp[0] == Integer.MAX_VALUE ? 0 : dp[0];
+    }
+
+    /**
+     * This solution will not work for below input.
+     * 0, 2, 3
+     */
+    class Solution {
+        public int jump(int[] nums) {
+            return s2(nums);
+        }
+
+        private int s2(int[] nums) {
+            int step = 0;
+            int curMax = 0;
+            int index = 0;
+
+            while (curMax < nums.length - 1) {
+                step++;
+                int tmp = curMax;
+                while (index <= tmp) {
+                    curMax = Math.max(curMax, index + nums[index]);
+                    index++;
+                }
+            }
+
+            return step;
+        }
+
     }
 
 }
