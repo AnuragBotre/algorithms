@@ -136,10 +136,14 @@ public class JumpGame {
             int n = nums.length;
             int i = 0;
             int reach = 0;
+            int count = 0;
             while (i < n && i <= reach) {
                 reach = Math.max(i + nums[i], reach);
                 i++;
+                count++;
             }
+
+            System.out.println(" No of steps required. " + count);
 
             return i == n;
         }

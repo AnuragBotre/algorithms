@@ -93,6 +93,10 @@ public class MergeIntervals {
         mergeIntervals.testCase(new int[][]{
                 {2, 3}, {4, 5}, {6, 7}, {8, 9}, {1, 10}
         });
+
+        mergeIntervals.testCase(new int[][]{
+            {2, 3}, {4, 6}, {5, 7}, {3, 4}
+        });
     }
 
     private void testCase(int[][] ints) {
@@ -110,36 +114,29 @@ public class MergeIntervals {
     public List<Interval> merge(List<Interval> intervals) {
         List<Interval> mergedIntervals = new ArrayList<>();
 
-        if (intervals.size() == 1) {
-            mergedIntervals.add(intervals.get(0));
-            return mergedIntervals;
-        }
-
         for (int i = 0; i < intervals.size(); i++) {
 
             Interval interval = intervals.get(i);
             if (i == 0) {
                 mergedIntervals.add(interval);
             } else {
-
-                boolean found = false;
+                List<Interval> notMergedList = new ArrayList();
+                Interval interval1 = new Interval(interval.start,interval.end);
                 for (int j = 0; j < mergedIntervals.size(); j++) {
                     Interval interInterval = mergedIntervals.get(j);
-                    if (intervalCanbeMerged(interval, interInterval)) {
+                    if (intervalCanbeMerged(interval1, interInterval)) {
                         //create merged interInterval
-                        int start = interval.start < interInterval.start ? interval.start : interInterval.start;
-                        int end = interval.end > interInterval.end ? interval.end : interInterval.end;
-                        interInterval.start = start;
-                        interInterval.end = end;
-                        found = true;
+                        int start = interval1.start < interInterval.start ? interval1.start : interInterval.start;
+                        int end = interval1.end > interInterval.end ? interval1.end : interInterval.end;
+                        interval1.start = start;
+                        interval1.end = end;
+                    }else{
+                        notMergedList.add(interInterval);
                     }
                 }
-
-                if(!found){
-                    mergedIntervals.add(interval);
-                }
+                notMergedList.add(interval1);
+                mergedIntervals = notMergedList;
             }
-
 
         }
 
