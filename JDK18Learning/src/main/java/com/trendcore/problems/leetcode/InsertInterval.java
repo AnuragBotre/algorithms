@@ -3,7 +3,6 @@ package com.trendcore.problems.leetcode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -59,7 +58,7 @@ public class InsertInterval {
 
         insertInterval.testCase(new int[][]{
                 //[1,2],[3,5],[6,7],[8,10],[12,16]
-                {1, 2}, {3, 5}, {6, 7}, {8, 10}, {12,16}
+                {1, 2}, {3, 5}, {6, 7}, {8, 10}, {12, 16}
         }, 4, 8);
 
         insertInterval.testCase(new int[][]{
@@ -89,11 +88,90 @@ public class InsertInterval {
 
         List<Interval> mergedInterval = new ArrayList<>();
 
-        if(intervals.size() == 0){
+        if (intervals.size() == 0) {
             mergedInterval.add(newInterval);
             return mergedInterval;
         }
 
+        //step -1
+        //loop through list and pick a position where insert can be made
+        mergedInterval = step1(0, intervals.size(), intervals, newInterval, mergedInterval);
+
+        // while looping also keep merging
+        return mergedInterval;
+    }
+
+    private List<Interval> step1(int start, int end, List<Interval> intervals, Interval newInterval, List<Interval> mergedInterval) {
+        boolean newIntervalMerged = false;
+
+        List<Interval> finalMergedInterval = mergedInterval;
+        Consumer<Interval> zeroThPosition = o -> {
+            finalMergedInterval.add(o);
+        };
+
+        int positionOfBreak = 0;
+        for (int i = start; i < end; i++) {
+            Interval interval = intervals.get(i);
+            if (i == 0) {
+                //zeroThPosition.accept(interval);
+                mergedInterval.add(interval);
+            } else {
+                if (newInterval.start < interval.start) {
+                    positionOfBreak = i;
+                    break;
+                }
+                mergedInterval = getMergedIntervalForStep1(mergedInterval, interval,false);
+            }
+        }
+
+        mergedInterval = getMergedIntervalForStep1(mergedInterval, newInterval , true);
+
+        for (int i = positionOfBreak; i < end; i++) {
+            Interval interval = intervals.get(i);
+            if (i == 0) {
+                zeroThPosition.accept(interval);
+            } else {
+                mergedInterval = getMergedIntervalForStep1(mergedInterval, interval,false);
+            }
+        }
+
+        return mergedInterval;
+    }
+
+    private List<Interval> getMergedIntervalForStep1(List<Interval> mergedInterval, Interval interval, boolean addAtFirst) {
+        Interval temp = new Interval(interval.start, interval.end);
+        List<Interval> nonMergedList = new ArrayList<>();
+
+        int pos = 0;
+        for (int j = 0, cnt = 0; j < mergedInterval.size(); j++) {
+            Interval intermediateMergedInterval = mergedInterval.get(j);
+            if (intervalsCanBeMerged(temp, intermediateMergedInterval)) {
+
+                int start = temp.start < intermediateMergedInterval.start ? temp.start : intermediateMergedInterval.start;
+                int end = temp.end > intermediateMergedInterval.end ? temp.end : intermediateMergedInterval.end;
+                temp.start = start;
+                temp.end = end;
+            } else {
+
+                if (temp.start > intermediateMergedInterval.start) {
+                    pos = cnt;
+                }
+
+                nonMergedList.add(intermediateMergedInterval);
+                cnt++;
+            }
+        }
+
+        if(addAtFirst) {
+            nonMergedList.add(0,temp);
+        }else{
+            nonMergedList.add(temp);
+        }
+        mergedInterval = nonMergedList;
+        return mergedInterval;
+    }
+
+    public List<Interval> approach1(List<Interval> intervals, Interval newInterval, List<Interval> mergedInterval) {
         boolean newIntervalMerged = false;
 
         for (int i = 0; i < intervals.size(); i++) {
@@ -112,7 +190,7 @@ public class InsertInterval {
             }
         }
 
-        if(!newIntervalMerged){
+        if (!newIntervalMerged) {
             mergedInterval = getMergedInterval(mergedInterval, newInterval);
         }
 
@@ -124,7 +202,7 @@ public class InsertInterval {
         List<Interval> nonMergedList = new ArrayList<>();
 
         int pos = 0;
-        for (int j = 0,cnt = 0; j < mergedInterval.size(); j++) {
+        for (int j = 0, cnt = 0; j < mergedInterval.size(); j++) {
             Interval intermediateMergedInterval = mergedInterval.get(j);
             if (intervalsCanBeMerged(temp, intermediateMergedInterval)) {
 
@@ -134,7 +212,7 @@ public class InsertInterval {
                 temp.end = end;
             } else {
 
-                if(temp.start > intermediateMergedInterval.start){
+                if (temp.start > intermediateMergedInterval.start) {
                     pos = cnt;
                 }
 
@@ -144,16 +222,16 @@ public class InsertInterval {
         }
 
         boolean initialized = false;
-        for(int j = 0 ; j < nonMergedList.size() ; j++){
-            if(nonMergedList.get(j).start > temp.start){
+        for (int j = 0; j < nonMergedList.size(); j++) {
+            if (nonMergedList.get(j).start > temp.start) {
                 pos = j;
                 initialized = true;
                 break;
             }
         }
-        if(initialized) {
+        if (initialized) {
             nonMergedList.add(pos, temp);
-        }else{
+        } else {
             nonMergedList.add(temp);
         }
         mergedInterval = nonMergedList;
