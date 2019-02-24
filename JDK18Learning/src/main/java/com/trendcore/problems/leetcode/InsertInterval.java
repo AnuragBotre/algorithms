@@ -70,6 +70,23 @@ public class InsertInterval {
                 //[1,2],[3,5],[6,7],[8,10],[12,16]
                 {1, 5}
         }, 0, 0);
+
+        insertInterval.testCase(new int[][]{
+                //[1,2],[3,5],[6,7],[8,10],[12,16]
+                {1, 5}
+        }, 6, 8);
+
+        insertInterval.testCase(new int[][]{
+                //[1,2],[3,5],[6,7],[8,10],[12,16]
+                {2, 6}, {7, 9}
+        }, 15, 18);
+
+        //Not working for this input
+        insertInterval.testCase(new int[][]{
+                //[1,2],[3,5],[6,7],[8,10],[12,16]
+                {1,3}, {6,8} , {9,9}
+        }, 7, 8);
+
     }
 
     private void testCase(int[][] ints, int start, int end) {
@@ -110,7 +127,8 @@ public class InsertInterval {
         };
 
         int positionOfBreak = 0;
-        for (int i = start; i < end; i++) {
+        int cnt = 0;
+        for (int i = start; i < end; i++, cnt++) {
             Interval interval = intervals.get(i);
             if (i == 0) {
                 //zeroThPosition.accept(interval);
@@ -118,20 +136,33 @@ public class InsertInterval {
             } else {
                 if (newInterval.start < interval.start) {
                     positionOfBreak = i;
+                    newIntervalMerged = true;
                     break;
                 }
-                mergedInterval = getMergedIntervalForStep1(mergedInterval, interval,false);
+                mergedInterval = getMergedIntervalForStep1(mergedInterval, interval, false);
             }
         }
+        positionOfBreak = cnt;
+        if (!newIntervalMerged) {
+            //need to analyze the last
+            if (!mergedInterval.isEmpty()) {
+                Interval interval = mergedInterval.get(mergedInterval.size() - 1);
+                if (newInterval.start < interval.start) {
+                    newIntervalMerged = true;
+                }
+            }
+        } else {
 
-        mergedInterval = getMergedIntervalForStep1(mergedInterval, newInterval , true);
+        }
+
+        mergedInterval = getMergedIntervalForStep1(mergedInterval, newInterval, newIntervalMerged);
 
         for (int i = positionOfBreak; i < end; i++) {
             Interval interval = intervals.get(i);
             if (i == 0) {
                 zeroThPosition.accept(interval);
             } else {
-                mergedInterval = getMergedIntervalForStep1(mergedInterval, interval,false);
+                mergedInterval = getMergedIntervalForStep1(mergedInterval, interval, false);
             }
         }
 
@@ -162,9 +193,9 @@ public class InsertInterval {
             }
         }
 
-        if(addAtFirst) {
-            nonMergedList.add(0,temp);
-        }else{
+        if (addAtFirst) {
+            nonMergedList.add(0, temp);
+        } else {
             nonMergedList.add(temp);
         }
         mergedInterval = nonMergedList;
