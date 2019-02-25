@@ -35,23 +35,36 @@ public class SpiralMatrixII {
 
     public int[][] generateMatrix(int n) {
 
+        int cnt = 1;
 
+        int rowCount = 0;
+        int colCount = 0;
 
-        for (int i = 0; i < n; i++) {
+        for (int i = 0; i < n / 2; i++) {
 
-            //print row wise
+            /*for (int j = 0; j < n; j++, cnt++) {
 
-            //print column wise
-
-            //print row wise
-
-            //print column wise
-
-            /*for (int j = 0; j < n; j++) {
-                //
+                System.out.print(cnt + " ");
             }*/
+            //print row wise
+            printRowWise(i, rowCount, colCount);
+
+            //print column wise
+
+            //print row wise
+
+            //print column wise
+            System.out.println();
         }
         return null;
+    }
+
+    private int printRowWise(int start, int rowCount, int colCount) {
+        int i;
+        for (i = start; i < rowCount; i++) {
+            System.out.print(i + " ");
+        }
+        return i;
     }
 
 }
