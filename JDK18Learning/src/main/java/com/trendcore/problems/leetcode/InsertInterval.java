@@ -84,7 +84,7 @@ public class InsertInterval {
         //Not working for this input
         insertInterval.testCase(new int[][]{
                 //[1,2],[3,5],[6,7],[8,10],[12,16]
-                {1,3}, {6,8} , {9,9}
+                {1, 3}, {6, 8}, {9, 9}
         }, 7, 8);
 
     }
@@ -174,6 +174,7 @@ public class InsertInterval {
         List<Interval> nonMergedList = new ArrayList<>();
 
         int pos = 0;
+        boolean positionInitialized = false;
         for (int j = 0, cnt = 0; j < mergedInterval.size(); j++) {
             Interval intermediateMergedInterval = mergedInterval.get(j);
             if (intervalsCanBeMerged(temp, intermediateMergedInterval)) {
@@ -184,8 +185,9 @@ public class InsertInterval {
                 temp.end = end;
             } else {
 
-                if (temp.start > intermediateMergedInterval.start) {
+                if (temp.start < intermediateMergedInterval.start) {
                     pos = cnt;
+                    positionInitialized = true;
                 }
 
                 nonMergedList.add(intermediateMergedInterval);
@@ -193,11 +195,16 @@ public class InsertInterval {
             }
         }
 
-        if (addAtFirst) {
-            nonMergedList.add(0, temp);
+        if (positionInitialized) {
+            nonMergedList.add(pos, temp);
         } else {
             nonMergedList.add(temp);
         }
+        /*if (addAtFirst) {
+            nonMergedList.add(0, temp);
+        } else {
+            nonMergedList.add(temp);
+        }*/
         mergedInterval = nonMergedList;
         return mergedInterval;
     }
