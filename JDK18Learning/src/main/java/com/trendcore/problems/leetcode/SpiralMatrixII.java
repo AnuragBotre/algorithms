@@ -25,20 +25,30 @@ public class SpiralMatrixII {
     private void testCase(int n) {
         int[][] ints = generateMatrix(n);
 
+        printResult(ints);
+    }
+
+    private void printResult(int[][] ints) {
         for (int i = 0; i < ints.length; i++) {
             for (int j = 0; j < ints[i].length; j++) {
-                System.out.print(ints[i] + " ");
+                System.out.print(ints[i][j] + " ");
             }
             System.out.println();
         }
     }
 
+    int cnt = 1;
+
     public int[][] generateMatrix(int n) {
 
-        int cnt = 1;
 
-        int rowCount = 0;
-        int colCount = 0;
+
+        int rowCount = n;
+        int colCount = n;
+        int output[][] = new int[n][n];
+
+        int rowStart;
+        int colStart;
 
         for (int i = 0; i < n / 2; i++) {
 
@@ -47,24 +57,69 @@ public class SpiralMatrixII {
                 System.out.print(cnt + " ");
             }*/
             //print row wise
-            printRowWise(i, rowCount, colCount);
+            rowStart = i;
+            colStart = i;
+
+
+            int i1 = printRowWise(output,i, rowCount, i);
+            rowCount--;
+            int i2 = printColumnWise(output,rowStart+1, rowCount, i1);
+            colCount--;
+            int i3 = printRowWiseReverse(output, i2, rowCount, i2);
+            rowCount--;
+            printColumnWiseReverse(output,i3, rowCount, colCount);
+            colCount--;
+
+            /*if(rowCount == colCount){
+                break;
+            }*/
 
             //print column wise
 
             //print row wise
 
             //print column wise
-            System.out.println();
+
         }
-        return null;
+        return output;
     }
 
-    private int printRowWise(int start, int rowCount, int colCount) {
+    private int printColumnWiseReverse(int[][] output, int start, int end, int col) {
         int i;
-        for (i = start; i < rowCount; i++) {
-            System.out.print(i + " ");
+        int c;
+        for (i = start,c = 0; c < end; i--,c++) {
+            output[i][col] = cnt;
+            cnt++;
         }
-        return i;
+        return i+1;
+    }
+
+    private int printRowWiseReverse(int[][] output, int start, int end, int row) {
+        int i;
+        int c;
+        for (i = start,c = 0; c < end; i--,c++) {
+            output[row][i] = cnt;
+            cnt++;
+        }
+        return i+1;
+    }
+
+    private int printColumnWise(int[][] output, int start, int end, int col) {
+        int i;
+        for (i = start; i < end; i++) {
+            output[i][col] = cnt;
+            cnt++;
+        }
+        return i-1;
+    }
+
+    private int printRowWise(int[][] output, int start, int end, int row) {
+        int i;
+        for (i = start; i < end; i++) {
+            output[row][i] = cnt;
+            cnt++;
+        }
+        return i-1;
     }
 
 }
