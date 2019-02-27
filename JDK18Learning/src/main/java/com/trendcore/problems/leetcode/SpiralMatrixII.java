@@ -20,6 +20,8 @@ public class SpiralMatrixII {
     public static void main(String[] args) {
         SpiralMatrixII s = new SpiralMatrixII();
         s.testCase(3);
+        s.cnt = 1;
+        s.testCase(4);
     }
 
     private void testCase(int n) {
@@ -41,44 +43,31 @@ public class SpiralMatrixII {
 
     public int[][] generateMatrix(int n) {
 
+        int rowstart = 0;
+        int colstart = 0;
 
-
-        int rowCount = n;
-        int colCount = n;
         int output[][] = new int[n][n];
 
-        int rowStart;
-        int colStart;
+        int colEntries = n;
+        int rowEntries = n;
 
-        for (int i = 0; i < n / 2; i++) {
+        int rowNumToProcess = 0;
+        int colNumToProcess = 0;
 
-            /*for (int j = 0; j < n; j++, cnt++) {
+        for (int i = 0; i < n / 2 + 1; i++) {
 
-                System.out.print(cnt + " ");
-            }*/
-            //print row wise
-            rowStart = i;
-            colStart = i;
+            rowstart = i;
+            colNumToProcess = printRowWise(output, rowstart, colEntries, rowNumToProcess);
+            rowEntries--;
 
+            rowNumToProcess = printColumnWise(output, rowstart + 1, rowEntries, colNumToProcess);
+            colEntries--;
 
-            int i1 = printRowWise(output,i, rowCount, i);
-            rowCount--;
-            int i2 = printColumnWise(output,rowStart+1, rowCount, i1);
-            colCount--;
-            int i3 = printRowWiseReverse(output, i2, rowCount, i2);
-            rowCount--;
-            printColumnWiseReverse(output,i3, rowCount, colCount);
-            colCount--;
+            colNumToProcess = printRowWiseReverse(output, colNumToProcess - 1, colEntries, rowNumToProcess);
+            rowEntries--;
 
-            /*if(rowCount == colCount){
-                break;
-            }*/
-
-            //print column wise
-
-            //print row wise
-
-            //print column wise
+            rowNumToProcess = printColumnWiseReverse(output, rowNumToProcess - 1, rowEntries, colNumToProcess);
+            colEntries--;
 
         }
         return output;
@@ -87,39 +76,40 @@ public class SpiralMatrixII {
     private int printColumnWiseReverse(int[][] output, int start, int end, int col) {
         int i;
         int c;
-        for (i = start,c = 0; c < end; i--,c++) {
+        for (i = start, c = 0; c < end; i--, c++) {
             output[i][col] = cnt;
             cnt++;
         }
-        return i+1;
+        return i + 1;
     }
 
     private int printRowWiseReverse(int[][] output, int start, int end, int row) {
         int i;
         int c;
-        for (i = start,c = 0; c < end; i--,c++) {
+        for (i = start, c = 0; c < end; i--, c++) {
             output[row][i] = cnt;
             cnt++;
         }
-        return i+1;
+        return i + 1;
     }
 
     private int printColumnWise(int[][] output, int start, int end, int col) {
         int i;
-        for (i = start; i < end; i++) {
+        for (i = start; i <= end; i++) {
             output[i][col] = cnt;
             cnt++;
         }
-        return i-1;
+        return i - 1;
     }
 
     private int printRowWise(int[][] output, int start, int end, int row) {
         int i;
-        for (i = start; i < end; i++) {
+        int c;
+        for (i = start,c = 0; c < end; i++,c++) {
             output[row][i] = cnt;
             cnt++;
         }
-        return i-1;
+        return i - 1;
     }
 
 }
