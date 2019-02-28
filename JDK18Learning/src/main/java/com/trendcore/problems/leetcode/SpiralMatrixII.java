@@ -95,7 +95,8 @@ public class SpiralMatrixII {
 
     private int printColumnWise(int[][] output, int start, int end, int col) {
         int i;
-        for (i = start; i <= end; i++) {
+        int c;
+        for (i = start,c = 0; c < end; i++,c++) {
             output[i][col] = cnt;
             cnt++;
         }
