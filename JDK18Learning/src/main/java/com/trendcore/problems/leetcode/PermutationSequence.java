@@ -43,7 +43,49 @@ public class PermutationSequence {
     }
 
     public String getPermutation(int n, int k) {
-        return null;
+
+        String s = "";
+
+        for (int i = 1; i <= n; i++) {
+            s = s + i;
+        }
+
+        getSeq(s);
+
+        return s;
+    }
+
+    public void getSeq(String s) {
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            keepOneFixedAndPrintOther(i, s, s.length());
+        }
+    }
+
+    private void keepOneFixedAndPrintOther(int charToBeFixed, String s, int length) {
+        //keep the same and print the others
+
+        System.out.print(s.charAt(charToBeFixed));
+
+        int pointer = charToBeFixed == 0 ? charToBeFixed + 1 : 0;
+
+        for (int cnt = 0; cnt < s.length(); cnt++) {
+
+            if(pointer == charToBeFixed){
+                pointer++;
+            }
+
+            if (pointer == s.length()) {
+                pointer = 0;
+            }
+
+            if (cnt != charToBeFixed) {
+                System.out.print(s.charAt(pointer));
+                pointer++;
+            }
+        }
+
+        System.out.println();
     }
 
 }
