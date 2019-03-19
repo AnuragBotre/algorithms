@@ -35,11 +35,12 @@ public class PermutationSequence {
     public static void main(String[] args) {
         PermutationSequence permutationSequence = new PermutationSequence();
         permutationSequence.testCase(3, 3);
+        permutationSequence.testCase(4, 4);
     }
 
     private void testCase(int i, int i1) {
         String permutation = getPermutation(i, i1);
-        System.out.println(permutation);
+        System.out.println(" Permutation :- " + permutation);
     }
 
     public String getPermutation(int n, int k) {
@@ -65,27 +66,53 @@ public class PermutationSequence {
     private void keepOneFixedAndPrintOther(int charToBeFixed, String s, int length) {
         //keep the same and print the others
 
-        System.out.print(s.charAt(charToBeFixed));
+        //TODO Need recursion here
 
-        int pointer = charToBeFixed == 0 ? charToBeFixed + 1 : 0;
+        int start = charToBeFixed == 0 ? charToBeFixed + 1 : 0;
 
-        for (int cnt = 0; cnt < s.length(); cnt++) {
+        for (int cnt = 0; cnt < s.length() - 1; cnt++, start++) {
 
-            if(pointer == charToBeFixed){
-                pointer++;
+            System.out.print(s.charAt(charToBeFixed));
+
+            if (start == s.length()) {
+                start = 0;
             }
 
-            if (pointer == s.length()) {
-                pointer = 0;
+            if (start == charToBeFixed) {
+                start++;
             }
 
-            if (cnt != charToBeFixed) {
-                System.out.print(s.charAt(pointer));
-                pointer++;
+            if (start == s.length()) {
+                start = 0;
             }
+
+            int pointer = start;
+
+            for (int cnt1 = 0; cnt1 < s.length(); cnt1++) {
+
+                if (pointer == s.length()) {
+                    pointer = 0;
+                }
+
+                if (pointer == charToBeFixed) {
+                    pointer++;
+                }
+
+                if (pointer == s.length()) {
+                    pointer = 0;
+                }
+
+                if (cnt1 != charToBeFixed) {
+                    System.out.print(s.charAt(pointer));
+                    pointer++;
+                }
+            }
+
+            System.out.println();
         }
 
-        System.out.println();
+
+
     }
 
 }
