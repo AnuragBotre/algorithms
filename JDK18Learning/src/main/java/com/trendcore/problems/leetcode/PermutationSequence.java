@@ -1,5 +1,8 @@
 package com.trendcore.problems.leetcode;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * https://leetcode.com/problems/permutation-sequence/
  * <p>
@@ -35,7 +38,10 @@ public class PermutationSequence {
     public static void main(String[] args) {
         PermutationSequence permutationSequence = new PermutationSequence();
         permutationSequence.testCase(3, 3);
-        permutationSequence.testCase(4, 4);
+        permutationSequence.testCase(4, 9);
+        permutationSequence.testCase(1, 1);
+        permutationSequence.testCase(2, 2);
+        permutationSequence.testCase(9, 17223);
     }
 
     private void testCase(int i, int i1) {
@@ -47,13 +53,31 @@ public class PermutationSequence {
 
         String s = "";
 
+        List<String> list = new ArrayList<>();
+
         for (int i = 1; i <= n; i++) {
             s = s + i;
+            list.add(""+i);
         }
 
-        getSeq(s);
+        for (int i = 0; i < n-1; i++) {
+            List anotherList = new ArrayList();
+            for (int j = 0; j < list.size(); j++) {
+                for (int cnt = 1; cnt <= n; cnt++) {
+                    String o = list.get(j);
+                    if (!o.contains("" + cnt)) {
+                        anotherList.add(o + cnt);
+                    }
+                }
+            }
+            list = anotherList;
+        }
 
-        return s;
+        return list.get(k-1);
+    }
+
+    public void approach1(String s) {
+        getSeq(s);
     }
 
     public void getSeq(String s) {
@@ -110,7 +134,6 @@ public class PermutationSequence {
 
             System.out.println();
         }
-
 
 
     }
