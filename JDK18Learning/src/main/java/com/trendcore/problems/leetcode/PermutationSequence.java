@@ -37,7 +37,7 @@ public class PermutationSequence {
 
     public static void main(String[] args) {
         PermutationSequence permutationSequence = new PermutationSequence();
-        permutationSequence.testCase(4, 15);
+        permutationSequence.testCase(4, 2);
         /*permutationSequence.testCase(4, 9);
         permutationSequence.testCase(1, 1);
         permutationSequence.testCase(2, 2);
@@ -56,17 +56,27 @@ public class PermutationSequence {
 
         List list = new ArrayList();
         for(int i = 0 ; i < n ; i++){
-            list.add(i);
+            list.add(i+1);
         }
 
         String s = "";
 
-        for(int cnt = 1 ; cnt < n ; cnt++){
+        for(int cnt = 0 ; cnt < n ; cnt++){
+
+            if(tempK < 0){
+                //copy rest of the values in the string
+                for(int i = 0 ; i < list.size() ; i++){
+                    s = s + list.get(i);
+                }
+                break;
+            }
+
             int factorial = factorial(tempN);
             int div = tempK / factorial;
-            int i = tempK % factorial == 0 ? div : div + 1;
+            //int i = tempK % factorial == 0 ? div : div + 1;
+            int i = div;
             s = s + list.remove(i);
-            tempK = tempK - tempN*i - 1;
+            tempK = tempK - factorial*i;
             tempN = tempN - 1;
         }
 
