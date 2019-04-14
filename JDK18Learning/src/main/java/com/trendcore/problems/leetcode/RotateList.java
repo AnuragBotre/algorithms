@@ -66,6 +66,7 @@ public class RotateList {
         r.testCase(getList(main, 0, 1, 2), 4);
         r.testCase(getList(main, 1, 2), 3);
         r.testCase(getList(main, 1, 2), 2);
+        r.testCase(getList(main, 1, 2), 1);
     }
 
     private static ListNode getList(RotateList main, Integer... args) {
@@ -102,7 +103,7 @@ public class RotateList {
         ListNode pointer1 = head;
         ListNode pointer2 = head;
         int i = 0;
-        int length = 0;
+        int length = 1;
 
         while (pointer1.next != null) {
             pointer1 = pointer1.next;
@@ -113,7 +114,7 @@ public class RotateList {
             length++;
         }
 
-        if (k - 1 < length) {
+        if (k < length) {
             ListNode t = pointer2.next;
             pointer1.next = head;
             head = t;
@@ -122,19 +123,10 @@ public class RotateList {
 
             //TODO If k is greater than length handle these cases
 
-            if (length == 0) {
-                return head;
-            }
+            k = k % length;
 
-            if (length > 1) {
-                k = (k - 1) % length;
-            } else {
-                k = length;
-            }
-
-            if (k == 0) {
+            if(k == 0)
                 return head;
-            }
 
             pointer1 = head;
             pointer2 = head;
