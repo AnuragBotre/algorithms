@@ -49,7 +49,7 @@ public class RotateList {
 
         RotateList r = new RotateList();
 
-        for(int i = 1 ; i < 5 ; i++){
+        for (int i = 1; i < 6; i++) {
 
             ListNode head = main.new ListNode(1);
             head.next = main.new ListNode(2);
@@ -57,16 +57,32 @@ public class RotateList {
             head.next.next.next = main.new ListNode(4);
             head.next.next.next.next = main.new ListNode(5);
 
-            r.testCase(head,i);
+            r.testCase(head, i);
         }
 
+        r.testCase(null, 0);
+        r.testCase(main.new ListNode(1), 1);
+
+        r.testCase(getList(main, 0, 1, 2), 4);
+        r.testCase(getList(main, 1, 2), 3);
+        r.testCase(getList(main, 1, 2), 2);
+    }
+
+    private static ListNode getList(RotateList main, Integer... args) {
+        ListNode listNode = main.new ListNode(args[0]);
+        ListNode head = listNode;
+        for (int i = 1; i < args.length; i++) {
+            listNode.next = main.new ListNode(args[i]);
+            listNode = listNode.next;
+        }
+        return head;
     }
 
     private void testCase(ListNode head, int k) {
         ListNode listNode = rotateRight(head, k);
 
         System.out.println();
-        while (listNode!= null) {
+        while (listNode != null) {
             System.out.print(" " + listNode.val);
             listNode = listNode.next;
         }
@@ -75,37 +91,70 @@ public class RotateList {
 
     public ListNode rotateRight(ListNode head, int k) {
 
-        ListNode tempHead = head;
-
-        int i = 0;
-
-        while (tempHead != null && i < k) {
-            tempHead = tempHead.next;
-            i++;
-        }
-
-        if(i == k){
-            //1st case
-            ListNode originalHead = head;
-            ListNode t = tempHead.next;
-
-            ListNode prev = null;
-            while (t.next != null){
-                prev = t;
-                t = t.next;
-            }
-            t.next = originalHead;
-            head = t;
-
-            if(prev != null){
-                prev.next = null;
-            }
-
+        if (head == null) {
+            return null;
+        } else if (k == 0) {
             return head;
-        }else{
-            //2nd case
         }
 
-        return null;
+        //go to last
+        ListNode temp = head;
+        ListNode pointer1 = head;
+        ListNode pointer2 = head;
+        int i = 0;
+        int length = 0;
+
+        while (pointer1.next != null) {
+            pointer1 = pointer1.next;
+            if (i >= k) {
+                pointer2 = pointer2.next;
+            }
+            i++;
+            length++;
+        }
+
+        if (k - 1 < length) {
+            ListNode t = pointer2.next;
+            pointer1.next = head;
+            head = t;
+            pointer2.next = null;
+        } else {
+
+            //TODO If k is greater than length handle these cases
+
+            if (length == 0) {
+                return head;
+            }
+
+            if (length > 1) {
+                k = (k - 1) % length;
+            } else {
+                k = length;
+            }
+
+            if (k == 0) {
+                return head;
+            }
+
+            pointer1 = head;
+            pointer2 = head;
+            i = 0;
+            length = 0;
+
+            while (pointer1.next != null) {
+                pointer1 = pointer1.next;
+                if (i >= k) {
+                    pointer2 = pointer2.next;
+                }
+                i++;
+                length++;
+            }
+
+            ListNode t = pointer2.next;
+            pointer1.next = head;
+            head = t;
+            pointer2.next = null;
+        }
+        return head;
     }
 }

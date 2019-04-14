@@ -16,4 +16,8 @@ public class LogParserTest {
     }
 
 
+    @Test
+    public void mod1() {
+        System.out.println(3 % 1);
+    }
 }
