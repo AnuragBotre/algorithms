@@ -35,8 +35,9 @@ public class UniquePaths {
     public static void main(String[] args) {
         UniquePaths paths = new UniquePaths();
         paths.testCase(3, 2);
-        paths.testCase(7, 3);
-        paths.testCase(23, 12);
+        paths.testCase(3, 3);
+        /*paths.testCase(7, 3);
+        paths.testCase(23, 12);*/
     }
 
     private void testCase(int i, int i1) {
@@ -45,7 +46,9 @@ public class UniquePaths {
     }
 
     public int uniquePaths(int m, int n) {
-        return traverse(m, n);
+
+        int i = oneOfLeetCodeApproach(m, n);
+        return i;
     }
 
     private int traverse(int m, int n) {
@@ -82,5 +85,29 @@ public class UniquePaths {
 
     }
 
+    public int oneOfLeetCodeApproach(int m, int n) {
+        int[][] res = new int[m][n];
+        for(int i = 0; i < m; i++){
+            for(int j = 0; j < n; j++){
+                if(i == 0 || j == 0)
+                    res[i][j] = 1;
+                else
+                    res[i][j] = res[i-1][j] + res[i][j-1];
+
+                //printArr(res);
+            }
+        }
+        return res[m-1][n-1];
+    }
+
+    private void printArr(int[][] res) {
+        for(int i = 0 ; i < res[0].length ; i++){
+            for(int j = 0 ; j < res.length ; j++){
+                System.out.print(res[j][i] + " ");
+            }
+            System.out.println();
+        }
+        System.out.println();
+    }
 
 }
