@@ -37,11 +37,11 @@ public class PermutationSequence {
 
     public static void main(String[] args) {
         PermutationSequence permutationSequence = new PermutationSequence();
-        permutationSequence.testCase(3, 3);
-        permutationSequence.testCase(4, 9);
+        permutationSequence.testCase(4, 2);
+        /*permutationSequence.testCase(4, 9);
         permutationSequence.testCase(1, 1);
         permutationSequence.testCase(2, 2);
-        permutationSequence.testCase(9, 17223);
+        permutationSequence.testCase(9, 17223);*/
     }
 
     private void testCase(int i, int i1) {
@@ -51,16 +51,57 @@ public class PermutationSequence {
 
     public String getPermutation(int n, int k) {
 
+        int tempN = n - 1;
+        int tempK =  k - 1;
+
+        List list = new ArrayList();
+        for(int i = 0 ; i < n ; i++){
+            list.add(i+1);
+        }
+
+        String s = "";
+
+        for(int cnt = 0 ; cnt < n ; cnt++){
+
+            if(tempK < 0){
+                //copy rest of the values in the string
+                for(int i = 0 ; i < list.size() ; i++){
+                    s = s + list.get(i);
+                }
+                break;
+            }
+
+            int factorial = factorial(tempN);
+            int div = tempK / factorial;
+            //int i = tempK % factorial == 0 ? div : div + 1;
+            int i = div;
+            s = s + list.remove(i);
+            tempK = tempK - factorial*i;
+            tempN = tempN - 1;
+        }
+
+        return s;
+    }
+
+    private int factorial(int n) {
+        int fact = 1;
+        for (int i = 1; i <= n; i++) {
+            fact = fact * i;
+        }
+        return fact;
+    }
+
+    private String approach1(int n, int k) {
         String s = "";
 
         List<String> list = new ArrayList<>();
 
         for (int i = 1; i <= n; i++) {
             s = s + i;
-            list.add(""+i);
+            list.add("" + i);
         }
 
-        for (int i = 0; i < n-1; i++) {
+        for (int i = 0; i < n - 1; i++) {
             List anotherList = new ArrayList();
             for (int j = 0; j < list.size(); j++) {
                 for (int cnt = 1; cnt <= n; cnt++) {
@@ -73,7 +114,11 @@ public class PermutationSequence {
             list = anotherList;
         }
 
-        return list.get(k-1);
+        list.stream().forEach(System.out::println);
+
+        System.out.println(list.size());
+
+        return list.get(k - 1);
     }
 
     public void approach1(String s) {
