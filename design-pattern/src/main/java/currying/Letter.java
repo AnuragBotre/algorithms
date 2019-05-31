@@ -55,11 +55,11 @@ public class Letter {
     /*Builder Pattern :- Instead of a sequence of functions, we use a sequence of functional interfaces*/
     public static AddReturnAddress builder(){
         AddReturnAddress addReturnAddress = returnAddress ->
-                (AddClosing) insideAddress ->
-                        (AddInsideAddress) date ->
-                                (AddDate) salutation ->
-                                        (AddSalutation) body ->
-                                                (AddBody) closing -> new Letter(returnAddress, insideAddress, date, salutation, body, closing);
+                insideAddress ->
+                date ->
+                salutation ->
+                body ->
+                closing -> new Letter(returnAddress, insideAddress, date, salutation, body, closing);
 
 
         return addReturnAddress;
