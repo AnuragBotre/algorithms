@@ -2,8 +2,6 @@ package collector;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.BiConsumer;
-import java.util.function.Supplier;
 
 import static java.util.Arrays.asList;
 
@@ -44,7 +42,7 @@ public class Main {
          */
         List collect1 = nestedList.parallelStream().flatMap(strings -> strings.stream()).collect(
                 () -> {
-                    System.out.println(Thread.currentThread().getId() + " Getting List instances... by thread :- ");
+                    System.out.println(Thread.currentThread().getId() + " Getting List instances...");
                     return new ArrayList();
                 },
                 (list12, s) -> {
