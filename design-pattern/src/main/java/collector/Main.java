@@ -36,9 +36,9 @@ public class Main {
 
         nestedList.forEach(strings -> System.out.println(strings));
 
+
+
         System.out.println("Doing it in parallel");
-
-
         /**
          * Above code () -> list, supplying global list will not work in case of parallel streams.
          */
