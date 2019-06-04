@@ -3,7 +3,6 @@ package collector;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static java.util.Arrays.asList;
 
@@ -35,13 +34,50 @@ public class Main {
 
         System.out.println("Group By using collector :- ");
 
-        Map<Object, List<String>> collect = nestedList.stream().flatMap(
+        Map<Integer, List<String>> collect = nestedList.stream().flatMap(
                                                 strings -> strings.stream()
                                             ).collect(
                                                 Collectors.groupingBy(s -> s.length())
                                             );
 
         collect.entrySet().stream().forEach(objectListEntry -> System.out.println(objectListEntry.getKey() + " " + objectListEntry.getValue()));
+
+
+        class Sale{
+            String city;
+            double sale;
+            String product;
+
+            public Sale(String city, String product, double v) {
+                this.city = city;
+                this.sale = v;
+                this.product = product;
+            }
+        }
+
+        List<Sale> countryList = new ArrayList<>();
+        countryList.add(new Sale("Pune","Phone",10000.00));
+        countryList.add(new Sale("Pune","Tv",10000.00));
+        countryList.add(new Sale("Pune","Fridge",10000.00));
+        countryList.add(new Sale("Mumbai", "Phone" , 10000.00));
+        countryList.add(new Sale("Mumbai", "Tv" , 10000.00));
+        countryList.add(new Sale("Mumbai", "Fridge" , 10000.00));
+
+        Map<String, List<Sale>> collect1 = countryList.stream().collect(
+                Collectors.groupingBy(sale -> sale.city)
+        );
+
+        collect1.entrySet().forEach(
+                stringListEntry ->
+                        System.out.println(
+                                stringListEntry.getKey() + " [" +
+                                stringListEntry.getValue().stream()
+                                        .map(sale -> sale.product)
+                                        .collect(
+                                                Collectors.joining(",")
+                                        )
+                                + "]" )
+        );
     }
 
     private static void collectingAndThen(List<List<String>> nestedList) {
