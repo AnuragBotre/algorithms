@@ -1,10 +1,9 @@
 package collector;
 
 import java.util.*;
-import java.util.function.BiConsumer;
 import java.util.function.Function;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static java.util.Arrays.asList;
 
@@ -28,11 +27,26 @@ public class Main {
 
         collectingAndThen(nestedList);
 
+        groupBy(nestedList);
+
+    }
+
+    private static void groupBy(List<List<String>> nestedList) {
+
+        System.out.println("Group By using collector :- ");
+
+        Map<Object, List<String>> collect = nestedList.stream().flatMap(
+                                                strings -> strings.stream()
+                                            ).collect(
+                                                Collectors.groupingBy(s -> s.length())
+                                            );
+
+        collect.entrySet().stream().forEach(objectListEntry -> System.out.println(objectListEntry.getKey() + " " + objectListEntry.getValue()));
     }
 
     private static void collectingAndThen(List<List<String>> nestedList) {
 
-        class Adder{
+        class Adder {
 
             int i;
 
@@ -50,12 +64,12 @@ public class Main {
 
         Adder collect = nestedList.stream().collect(
                 Collectors.collectingAndThen(
-                    Collectors.toList(),
-                    lists -> lists.stream().map(strings -> strings.size()).collect(
-                            () -> new Adder(0),
-                            (adder, integer) -> adder.add(integer),
-                            (adder, adder2) -> adder.add(adder2.i)
-                    )
+                        Collectors.toList(),
+                        lists -> lists.stream().map(strings -> strings.size()).collect(
+                                () -> new Adder(0),
+                                (adder, integer) -> adder.add(integer),
+                                (adder, adder2) -> adder.add(adder2.i)
+                        )
                 )
         );
         System.out.println(collect.i);
@@ -135,12 +149,12 @@ public class Main {
                 () -> list,
                 (list12, s) -> list12.add(s),
                 (list1, list2) ->
-                //This method will be never used in sequential stream.
-                //A careful reading of the streams implementation code in ReduceOps.java
-                // reveals that the combine function is called only when a ReduceTask completes,
-                // and ReduceTask instances are used only when evaluating a pipeline in parallel.
-                // Thus, in the current implementation,
-                // the combiner is never called when evaluating a sequential pipeline.
+                        //This method will be never used in sequential stream.
+                        //A careful reading of the streams implementation code in ReduceOps.java
+                        // reveals that the combine function is called only when a ReduceTask completes,
+                        // and ReduceTask instances are used only when evaluating a pipeline in parallel.
+                        // Thus, in the current implementation,
+                        // the combiner is never called when evaluating a sequential pipeline.
                 {
                     //list1.addAll(list2);
                     System.out.println(list1 + " " + list2);
