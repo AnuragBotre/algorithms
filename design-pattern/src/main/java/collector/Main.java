@@ -1,10 +1,9 @@
 package collector;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.function.BiConsumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import static java.util.Arrays.asList;
@@ -19,7 +18,6 @@ public class Main {
 
         sequential(nestedList);
 
-
         parallel(nestedList);
 
         collectorToList(nestedList);
@@ -28,6 +26,39 @@ public class Main {
 
         collectorsToMap(nestedList);
 
+        collectingAndThen(nestedList);
+
+    }
+
+    private static void collectingAndThen(List<List<String>> nestedList) {
+
+        class Adder{
+
+            int i;
+
+            public Adder(int i) {
+                this.i = i;
+            }
+
+            int add(int j) {
+                i = i + j;
+                return i;
+            }
+
+        }
+
+
+        Adder collect = nestedList.stream().collect(
+                Collectors.collectingAndThen(
+                    Collectors.toList(),
+                    lists -> lists.stream().map(strings -> strings.size()).collect(
+                            () -> new Adder(0),
+                            (adder, integer) -> adder.add(integer),
+                            (adder, adder2) -> adder.add(adder2.i)
+                    )
+                )
+        );
+        System.out.println(collect.i);
     }
 
     private static void collectorsToMap(List<List<String>> nestedList) {
@@ -40,6 +71,15 @@ public class Main {
         }));
 
         collect.entrySet().stream().forEach(objectStringEntry -> System.out.println(objectStringEntry.getKey() + " " + objectStringEntry.getValue()));
+
+        List<String> listWithDuplicates = Arrays.asList("a", "bb", "c", "d", "bb");
+
+        try {
+            listWithDuplicates.stream().collect(Collectors.toMap(Function.identity(), String::length));
+        } catch (Exception e) {
+            System.out.println("List with duplicates contains duplicate elements ");
+        }
+
     }
 
     private static void collectorToSet(List<List<String>> nestedList) {
