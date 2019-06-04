@@ -2,6 +2,10 @@ package collector;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static java.util.Arrays.asList;
 
@@ -18,6 +22,38 @@ public class Main {
 
         parallel(nestedList);
 
+        collectorToList(nestedList);
+
+        collectorToSet(nestedList);
+
+        collectorsToMap(nestedList);
+
+    }
+
+    private static void collectorsToMap(List<List<String>> nestedList) {
+        Map<Object, String> collect = nestedList.stream().flatMap(strings -> strings.stream()).collect(Collectors.toMap((Function<Object, Object>) o -> {
+            System.out.println(" key mapper :- " + o);
+            return o;
+        }, s -> {
+            System.out.println(" Value mapper :- " + s);
+            return s;
+        }));
+
+        collect.entrySet().stream().forEach(objectStringEntry -> System.out.println(objectStringEntry.getKey() + " " + objectStringEntry.getValue()));
+    }
+
+    private static void collectorToSet(List<List<String>> nestedList) {
+        Set<String> collect = nestedList.stream().flatMap(strings -> strings.stream()).collect(Collectors.toSet());
+
+        System.out.println("To Set :- ");
+        collect.forEach(s -> System.out.println(s));
+    }
+
+    private static void collectorToList(List<List<String>> nestedList) {
+        List<String> collect = nestedList.stream().flatMap(strings -> strings.stream()).collect(Collectors.toList());
+
+        System.out.println("To List :- ");
+        collect.forEach(s -> System.out.println(s));
     }
 
     private static void parallel(List<List<String>> nestedList) {
