@@ -2,6 +2,6 @@ package com.trendcore.factory;
 
 public interface AbstractFactory<T> {
 
-    T create();
+    T create(String choice);
 
 }
