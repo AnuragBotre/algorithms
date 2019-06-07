@@ -1,7 +1,8 @@
 package collector;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static java.util.Arrays.asList;
 
@@ -15,9 +16,134 @@ public class Main {
 
         sequential(nestedList);
 
-
         parallel(nestedList);
 
+        collectorToList(nestedList);
+
+        collectorToSet(nestedList);
+
+        collectorsToMap(nestedList);
+
+        collectingAndThen(nestedList);
+
+        groupBy(nestedList);
+
+    }
+
+    private static void groupBy(List<List<String>> nestedList) {
+
+        System.out.println("Group By using collector :- ");
+
+        Map<Integer, List<String>> collect = nestedList.stream().flatMap(
+                                                strings -> strings.stream()
+                                            ).collect(
+                                                Collectors.groupingBy(s -> s.length())
+                                            );
+
+        collect.entrySet().stream().forEach(objectListEntry -> System.out.println(objectListEntry.getKey() + " " + objectListEntry.getValue()));
+
+
+        class Sale{
+            String city;
+            double sale;
+            String product;
+
+            public Sale(String city, String product, double v) {
+                this.city = city;
+                this.sale = v;
+                this.product = product;
+            }
+        }
+
+        List<Sale> countryList = new ArrayList<>();
+        countryList.add(new Sale("Pune","Phone",10000.00));
+        countryList.add(new Sale("Pune","Tv",10000.00));
+        countryList.add(new Sale("Pune","Fridge",10000.00));
+        countryList.add(new Sale("Mumbai", "Phone" , 10000.00));
+        countryList.add(new Sale("Mumbai", "Tv" , 10000.00));
+        countryList.add(new Sale("Mumbai", "Fridge" , 10000.00));
+
+        Map<String, List<Sale>> collect1 = countryList.stream().collect(
+                Collectors.groupingBy(sale -> sale.city)
+        );
+
+        collect1.entrySet().forEach(
+                stringListEntry ->
+                        System.out.println(
+                                stringListEntry.getKey() + " [" +
+                                stringListEntry.getValue().stream()
+                                        .map(sale -> sale.product)
+                                        .collect(
+                                                Collectors.joining(",")
+                                        )
+                                + "]" )
+        );
+    }
+
+    private static void collectingAndThen(List<List<String>> nestedList) {
+
+        class Adder {
+
+            int i;
+
+            public Adder(int i) {
+                this.i = i;
+            }
+
+            int add(int j) {
+                i = i + j;
+                return i;
+            }
+
+        }
+
+
+        Adder collect = nestedList.stream().collect(
+                Collectors.collectingAndThen(
+                        Collectors.toList(),
+                        lists -> lists.stream().map(strings -> strings.size()).collect(
+                                () -> new Adder(0),
+                                (adder, integer) -> adder.add(integer),
+                                (adder, adder2) -> adder.add(adder2.i)
+                        )
+                )
+        );
+        System.out.println(collect.i);
+    }
+
+    private static void collectorsToMap(List<List<String>> nestedList) {
+        Map<Object, String> collect = nestedList.stream().flatMap(strings -> strings.stream()).collect(Collectors.toMap((Function<Object, Object>) o -> {
+            System.out.println(" key mapper :- " + o);
+            return o;
+        }, s -> {
+            System.out.println(" Value mapper :- " + s);
+            return s;
+        }));
+
+        collect.entrySet().stream().forEach(objectStringEntry -> System.out.println(objectStringEntry.getKey() + " " + objectStringEntry.getValue()));
+
+        List<String> listWithDuplicates = Arrays.asList("a", "bb", "c", "d", "bb");
+
+        try {
+            listWithDuplicates.stream().collect(Collectors.toMap(Function.identity(), String::length));
+        } catch (Exception e) {
+            System.out.println("List with duplicates contains duplicate elements ");
+        }
+
+    }
+
+    private static void collectorToSet(List<List<String>> nestedList) {
+        Set<String> collect = nestedList.stream().flatMap(strings -> strings.stream()).collect(Collectors.toSet());
+
+        System.out.println("To Set :- ");
+        collect.forEach(s -> System.out.println(s));
+    }
+
+    private static void collectorToList(List<List<String>> nestedList) {
+        List<String> collect = nestedList.stream().flatMap(strings -> strings.stream()).collect(Collectors.toList());
+
+        System.out.println("To List :- ");
+        collect.forEach(s -> System.out.println(s));
     }
 
     private static void parallel(List<List<String>> nestedList) {
@@ -59,12 +185,12 @@ public class Main {
                 () -> list,
                 (list12, s) -> list12.add(s),
                 (list1, list2) ->
-                //This method will be never used in sequential stream.
-                //A careful reading of the streams implementation code in ReduceOps.java
-                // reveals that the combine function is called only when a ReduceTask completes,
-                // and ReduceTask instances are used only when evaluating a pipeline in parallel.
-                // Thus, in the current implementation,
-                // the combiner is never called when evaluating a sequential pipeline.
+                        //This method will be never used in sequential stream.
+                        //A careful reading of the streams implementation code in ReduceOps.java
+                        // reveals that the combine function is called only when a ReduceTask completes,
+                        // and ReduceTask instances are used only when evaluating a pipeline in parallel.
+                        // Thus, in the current implementation,
+                        // the combiner is never called when evaluating a sequential pipeline.
                 {
                     //list1.addAll(list2);
                     System.out.println(list1 + " " + list2);
