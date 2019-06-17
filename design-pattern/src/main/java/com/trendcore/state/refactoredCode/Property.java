@@ -53,4 +53,9 @@ public class Property {
     private void setState(State state) {
         this.state = state;
     }
+
+    public void rentToPlayer(Player p) {
+        p.debit(getRent());
+        getOwner().credit(getRent());
+    }
 }

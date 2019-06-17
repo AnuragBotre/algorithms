@@ -8,8 +8,7 @@ public class OwnedProperty implements State {
     public void rentProperty(Property property, Player p) {
         System.out.println(" - owned by " + property.getOwner().getName());
         if (p != property.getOwner()) {
-            p.debit(property.getRent());
-            property.getOwner().credit(property.getRent());
+            property.rentToPlayer(p);
             System.out.println(property.getOwner().getName() + " now has "
                     + property.getOwner().getWorth() + " dollars");
         }
