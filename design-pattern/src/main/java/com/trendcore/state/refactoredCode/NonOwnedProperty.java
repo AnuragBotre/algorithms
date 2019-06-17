@@ -9,8 +9,7 @@ public class NonOwnedProperty implements State {
         if (p.getWorth() < property.getPrice()) {
             System.out.println(" does not have enough money to purchase");
         } else {
-            p.debit(property.getPrice());
-            property.setOwner(p);
+            property.boughtProperty(p,new OwnedProperty());
             System.out.println(" bought " + property.getName());
         }
     }

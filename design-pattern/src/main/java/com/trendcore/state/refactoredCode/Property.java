@@ -36,15 +36,21 @@ public class Property {
 
     public void setOwner(Player p) {
         owner = p;
-        if(p != null){
-            state = new OwnedProperty();
-        }
     }
 
 
     void landOnBy(Player p) {
         System.out.print(p.getName() + " landed on " + name);
-        state.rentProperty(this,p);
+        state.rentProperty(this, p);
     }
 
+    public void boughtProperty(Player p, State state) {
+        p.debit(getPrice());
+        setOwner(p);
+        setState(state);
+    }
+
+    private void setState(State state) {
+        this.state = state;
+    }
 }
