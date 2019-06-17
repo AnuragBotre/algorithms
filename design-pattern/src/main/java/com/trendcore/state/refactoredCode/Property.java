@@ -36,7 +36,7 @@ public class Property {
 
     public void setOwner(Player p) {
         owner = p;
-        if(p == null){
+        if(p != null){
             state = new OwnedProperty();
         }
     }
