@@ -1,6 +1,6 @@
 package com.trendcore.state.refactoredCode;
 
-public interface Playable {
+public interface PlayerState {
 
     void clickLock();
 
