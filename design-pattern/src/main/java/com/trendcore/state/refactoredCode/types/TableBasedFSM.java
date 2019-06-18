@@ -36,7 +36,7 @@ public class TableBasedFSM {
 
         @Override
         public void off() {
-            System.out.println("A + on = B");
+            System.out.println("A + off = B");
         }
 
         @Override
