@@ -10,7 +10,12 @@ public class TableBasedFSM {
     private State[] states = {new A(), new B(), new C()};
 
     //4. transition
-    private int[][] transition = {{2, 1, 0}, {0, 2, 1}, {1, 2, 2}};
+    private int[][] transition = {
+
+                                {2, 1, 0}, //- row represents current state , and array in row represents possible transition
+                                {0, 2, 1},
+                                {1, 2, 2}
+                            };
 
     // 3. current
     private int current = 0;
