@@ -50,6 +50,6 @@ public class Dot implements Shape {
 
     @Override
     public String accept(Visitor visitor) {
-        return null;
+        return visitor.visitDot(this);
     }
 }
