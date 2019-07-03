@@ -1,7 +1,12 @@
 package com.trendcore.visitor;
 
-public interface Visitor<E> {
+public interface Visitor {
 
-    String visit(E e);
+    String visitDot(Dot dot);
 
+    String visitCircle(Circle circle);
+
+    String visitRectangle(Rectangle rectangle);
+
+    String visitCompoundGraphic(CompoundShape compoundShape);
 }
