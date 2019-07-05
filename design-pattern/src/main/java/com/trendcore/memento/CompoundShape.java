@@ -34,5 +34,67 @@ public class CompoundShape extends BaseShape {
         childrens.clear();
     }
 
+    public int getX(){
+        if(childrens.isEmpty()){
+            return 0;
+        }
+
+        int x = childrens.get(0).getX();
+
+        for(int i = 1 ; i < childrens.size() ; i++){
+            if(x > childrens.get(i).getX()){
+                x = childrens.get(i).getX();
+            }
+        }
+
+        return x;
+    }
+
+    public int getY(){
+        if(childrens.isEmpty()){
+            return 0;
+        }
+
+        int y = childrens.get(0).getY();
+
+        for(int i = 1 ; i < childrens.size() ; i++){
+            if(y > childrens.get(i).getY()){
+                y = childrens.get(i).getY();
+            }
+        }
+
+        return y;
+    }
+
+    public int getWidth(){
+        int width = getX();
+        int maxWidth = 0;
+
+        for(Shape child : childrens){
+            int childRelativeX = child.getX() - width;
+            int childWidth = childRelativeX + child.getWidth();
+
+            if(childWidth > maxWidth){
+                maxWidth = childWidth;
+            }
+        }
+
+        return maxWidth;
+    }
+
+
+    public int getHeight(){
+        int maxHeight = 0;
+        int y = getY();
+        for (Shape child : childrens) {
+            int childRelativeY = child.getY() - y;
+            int childHeight = childRelativeY + child.getHeight();
+            if (childHeight > maxHeight) {
+                maxHeight = childHeight;
+            }
+        }
+        return maxHeight;
+    }
+
 
 }
