@@ -7,7 +7,7 @@ import java.util.List;
 
 public class CompoundShape extends BaseShape {
 
-    private List<Shape> childrens = new ArrayList<>();
+    private List<Shape> children = new ArrayList<>();
 
     public CompoundShape(Shape... shapes) {
         super(0, 0, Color.BLACK);
@@ -15,35 +15,35 @@ public class CompoundShape extends BaseShape {
     }
 
     public void add(Shape... shapes) {
-        childrens.addAll(Arrays.asList(shapes));
+        children.addAll(Arrays.asList(shapes));
     }
 
     public void add(Shape shape) {
-        childrens.add(shape);
+        children.add(shape);
     }
 
     public void remove(Shape child) {
-        childrens.remove(child);
+        children.remove(child);
     }
 
     public void remove(Shape... shapes) {
-        childrens.removeAll(Arrays.asList(shapes));
+        children.removeAll(Arrays.asList(shapes));
     }
 
     public void clear() {
-        childrens.clear();
+        children.clear();
     }
 
     public int getX(){
-        if(childrens.isEmpty()){
+        if(children.isEmpty()){
             return 0;
         }
 
-        int x = childrens.get(0).getX();
+        int x = children.get(0).getX();
 
-        for(int i = 1 ; i < childrens.size() ; i++){
-            if(x > childrens.get(i).getX()){
-                x = childrens.get(i).getX();
+        for(int i = 1; i < children.size() ; i++){
+            if(x > children.get(i).getX()){
+                x = children.get(i).getX();
             }
         }
 
@@ -51,15 +51,15 @@ public class CompoundShape extends BaseShape {
     }
 
     public int getY(){
-        if(childrens.isEmpty()){
+        if(children.isEmpty()){
             return 0;
         }
 
-        int y = childrens.get(0).getY();
+        int y = children.get(0).getY();
 
-        for(int i = 1 ; i < childrens.size() ; i++){
-            if(y > childrens.get(i).getY()){
-                y = childrens.get(i).getY();
+        for(int i = 1; i < children.size() ; i++){
+            if(y > children.get(i).getY()){
+                y = children.get(i).getY();
             }
         }
 
@@ -70,7 +70,7 @@ public class CompoundShape extends BaseShape {
         int width = getX();
         int maxWidth = 0;
 
-        for(Shape child : childrens){
+        for(Shape child : children){
             int childRelativeX = child.getX() - width;
             int childWidth = childRelativeX + child.getWidth();
 
@@ -86,7 +86,7 @@ public class CompoundShape extends BaseShape {
     public int getHeight(){
         int maxHeight = 0;
         int y = getY();
-        for (Shape child : childrens) {
+        for (Shape child : children) {
             int childRelativeY = child.getY() - y;
             int childHeight = childRelativeY + child.getHeight();
             if (childHeight > maxHeight) {
@@ -97,4 +97,22 @@ public class CompoundShape extends BaseShape {
     }
 
 
+    public List<Shape> getSelected() {
+        List<Shape> selected = new ArrayList<>();
+        for (Shape child : children) {
+            if (child.isSelected()) {
+                selected.add(child);
+            }
+        }
+        return selected;
+    }
+
+    public Shape getChildAt(int x, int y) {
+        for (Shape child : children) {
+            if (child.isInsideBounds(x, y)) {
+                return child;
+            }
+        }
+        return null;
+    }
 }
