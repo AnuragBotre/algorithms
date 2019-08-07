@@ -1,3 +1,7 @@
+https://github.com/jxblum/scalable-spring-gemfire
+https://github.com/Pivotal-Open-Source-Hub/geode-demo-application
+Apache Gemfire Demo Application
+
 https://thenewstack.io/multi-version-concurrency-control-mvcc-design-decisions/
 - Database Design Decisions for Multi-Version Concurrency Control
 - In summary, the MVCC design choices implemented in NuoDB: MV2PL protocol, append-only storage scheme and logical pointers in indexes, are shown to achieve good overall performance both in terms of transactional throughput and latency.
