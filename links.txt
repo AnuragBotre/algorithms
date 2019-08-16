@@ -1,3 +1,6 @@
+https://www.codejava.net/java-se/file-io/execute-operating-system-commands-using-runtime-exec-methods
+- Executing command in interactive way. when process requires input.
+
 https://github.com/jxblum/scalable-spring-gemfire
 https://github.com/Pivotal-Open-Source-Hub/geode-demo-application
 Apache Gemfire Demo Application
