@@ -1,6 +1,6 @@
 package com.trendcore.observer;
 
-public class ClientForOberserver {
+public class ClientForObserver {
 
     public static void main(String[] args) {
         Subscriber emailSubscriber = new EmailSubscriber("abc@pqe.com");
