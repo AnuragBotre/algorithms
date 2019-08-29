@@ -133,18 +133,24 @@ public class UniquePathsII {
                         }
                     } else {
                         if (i == 0) {
+                            //Obstacle is present
                             if (obstacleGrid[i][j] == 1) {
                                 output[i][j] = 0;
                             } else {
+                                //can we reach to i,j from  i,j-1 from previous stage
+                                // or does i,j-1 contain obstacle or is it reachable
                                 if (output[i][j - 1] != 0)
                                     output[i][j] = 1;
                                 else
                                     output[i][j] = 0;
                             }
                         } else if (j == 0) {
+                            //Obstacle is present
                             if (obstacleGrid[i][j] == 1) {
                                 output[i][j] = 0;
                             } else {
+                                //can we reach to i,j from  i-1,j from previous stage
+                                // or does i-1,j contain obstacle or is it reachable
                                 if (output[i - 1][j] != 0)
                                     output[i][j] = 1;
                                 else
