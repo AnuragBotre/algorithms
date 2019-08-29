@@ -45,13 +45,62 @@ public class UniquePathsII {
                 {0, 0, 0},
                 {0, 1, 0},
                 {0, 0, 0}
-        });
+        }, 2);
+
+        u.testCase(new int[][]{
+                {0, 0, 0},
+                {0, 0, 0},
+                {0, 0, 0}
+        }, 6);
+
+        u.testCase(new int[][]{
+                {0, 0, 1},
+                {0, 0, 0},
+                {0, 0, 0}
+        }, 5);
+
+        u.testCase(new int[][]{
+                {0, 0, 1},
+                {0, 1, 0},
+                {0, 0, 0}
+        },1);
+
+        u.testCase(new int[][]{
+                {0, 0, 0}
+        },1);
+
+        u.testCase(new int[][]{
+                {0},
+                {0},
+                {0}
+        },1);
+
+        u.testCase(new int[][]{
+                {0, 1, 0}
+        }, 0);
+
+        u.testCase(new int[][]{
+                {0},
+                {1},
+                {0}
+        }, 0);
+
+        u.testCase(new int[][]{
+                {0, 0},
+                {1, 0},
+                {0, 0}
+        }, 1);
+
+        u.testCase(new int[][]{
+                {0, 0 , 0},
+                {1, 0 , 0}
+        }, 2);
 
     }
 
-    private void testCase(int[][] obstacleGrid) {
+    private void testCase(int[][] obstacleGrid, int expected) {
         int i = uniquePathsWithObstacles(obstacleGrid);
-        System.out.println(" Possible ways :- " + i);
+        System.out.println(" Possible ways :- " + i + " expected :- " + expected);
     }
 
     public int uniquePathsWithObstacles(int[][] obstacleGrid) {
@@ -66,31 +115,125 @@ public class UniquePathsII {
         int output[][] = new int[obstacleGrid.length][obstacleGrid[0].length];
 
         for (int i = 0; i < m; i++) {
+
+            boolean flag = false;
+
             for (int j = 0; j < n; j++) {
                 if (i == 0 || j == 0) {
-                    output[i][j] = 1;
-                    debug(output, i, j);
+
+                    int x = 0;
+                    int y = 0;
+
+                    if (i == 0 && j == 0) {
+                        if (obstacleGrid[i][j] == 1) {
+                            flag = true;
+                            break;
+                        }else{
+                            output[i][j] = 1;
+                        }
+                    } else {
+                        if (i == 0) {
+                            if (obstacleGrid[i][j] == 1) {
+                                output[i][j] = 0;
+                            } else {
+                                if (output[i][j - 1] != 0)
+                                    output[i][j] = 1;
+                                else
+                                    output[i][j] = 0;
+                            }
+                        } else if (j == 0) {
+                            if (obstacleGrid[i][j] == 1) {
+                                output[i][j] = 0;
+                            } else {
+                                if (output[i - 1][j] != 0)
+                                    output[i][j] = 1;
+                                else
+                                    output[i][j] = 0;
+                            }
+                        }
+                    }
+
                 } else {
-                    output[i][j] = output[i - 1][j] + output[i][j - 1];
-                    debug(output, i, j,i-1,j-1);
+
+                    int x = 0;
+                    if (output[i - 1][j] != -1) {
+                        x = output[i - 1][j];
+                    }
+
+                    int y = 0;
+                    if (output[i][j - 1] != -1) {
+                        y = output[i][j - 1];
+                    }
+
+                    output[i][j] = x + y;
+
+                    if (obstacleGrid[i][j] == 1) {
+                        output[i][j] = 0;
+                    }
+                    /*output[i][j] = output[i - 1][j] + output[i][j - 1];
+                    if (obstacleGrid[i][j] == 1) {
+                        output[i][j] = 0;
+                    }*/
+                    debug(output, i, j, i - 1, j - 1);
+                }
+            }
+
+            if (flag) {
+                break;
+            }
+        }
+
+        //System.out.println(output[m - 1][n - 1]);
+
+        return output[m - 1][n - 1];
+    }
+
+    private boolean obstacleIsPresentInCol(int[][] obstacleGrid, int i, int j) {
+
+        if (j == 0) {
+            for (int k = i; k < obstacleGrid.length; k++) {
+                if (obstacleGrid[k][j] == 1) {
+                    return true;
                 }
             }
         }
 
-        System.out.println(output[m - 1][n - 1]);
+        return false;
+    }
 
-        return finalCount;
+    private boolean obstacleShouldNotBePresentInRowOrCol(int[][] obstacleGrid, int i, int j) {
+        if (i == 0 && j == 0) {
+            if (obstacleGrid[i][j] == 1) {
+                return false;
+            }
+        }
+
+        if (i == 0) {
+            for (int k = 0; k < obstacleGrid[i].length; k++) {
+                if (obstacleGrid[i][k] == 1)
+                    return false;
+            }
+        }
+
+        if (j == 0) {
+            for (int k = 0; k < obstacleGrid.length; k++) {
+                if (obstacleGrid[k][j] == 1)
+                    return false;
+            }
+        }
+
+        return true;
     }
 
     private void debug(int[][] output, int i, int j, int i1, int j1) {
-        System.out.println(" i = " + i + " j = " + j );
-        System.out.println(" i - 1 = " + i1 + " j - 1 = " + j1 );
-        printMatrix(output);
+        /*System.out.println(" i = " + i + " j = " + j);
+        System.out.println(" i - 1 = " + i1 + " j - 1 = " + j1);
+        printMatrix(output);*/
     }
 
     private void debug(int[][] output, int i, int j) {
-        System.out.println(" i = " + i + " j = " + j);
-        printMatrix(output);
+        /*System.out.println(" i = " + i + " j = " + j);
+        printMatrix(output);*/
     }
 
     private void printMatrix(int[][] output) {
