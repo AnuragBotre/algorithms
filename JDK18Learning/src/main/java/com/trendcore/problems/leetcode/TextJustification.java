@@ -77,25 +77,25 @@ public class TextJustification {
 
         for (int i = 0; i < words.length; ) {
 
-            int temp = maxWidth;
+            int maxTempWidth = maxWidth;
 
             List<String> intermediateWordList = new ArrayList<>();
 
             int selectedWordsSize = 0;
 
             //find how may words can be fit in
-            for (; i < words.length && temp >= 0; ) {
+            for (; i < words.length && maxTempWidth >= 0; ) {
                 String word = words[i];
-                if (word.length() > temp) {
+                if (word.length() > maxTempWidth) {
                     if (intermediateWordList.isEmpty()) {
                         intermediateWordList.add(word);
                         i++;
                         selectedWordsSize = selectedWordsSize + word.length();
-                        temp = temp - (word.length() + 1);
+                        maxTempWidth = maxTempWidth - (word.length() + 1);
                     }
                     break;
                 }
-                temp = temp - (word.length() + 1);
+                maxTempWidth = maxTempWidth - (word.length() + 1);
                 intermediateWordList.add(word);
                 i++;
                 selectedWordsSize = selectedWordsSize + word.length();
