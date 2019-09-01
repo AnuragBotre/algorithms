@@ -48,6 +48,8 @@ public class Sqrt {
             //i*i > x -> then previous i*i is the solution
 
             //i*i
+
+            //try to find using binary search
             long temp = i * i;
 
             if(temp < 0){
