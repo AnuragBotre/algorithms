@@ -30,11 +30,21 @@ public class SqrtTest {
 
     @Test
     public void testForFailedInput() {
+        //4294836225
+        execute(10, 3);
         execute(2147483647, 46340);
     }
 
     public void execute(int x, int expected) {
         int i = sqrt.mySqrt(x);
         Assert.assertEquals(expected,i);
+    }
+
+    @Test
+    public void squareOf_536870912() {
+        int i = 46341 * 46341;
+        long l =46341 * 46341;
+        long m =65535 * 65535;
+        System.out.println(i + " " + l + " " + m);
     }
 }
