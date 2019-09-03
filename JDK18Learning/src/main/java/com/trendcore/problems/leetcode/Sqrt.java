@@ -148,7 +148,7 @@ public class Sqrt {
         }
 
 
-        //everything is overflown after mid;
+        //everything is overflown after mid+1;
         //find the smallest no which not overflow and closest to x
         System.out.println("executionOrder "+(executionOrder++)+" Loop Break, mid ->  " + mid + ", lastMid " + lastMid);
 
