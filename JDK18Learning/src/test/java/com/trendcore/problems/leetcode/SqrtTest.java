@@ -32,8 +32,19 @@ public class SqrtTest {
     public void testForFailedInput() {
         //4294836225
         execute(10, 3);
+    }
+
+    @Test
+    public void forMaxInt() {
         execute(2147483647, 46340);
     }
+
+    @Test
+    public void for_2147395599() {
+        execute(2147395599, 46339);
+    }
+
+
 
     public void execute(int x, int expected) {
         int i = sqrt.mySqrt(x);
@@ -46,5 +57,12 @@ public class SqrtTest {
         long l =46341 * 46341;
         long m =65535 * 65535;
         System.out.println(i + " " + l + " " + m);
+        System.out.println((1/2));
+
+        System.out.println((268424449*268424449) + " " + (268424449*268424449 > 2147395599));
+
+        int i1 = (402636674+1) * (402636674+1);
+        System.out.println(i1 + " " + (268424449*268424449 > 2147395599));
+
     }
 }

@@ -105,7 +105,54 @@ public class Sqrt {
             return x;
         }
 
-        return x;
+        int no = x;
+        int mid;
+        int lastMid = mid = x / 2;
+
+        int executionOrder = 1;
+
+        for (; true; ) {
+
+
+            if (mid * mid == x) {
+                return mid;
+            } else if ((mid * mid > x) || (mid * mid < 0)) {
+
+                lastMid = mid;
+                mid = mid / 2;
+
+                System.out.println(" executionOrder :- " + executionOrder + " mid = " + mid);
+
+                if (mid * mid < x && (mid + 1) * (mid + 1) > x) {
+                    return mid;
+                }
+
+            } else {
+
+                String x1 = " executionOrder :- " + executionOrder + " mid = " + mid + " lastMid = " + lastMid + " addition of :- " + (mid + lastMid);
+                System.out.println(x1);
+
+                mid = (lastMid + mid) / 2;
+
+                if (mid * mid > x && ((mid + 1) * (mid + 1) > x)) {
+                    return mid;
+                } else {
+                    //need to find minimal no in case of overflow
+                    break;
+                }
+
+
+            }
+
+            executionOrder++;
+        }
+
+
+        //everything is overflown after mid;
+        //find the smallest no which not overflow and closest to x
+        System.out.println("executionOrder "+(executionOrder++)+" Loop Break, mid ->  " + mid + ", lastMid " + lastMid);
+
+        return mid;
 
     }
 
