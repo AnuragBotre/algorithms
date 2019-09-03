@@ -29,7 +29,7 @@ public class Sqrt {
 
     public int mySqrt(int x) {
 
-        return usingLastMidApproach(x);
+        return anotherBinarySearch(x);
     }
 
     public int linearApproach(int x) {
@@ -99,60 +99,33 @@ public class Sqrt {
         return left;
     }
 
-    private int usingLastMidApproach(int x) {
+    private int anotherBinarySearch(int x) {
 
-        if (x < 2) {
-            return x;
-        }
+        //everything is in long
 
-        int no = x;
-        int mid;
-        int lastMid = mid = x / 2;
+        if(x < 0 ) return -1;
+        if(x == 0) return 0;
+        if(x == 1) return 1;
 
-        int executionOrder = 1;
+        long high = x;
+        long mid = 0;
+        long low = 1;
+        long ans = 0;
 
-        for (; true; ) {
-
-
-            if (mid * mid == x) {
-                return mid;
-            } else if ((mid * mid > x) || (mid * mid < 0)) {
-
-                lastMid = mid;
-                mid = mid / 2;
-
-                System.out.println(" executionOrder :- " + executionOrder + " mid = " + mid);
-
-                if (mid * mid < x && (mid + 1) * (mid + 1) > x) {
-                    return mid;
-                }
-
-            } else {
-
-                String x1 = " executionOrder :- " + executionOrder + " mid = " + mid + " lastMid = " + lastMid + " addition of :- " + (mid + lastMid);
-                System.out.println(x1);
-
-                mid = (lastMid + mid) / 2;
-
-                if (mid * mid > x && ((mid + 1) * (mid + 1) > x)) {
-                    return mid;
-                } else {
-                    //need to find minimal no in case of overflow
-                    break;
-                }
-
-
+        while(low <= high ) {
+            mid = (low + high)/2;
+            long sq = mid * mid;
+            if (sq == x)
+                return (int)mid;
+            if( sq > x) {
+                high = mid - 1;
             }
-
-            executionOrder++;
+            else {
+                low = mid + 1;
+                ans = mid;
+            }
         }
-
-
-        //everything is overflown after mid+1;
-        //find the smallest no which not overflow and closest to x
-        System.out.println("executionOrder "+(executionOrder++)+" Loop Break, mid ->  " + mid + ", lastMid " + lastMid);
-
-        return mid;
+        return (int)ans;
 
     }
 

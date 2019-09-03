@@ -32,6 +32,8 @@ public class SqrtTest {
     public void testForFailedInput() {
         //4294836225
         execute(10, 3);
+        execute(2147395600, 46340);
+
     }
 
     @Test
