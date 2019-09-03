@@ -134,7 +134,7 @@ public class Sqrt {
 
                 mid = (lastMid + mid) / 2;
 
-                if (mid * mid > x && ((mid + 1) * (mid + 1) > x)) {
+                if (mid * mid < x && ((mid + 1) * (mid + 1) > x)) {
                     return mid;
                 } else {
                     //need to find minimal no in case of overflow
