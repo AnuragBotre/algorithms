@@ -1,8 +1,5 @@
 package com.trendcore.problems.leetcode;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * https://leetcode.com/problems/climbing-stairs/
  * <p>
@@ -33,16 +30,24 @@ import java.util.List;
  */
 public class ClimbingStairs {
 
-
-
-    class StepTaker{
+    class StepTaker {
         int steps;
 
-        public void takeStep(int n) {
+        int dest;
+
+        public StepTaker() {
+        }
+
+        public StepTaker(int dest) {
+            this.dest = dest;
+            memory = new int[dest +1];
+        }
+
+        public void takeStepUsingReduction(int n) {
 
             if (n < 0) {
                 return;
-            }else if(n == 0){
+            } else if (n == 0) {
                 steps++;
                 return;
             }
@@ -50,19 +55,73 @@ public class ClimbingStairs {
             //for given n we can take either 1 step or 2 step
 
             //one step
-            takeStep(n - 1);
+            takeStepUsingReduction(n - 1);
 
             //two step
-            takeStep(n - 2);
+            takeStepUsingReduction(n - 2);
+        }
+
+
+        private int memory[];
+
+        public int takeStepUsingAggregation(int n) {
+
+            if (n == 2) {
+                return 2;
+            } else if (n == 1) {
+                return 1;
+            } else {
+                //do we have ans for current step
+                if (memory[n] > 0) {
+                    return memory[n];
+                } else {
+                    //we need to calculate ans
+                    int ans = 0;
+
+                    ans = takeStepUsingAggregation(n - 2) + takeStepUsingAggregation(n - 1);
+
+                    memory[n] = ans;
+
+                    return ans;
+                }
+            }
         }
     }
 
     public int climbStairs(int n) {
-        StepTaker step = new StepTaker();
-        step.takeStep(n);
-        return step.steps;
+        StepTaker step = new StepTaker(n);
+        int i = step.takeStepUsingAggregation(n);
+        return i;
     }
 
+    /**
+     * Uses fibo series.
+     * output of previous step + permutation to get result for current step.
+     *
+     * @param n
+     * @return
+     */
+    public int oneOfLeetCodeApproach(int n) {
+        int a = 1, b = 2;
+
+        if (n == 1) {
+            return 1;
+        }
+
+        if (n == 2) {
+            return 2;
+        }
+
+        int temp;
+
+        for (int i = 3; i <= n; i++) {
+            temp = a;
+            a = b;
+            b = b + temp;
+        }
+
+        return b;
+    }
 
 
 }
