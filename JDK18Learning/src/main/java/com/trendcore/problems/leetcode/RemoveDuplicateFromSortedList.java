@@ -25,14 +25,17 @@ public class RemoveDuplicateFromSortedList {
             if (previous != null) {
                 if (previous.val == current.val) {
                     previous.next = current.next;
+                    temp=current.next;
                 } else {
                     previous = temp;
+                    temp = temp.next;
                 }
             } else {
                 previous = temp;
+                temp = temp.next;
             }
 
-            temp = temp.next;
+
         }
 
         return head;
