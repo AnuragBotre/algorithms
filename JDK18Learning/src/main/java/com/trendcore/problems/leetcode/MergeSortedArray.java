@@ -61,22 +61,39 @@ public class MergeSortedArray {
 
     public void merge(int[] nums1, int m, int[] nums2, int n) {
 
-
         int i = 0;
-
         int j = 0;
 
-        int queueStart = m;
+        for (; i < m && j < n; ) {
 
-        while (i < nums1.length && queueStart < nums1.length) {
+            if (nums1[i] <= nums2[j]) {
+                i++;
+            } else {
+                //shift array
+                shiftArray(nums1,i);
+                m++;
 
-            int[] process = process(nums1, m, nums2, n, i, j, queueStart);
-            i = process[0];
-            j = process[1];
-            m = process[2];
-            queueStart = queueStart + m;
+                nums1[i] = nums2[j];
+                i++;
+                j++;
+            }
         }
 
+        if (j < nums2.length) {
+            for (int x = j; x < nums2.length; x++) {
+                nums1[i] = nums2[x];
+                i++;
+            }
+        }
+
+
+    }
+
+    private void shiftArray(int[] nums, int pos) {
+
+        for (int i = nums.length - 1; i > pos; i--) {
+            nums[i] = nums[i - 1];
+        }
     }
 
     public int[] process(int[] nums1, int m, int[] nums2, int n, int i, int j, int queueStart) {
