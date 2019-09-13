@@ -10,7 +10,12 @@ public class EditDistanceTest {
 
     @Test
     public void example_1() {
-        act("horse", "ros", 5);
+        act("horse", "ros", 3);
+    }
+
+    @Test
+    public void example_2() {
+        act("intention", "execution", 5);
     }
 
     public void act(String word1, String word2, int expected) {

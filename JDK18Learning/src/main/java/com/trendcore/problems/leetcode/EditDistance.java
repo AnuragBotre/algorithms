@@ -92,13 +92,45 @@ public class EditDistance {
 
         Arrays.stream(list2).forEach(System.out::println);
 
-        return 0;
+        int operation = 1;
+        for (int i = 0, j = 0; i < word2.length() && j < list2.length; ) {
+            char c = word2.charAt(i);
+            if (("" + c).equals(list2[j])) {
+                i++;
+                j++;
+            } else if (isPresentInList(list2, c, i)) {
+                //char is present in the later section
+                j++;
+                operation++;
+            } else {
+                //not present at all
+                operation++;
+                j++;
+                i++;
+            }
+        }
+
+        return operation;
+    }
+
+    private boolean isPresentInList(String[] list2, char c, int pos) {
+
+        for (int i = pos; i < list2.length; i++) {
+            if (list2[i] == null) {
+                if (("" + c).equals(list2[i]))
+                    return true;
+            } else {
+                return false;
+            }
+        }
+
+        return false;
     }
 
     private int findInList1WithPos(char c, String[] list1, int pointer1) {
 
         for (int i = pointer1 - 1; i >= 0; i--) {
-            if (list1[i].equals(""+c)) {
+            if (list1[i].equals("" + c)) {
                 return i;
             }
         }
