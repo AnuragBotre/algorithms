@@ -3,6 +3,7 @@ package com.trendcore.problems.leetcode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * https://leetcode.com/problems/edit-distance/
@@ -37,6 +38,10 @@ import java.util.List;
  * exection -> execution (insert 'u')
  */
 public class EditDistance {
+
+    class References {
+        int position;
+    }
 
     public int minDistance(String word1, String word2) {
 
@@ -81,33 +86,63 @@ public class EditDistance {
         //pointing to list1
         int pointer1 = SIZE;
 
+        List<References> positionList1 = new ArrayList<>();
+        List<References> positionList2 = new ArrayList<>();
+
         for (int i = word2.length() - 1; i >= 0; i--) {
             char c = word2.charAt(i);
             int inList1WithPos = findInList1WithPos(c, list1, pointer1);
             if (inList1WithPos != -1) {
                 pointer1 = inList1WithPos;
                 list2[pointer1] = "" + c;
+
+                References r1 = new References();
+                r1.position = inList1WithPos;
+                positionList1.add(r1);
+
+                References r2 = new References();
+                r2.position = i;
+                positionList2.add(r2);
             }
         }
 
-        Arrays.stream(list2).forEach(System.out::println);
+        //print both list
 
-        int operation = 1;
-        for (int i = 0, j = 0; i < word2.length() && j < list2.length; ) {
-            char c = word2.charAt(i);
-            if (("" + c).equals(list2[j])) {
-                i++;
-                j++;
-            } else if (isPresentInList(list2, c, i)) {
-                //char is present in the later section
-                j++;
-                operation++;
+        String collect1 = positionList1.stream().map(references -> "" + references.position).collect(Collectors.joining(","));
+        String collect2 = positionList2.stream().map(references -> "" + references.position).collect(Collectors.joining(","));
+
+        System.out.println(collect1 + " " + collect2);
+
+
+        int operation = 0;
+
+        for (int i = positionList2.size() - 1; i >= 0; i--) {
+            References r2 = positionList2.get(i);
+            References r1 = positionList1.get(i);
+
+            if (r1.position == r2.position) {
+
+                continue;
+            } else if (r1.position < r2.position) {
+                int i1 = r2.position - r1.position;
+                operation = operation + r1.position + i1;
+
+                //i1 needs to be added to further elements in the list of r1
+                for (int j = i - 1; j >= 0; j--) {
+                    References references = positionList1.get(j);
+                    references.position = references.position + i1;
+                }
             } else {
-                //not present at all
-                operation++;
-                j++;
-                i++;
+                int i1 = r1.position - r2.position;
+                operation = operation + r2.position + i1;
+
+                //i1 needs to be added to further elements in the list of r1
+                for (int j = i - 1; j >= 0; j--) {
+                    References references = positionList1.get(j);
+                    references.position = references.position - i1;
+                }
             }
+
         }
 
         return operation;
