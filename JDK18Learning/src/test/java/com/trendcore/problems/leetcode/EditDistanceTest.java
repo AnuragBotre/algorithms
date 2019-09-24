@@ -18,6 +18,11 @@ public class EditDistanceTest {
         act("intention", "execution", 5);
     }
 
+    @Test
+    public void example_3() {
+        act("abcdef", "dxyzef", 5);
+    }
+
     public void act(String word1, String word2, int expected) {
         int i = editDistance.minDistance(word1, word2);
         assertEquals(expected,i);

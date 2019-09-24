@@ -1,9 +1,7 @@
 package com.trendcore.problems.leetcode;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * https://leetcode.com/problems/edit-distance/
@@ -41,6 +39,7 @@ public class EditDistance {
 
     class References {
         int position;
+        char c;
     }
 
     public int minDistance(String word1, String word2) {
@@ -89,6 +88,8 @@ public class EditDistance {
         List<References> positionList1 = new ArrayList<>();
         List<References> positionList2 = new ArrayList<>();
 
+        String list3[] = new String[SIZE];
+
         for (int i = word2.length() - 1; i >= 0; i--) {
             char c = word2.charAt(i);
             int inList1WithPos = findInList1WithPos(c, list1, pointer1);
@@ -96,56 +97,105 @@ public class EditDistance {
                 pointer1 = inList1WithPos;
                 list2[pointer1] = "" + c;
 
+                list3[pointer1] = "" + c;
+
                 References r1 = new References();
                 r1.position = inList1WithPos;
+                r1.c = c;
                 positionList1.add(r1);
 
                 References r2 = new References();
+                r2.c = c;
                 r2.position = i;
                 positionList2.add(r2);
             }
         }
 
-        //print both list
 
-        String collect1 = positionList1.stream().map(references -> "" + references.position).collect(Collectors.joining(","));
-        String collect2 = positionList2.stream().map(references -> "" + references.position).collect(Collectors.joining(","));
+        int operation = 1;
+        int previousPosition = 0;
 
-        System.out.println(collect1 + " " + collect2);
-
-
-        int operation = 0;
+        int listCounter = 0;
 
         for (int i = positionList2.size() - 1; i >= 0; i--) {
-            References r2 = positionList2.get(i);
-            References r1 = positionList1.get(i);
+            References references2 = positionList2.get(i);
+            References references1 = positionList1.get(i);
+            if (references1.position == references2.position) {
+                //no-op
+            } else if (references1.position < references2.position) {
+                //move towards right
+                int diff = references2.position - references1.position;
+                operation = operation + diff;
 
-            if (r1.position == r2.position) {
-
-                continue;
-            } else if (r1.position < r2.position) {
-                int i1 = r2.position - r1.position;
-                operation = operation + r1.position + i1;
-
-                //i1 needs to be added to further elements in the list of r1
-                for (int j = i - 1; j >= 0; j--) {
+                for (int j = i; j >= 0; j--) {
                     References references = positionList1.get(j);
-                    references.position = references.position + i1;
+                    references.position = references.position + diff;
                 }
-            } else {
-                int i1 = r1.position - r2.position;
-                operation = operation + r2.position + i1;
 
-                //i1 needs to be added to further elements in the list of r1
-                for (int j = i - 1; j >= 0; j--) {
+            } else {
+                //move towards left
+                int diff = references1.position - references2.position;
+                operation = operation + diff;
+
+                for (int j = i; j >= 0; j--) {
                     References references = positionList1.get(j);
-                    references.position = references.position - i1;
+                    references.position = references.position - diff;
                 }
             }
-
         }
 
+
         return operation;
+    }
+
+
+    public int getOperationApproach1(List<References> positionList2, String[] list3, int operation, int listCounter) {
+        for (int j = positionList2.size() - 1; j >= 0; j--) {
+            References reference = positionList2.get(j);
+            for (int i = listCounter; i < list3.length; i++) {
+                if (list3[i] != null && list3[i].equals("" + list3[i])) {
+
+                    if (i == reference.position) {
+                        //no - op
+                    } else if (i < reference.position) {
+                        int diff = reference.position - i;
+                        //move towards right by that many steps
+                        list3 = shiftRight(list3, i, diff);
+                        operation = operation + diff;
+                    } else {
+                        int diff = i - reference.position;
+                        //move towards left by that many steps
+                        list3 = shiftLeft(list3, i, diff);
+                        operation = operation + diff;
+                    }
+                    listCounter = reference.position + 1;
+                    break;
+                } else {
+                    operation++;
+                }
+            }
+        }
+        return operation;
+    }
+
+    private String[] shiftLeft(String[] list3, int pos, int noOfTimes) {
+        String temp[] = new String[list3.length];
+        for (int i = pos, j = pos - noOfTimes; i < list3.length; i++, j++) {
+            if (j >= 0) {
+                temp[j] = list3[i];
+            }
+        }
+        return temp;
+    }
+
+    private String[] shiftRight(String[] list3, int pos, int noOfTimes) {
+        String temp[] = new String[list3.length];
+        for (int i = pos, j = pos + noOfTimes; i < list3.length; i++, j++) {
+            if (j < temp.length) {
+                temp[j] = list3[i];
+            }
+        }
+        return temp;
     }
 
     private boolean isPresentInList(String[] list2, char c, int pos) {
