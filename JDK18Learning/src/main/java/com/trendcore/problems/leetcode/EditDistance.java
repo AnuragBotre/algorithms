@@ -112,36 +112,45 @@ public class EditDistance {
         }
 
 
-        int operation = 1;
+        int operation = 0;
         int previousPosition = 0;
 
         int listCounter = 0;
 
-        for (int i = positionList2.size() - 1; i >= 0; i--) {
-            References references2 = positionList2.get(i);
-            References references1 = positionList1.get(i);
+        int lastProcessedPosition = 0;
+
+        for (int l = positionList2.size() - 1; l >= 0; l--) {
+            References references2 = positionList2.get(l);
+            References references1 = positionList1.get(l);
+
             if (references1.position == references2.position) {
+                int delta = references1.position - lastProcessedPosition;
+                operation = operation + delta;
                 //no-op
             } else if (references1.position < references2.position) {
                 //move towards right
+                int delta = references1.position - lastProcessedPosition;
                 int diff = references2.position - references1.position;
-                operation = operation + diff;
+                operation = operation + diff + delta;
 
-                for (int j = i; j >= 0; j--) {
+                for (int j = l; j >= 0; j--) {
                     References references = positionList1.get(j);
                     references.position = references.position + diff;
                 }
 
             } else {
                 //move towards left
+                int delta = references2.position - lastProcessedPosition;
                 int diff = references1.position - references2.position;
-                operation = operation + diff;
+                operation = operation + diff + delta;
 
-                for (int j = i; j >= 0; j--) {
+                for (int j = l; j >= 0; j--) {
                     References references = positionList1.get(j);
                     references.position = references.position - diff;
                 }
             }
+
+            lastProcessedPosition = references2.position;
         }
 
 
