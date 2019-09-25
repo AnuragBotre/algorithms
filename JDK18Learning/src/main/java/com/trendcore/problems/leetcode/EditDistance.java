@@ -150,8 +150,12 @@ public class EditDistance {
                 }
             }
 
-            lastProcessedPosition = references2.position;
+            lastProcessedPosition = references2.position + 1;
         }
+
+
+        //finally after loop delete rest of elements
+        //handle this case and problem is done.
 
 
         return operation;
