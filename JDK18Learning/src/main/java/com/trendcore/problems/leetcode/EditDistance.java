@@ -44,6 +44,12 @@ public class EditDistance {
 
     public int minDistance(String word1, String word2) {
 
+
+        //Wrong Algo will not work for below input
+        //abcdef
+        //dxyzef
+        //answer is - 4
+
         String BLANK = "#B";
 
         //need 2 arrays of equal size
@@ -119,9 +125,11 @@ public class EditDistance {
 
         int lastProcessedPosition = 0;
 
+        References references1 = null;
+
         for (int l = positionList2.size() - 1; l >= 0; l--) {
             References references2 = positionList2.get(l);
-            References references1 = positionList1.get(l);
+            references1 = positionList1.get(l);
 
             if (references1.position == references2.position) {
                 int delta = references1.position - lastProcessedPosition;
@@ -132,6 +140,8 @@ public class EditDistance {
                 int delta = references1.position - lastProcessedPosition;
                 int diff = references2.position - references1.position;
                 operation = operation + diff + delta;
+
+                SIZE = SIZE + diff;
 
                 for (int j = l; j >= 0; j--) {
                     References references = positionList1.get(j);
@@ -144,6 +154,8 @@ public class EditDistance {
                 int diff = references1.position - references2.position;
                 operation = operation + diff + delta;
 
+                SIZE = SIZE - diff;
+
                 for (int j = l; j >= 0; j--) {
                     References references = positionList1.get(j);
                     references.position = references.position - diff;
@@ -153,10 +165,14 @@ public class EditDistance {
             lastProcessedPosition = references2.position + 1;
         }
 
-
         //finally after loop delete rest of elements
         //handle this case and problem is done.
 
+        if(references1.position < SIZE){
+
+            int diff = SIZE - (references1.position+1);
+            operation = operation + diff;
+        }
 
         return operation;
     }

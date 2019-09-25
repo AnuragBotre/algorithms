@@ -20,6 +20,10 @@ public class EditDistanceTest {
 
     @Test
     public void example_3() {
+
+        //abcdef
+        //dxyzef
+
         act("abcdef", "dxyzef", 5);
     }
 
