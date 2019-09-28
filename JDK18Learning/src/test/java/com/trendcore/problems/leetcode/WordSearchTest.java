@@ -62,6 +62,33 @@ public class WordSearchTest {
         }, "ABCCEESE", true);
     }
 
+    @Test
+    public void ip_7() {
+        execute(new char[][]{
+                {'A', 'B', 'C', 'E'},
+                {'S', 'F', 'C', 'S'},
+                {'A', 'D', 'E', 'E'}
+        }, "ABCCFD", true);
+    }
+
+    @Test
+    public void ip_8() {
+        execute(new char[][]{
+                {'A', 'B', 'C', 'E'},
+                {'S', 'F', 'C', 'S'},
+                {'A', 'D', 'E', 'E'}
+        }, "ABCCED", true);
+    }
+
+    @Test
+    public void ip_9() {
+        execute(new char[][]{
+                {'A', 'B', 'B', 'E'},
+                {'S', 'B', 'C', 'C'},
+                {'A', 'D', 'C', 'E'}
+        }, "ABBCCE", true);
+    }
+
     public void execute(char[][] board, String word, boolean expected) {
         boolean output = wordSearch.exist(board, word);
         assertEquals(expected, output);
