@@ -44,7 +44,17 @@ public class WordSearch {
         }
 
         private boolean findWord() {
-            return traverseInternal(0, 0, 0);
+            for (int i = 0; i < m; i++) {
+                for (int j = 0; j < n; j++) {
+                    if (board[i][j] == word.charAt(0)) {
+                        boolean b = traverseInternal(i, j, 0);
+                        if (b) {
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
         }
 
         private boolean traverseInternal(int i, int j, int index) {
@@ -94,9 +104,6 @@ public class WordSearch {
     public boolean exist(char[][] board, String word) {
 
         Traversal t = new Traversal(board, word);
-
-        String container = "";
-
         return t.findWord();
     }
 
