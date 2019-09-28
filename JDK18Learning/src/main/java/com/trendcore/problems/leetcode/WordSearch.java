@@ -47,8 +47,10 @@ public class WordSearch {
             for (int i = 0; i < m; i++) {
                 for (int j = 0; j < n; j++) {
                     if (board[i][j] == word.charAt(0)) {
+                        visitedCell = new int[m][n];
+                        container = "";
                         boolean b = traverseInternal(i, j, 0);
-                        if (b) {
+                        if (word.equals(container)) {
                             return true;
                         }
                     }
@@ -71,6 +73,10 @@ public class WordSearch {
 
                     container = container + board[i][j];
 
+                    if (word.equals(container)) {
+                        return true;
+                    }
+
                     boolean t = true;
 
                     t = traversePath(i, j - 1, index + 1);
@@ -78,6 +84,8 @@ public class WordSearch {
                     t = traversePath(i - 1, j, index + 1);
                     t = traversePath(i + 1, j, index + 1);
                     return t;
+                } else {
+                    visitedCell[i][j] = 0;
                 }
             }
             return false;

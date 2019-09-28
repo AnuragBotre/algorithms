@@ -107,6 +107,30 @@ public class WordSearchTest {
         }, "BECE", true);
     }
 
+    @Test
+    public void ip_12() {
+        execute(new char[][]{
+                {'A'},
+        }, "A", true);
+    }
+
+    @Test
+    public void ip_13() {
+        execute(new char[][]{
+                {'A','A'},
+        }, "AA", true);
+    }
+
+    @Test
+    public void ip_14() {
+        execute(new char[][]{
+                {'A','B','C','E'},
+                {'S','F','E','S'},
+                {'S','F','E','S'},
+                {'A','D','E','E'}
+        }, "ABCESEEEFS", true);
+    }
+
     public void execute(char[][] board, String word, boolean expected) {
         boolean output = wordSearch.exist(board, word);
         assertEquals(expected, output);
