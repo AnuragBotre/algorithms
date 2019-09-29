@@ -34,6 +34,8 @@ public class WordSearch {
         private int m;
         private int n;
 
+        //private String path = "";
+
         public Traversal(char[][] board, String word) {
             this.board = board;
             this.word = word;
@@ -73,6 +75,9 @@ public class WordSearch {
 
                     container = container + board[i][j];
 
+                    /*path = path + "{"+i+","+j+"}";
+                    System.out.println(container + " " + path);*/
+
                     if (word.equals(container)) {
                         return true;
                     }
@@ -83,9 +88,13 @@ public class WordSearch {
                     t = traversePath(i, j + 1, index + 1);
                     t = traversePath(i - 1, j, index + 1);
                     t = traversePath(i + 1, j, index + 1);
+
+                    if (!word.equals(container)) {
+                        container = container.substring(0, container.length() - 1);
+                        visitedCell[i][j] = 0;
+                    }
+
                     return t;
-                } else {
-                    visitedCell[i][j] = 0;
                 }
             }
             return false;

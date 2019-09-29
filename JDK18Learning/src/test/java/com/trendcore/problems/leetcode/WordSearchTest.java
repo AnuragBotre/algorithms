@@ -9,6 +9,13 @@ public class WordSearchTest {
     WordSearch wordSearch = new WordSearch();
 
     @Test
+    public void removeLastChar() {
+        String container = "ABC";
+        container = container.substring(0, container.length() - 1);
+        System.out.println(container);
+    }
+
+    @Test
     public void ip_1() {
         execute(new char[][]{
                 {'A', 'B', 'C', 'E'},
@@ -90,6 +97,15 @@ public class WordSearchTest {
     }
 
     @Test
+    public void ip_15() {
+        execute(new char[][]{
+                {'A', 'B', 'B', 'E'},
+                {'S', 'B', 'C', 'C'},
+                {'A', 'D', 'C', 'E'}
+        }, "ABBCCD", true);
+    }
+
+    @Test
     public void ip_10() {
         execute(new char[][]{
                 {'A', 'B', 'B', 'E'},
@@ -125,7 +141,6 @@ public class WordSearchTest {
     public void ip_14() {
         execute(new char[][]{
                 {'A','B','C','E'},
-                {'S','F','E','S'},
                 {'S','F','E','S'},
                 {'A','D','E','E'}
         }, "ABCESEEEFS", true);
