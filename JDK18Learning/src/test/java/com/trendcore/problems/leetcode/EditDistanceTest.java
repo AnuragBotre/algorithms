@@ -24,7 +24,7 @@ public class EditDistanceTest {
         //abcdef
         //dxyzef
 
-        act("abcdef", "dxyzef", 5);
+        act("abcdef", "dxyzef", 4);
     }
 
     public void act(String word1, String word2, int expected) {
