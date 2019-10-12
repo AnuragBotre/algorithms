@@ -31,4 +31,40 @@ public class EditDistanceTest {
         int i = editDistance.minDistance(word1, word2);
         assertEquals(expected,i);
     }
+
+    @Test
+    public void replaceChar() {
+        String s = editDistance.replaceChar("abcd", 2, "efghi");
+        System.out.println(s);
+    }
+
+    @Test
+    public void addChar() {
+        String s = editDistance.addChar("abcd", 2, "efghi");
+        System.out.println(s);
+    }
+
+    @Test
+    public void addCharAtLastPos() {
+        String s = editDistance.addChar("abcd", 4, "efghi");
+        System.out.println(s);
+    }
+
+    @Test
+    public void removeChar() {
+        String s = editDistance.removeChar("abcd",2);
+        System.out.println(s);
+    }
+
+    @Test
+    public void removeCharAt_0_pos() {
+        String s = editDistance.removeChar("abcd",0);
+        System.out.println(s);
+    }
+
+    @Test
+    public void removeCharAt_last_pos() {
+        String s = editDistance.removeChar("abcd",3);
+        System.out.println(s);
+    }
 }

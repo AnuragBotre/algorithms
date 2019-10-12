@@ -45,9 +45,9 @@ public class EditDistance {
         //proceed
         //else
         //perform one of three operation
-            //while performing 3 operation
-            //replace and add can be done easily
-            //delete may not work
+        //while performing 3 operation
+        //replace and add can be done easily
+        //delete may not work
         //then proceed
 
         int height = 0;
@@ -57,59 +57,156 @@ public class EditDistance {
     }
 
     private void traverse(String word1, int index, String word2, int height) {
+
+        //terminating conditions.
         if (word1.equals(word2)) {
             if (!initialized) {
                 minHeight = height;
+                initialized = true;
             } else {
-                if (height < minHeight) {
+                if (minHeight > height) {
                     minHeight = height;
                 }
             }
+            return;
         } else {
+            //if index goes beyond word1
 
-            if (index > word2.length()) {
-                return;
-            }
+            ifEqualThenProceed(word1, index, word2, height);
+            replaceIfPermitted(word1, index, word2, height);
+            addIfPermitted(word1, index, word2, height);
+            removeIfPermitted(word1, index, word2, height);
+        }
+    }
 
-            if (index < word1.length() && index < word2.length()) {
-                String s = replaceChar(word1, index, word2);
-                traverse(s, index + 1, word2, height + 1);
-            }
+    private void removeIfPermitted(String word1, int index, String word2, int height) {
+        if (index >= word1.length()) {
+            return;
+        }
 
-            if (index < word2.length()) {
-                String s = addChar(word1, index, word2);
-                traverse(s, index + 1, word2, height + 1);
+        String s = removeChar(word1, index);
+        traverse(s, index + 1, word2, height + 1);
+    }
+
+    private void addIfPermitted(String word1, int index, String word2, int height) {
+        if (index >= word2.length()) {
+            return;
+        }
+        String s = addChar(word1, index, word2);
+        traverse(s, index + 1, word2, height + 1);
+    }
+
+    private void ifEqualThenProceed(String word1, int index, String word2, int height) {
+        if (index >= word2.length() || index >= word1.length()) {
+            return;
+        }
+
+        if (word1.charAt(index) == word2.charAt(index)) {
+            traverse(word1, index + 1, word2, height);
+        }
+    }
+
+    private void replaceIfPermitted(String word1, int index, String word2, int height) {
+        if (index >= word2.length() || index >= word1.length()) {
+            return;
+        }
+
+        String s = replaceChar(word1, index, word2);
+        traverse(s, index + 1, word2, height + 1);
+    }
+
+    private void approach1(String word1, int index, String word2, int height) {
+        //if index goes beyond word1
+        if (index >= word1.length() && index < word2.length()) {
+            //we need to add char
+            String newWord = addChar(word1, index, word2);
+            traverse(newWord, index + 1, word2, height + 1);
+        } else if (index < word1.length() && index >= word2.length()) {
+            //we need to remove char
+            String newWord = removeChar(word1, index);
+            traverse(newWord, index + 1, word2, height + 1);
+        } else {
+            //word1 char equal word2 char do nothing
+            //index + 1
+            if (word1.charAt(index) == word2.charAt(index)) {
+                traverse(word1, index + 1, word2, height);
+            } else {
+                //replace word1 char with word2 char
+                String newWord = replaceChar(word1, index, word2);
+                traverse(newWord, index + 1, word2, height + 1);
             }
         }
     }
 
-    private String addChar(String word1, int index, String word2) {
-        char c = word2.charAt(index);
-        char c1 = word1.charAt(index);
+    String removeChar(String word1, int index) {
+        int i = 0;
+        int cnt;
 
         char[] chars = word1.toCharArray();
+        char[] temp = new char[word1.length() - 1];
 
-        char temp[] = new char[chars.length + 1];
-        //copy first part
-        int i;
         int j = 0;
-        for (i = 0; i < index; i++) {
-            temp[i] = chars[j];
+        for (; i < index; ) {
+            temp[j] = chars[i];
             j++;
+            i++;
         }
 
-        //copy index
-        temp[i] = c;
+        i++;
 
-        //copy rest of the part
-        for(i = i+1 ; i < word1.length() ; i++){
-            temp[i] = chars[j];
+        for (; i < word1.length(); ) {
+            temp[j] = chars[i];
+            i++;
+            j++;
         }
 
         return new String(temp);
     }
 
-    private String replaceChar(String word1, int index, String word2) {
+    String addChar(String word1, int index, String word2) {
+        char c = word2.charAt(index);
+
+        char[] chars = word1.toCharArray();
+
+        char temp[] = new char[chars.length + 1];
+
+        if (index >= chars.length) {
+            //add to last
+            int i = 0;
+            for (i = 0; i < chars.length; ) {
+                temp[i] = chars[i];
+                i++;
+            }
+
+            temp[i] = c;
+            return new String(temp);
+        } else {
+
+            //copy first part
+            int i;
+            int j = 0;
+            for (i = 0; j < index; ) {
+                temp[i] = chars[j];
+                i++;
+                j++;
+            }
+
+            //copy index
+            temp[i] = c;
+            i++;
+            //copy rest of the part
+            for (; j < word1.length(); ) {
+                temp[i] = chars[j];
+                i++;
+                j++;
+            }
+
+            return new String(temp);
+        }
+
+    }
+
+    String replaceChar(String word1, int index, String word2) {
         char c = word2.charAt(index);
         char[] chars = word1.toCharArray();
         chars[index] = c;
