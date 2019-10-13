@@ -34,9 +34,73 @@ package com.trendcore.problems.leetcode;
  */
 public class EditDistance {
 
-    int minHeight = 0;
 
-    boolean initialized = false;
+    class Traversal{
+        int minHeight = 0;
+
+        boolean initialized = false;
+
+
+        private void traverse(String word1, int index, String word2, int height) {
+
+            //terminating conditions.
+            if (word1.equals(word2)) {
+                if (!initialized) {
+                    minHeight = height;
+                    initialized = true;
+                } else {
+                    if (minHeight > height) {
+                        minHeight = height;
+                    }
+                }
+                return;
+            } else {
+                //if index goes beyond word1
+
+                ifEqualThenProceed(word1, index, word2, height);
+                replaceIfPermitted(word1, index, word2, height);
+                addIfPermitted(word1, index, word2, height);
+                removeIfPermitted(word1, index, word2, height);
+            }
+        }
+
+        private void removeIfPermitted(String word1, int index, String word2, int height) {
+            if (index >= word1.length()) {
+                return;
+            }
+
+            String s = removeChar(word1, index);
+            traverse(s, index + 1, word2, height + 1);
+        }
+
+        private void addIfPermitted(String word1, int index, String word2, int height) {
+            if (index >= word2.length()) {
+                return;
+            }
+            String s = addChar(word1, index, word2);
+            traverse(s, index + 1, word2, height + 1);
+        }
+
+        private void ifEqualThenProceed(String word1, int index, String word2, int height) {
+            if (index >= word2.length() || index >= word1.length()) {
+                return;
+            }
+
+            if (word1.charAt(index) == word2.charAt(index)) {
+                traverse(word1, index + 1, word2, height);
+            }
+        }
+
+        private void replaceIfPermitted(String word1, int index, String word2, int height) {
+            if (index >= word2.length() || index >= word1.length()) {
+                return;
+            }
+
+            String s = replaceChar(word1, index, word2);
+            traverse(s, index + 1, word2, height + 1);
+        }
+
+    }
 
     public int minDistance(String word1, String word2) {
 
@@ -50,93 +114,14 @@ public class EditDistance {
         //delete may not work
         //then proceed
 
+        Traversal t = new Traversal();
+
         int height = 0;
-        traverse(word1, 0, word2, height);
+        t.traverse(word1, 0, word2, height);
 
-        return minHeight;
+        return t.minHeight;
     }
 
-    private void traverse(String word1, int index, String word2, int height) {
-
-        //terminating conditions.
-        if (word1.equals(word2)) {
-            if (!initialized) {
-                minHeight = height;
-                initialized = true;
-            } else {
-                if (minHeight > height) {
-                    minHeight = height;
-                }
-            }
-            return;
-        } else {
-            //if index goes beyond word1
-
-            ifEqualThenProceed(word1, index, word2, height);
-            replaceIfPermitted(word1, index, word2, height);
-            addIfPermitted(word1, index, word2, height);
-            removeIfPermitted(word1, index, word2, height);
-        }
-    }
-
-    private void removeIfPermitted(String word1, int index, String word2, int height) {
-        if (index >= word1.length()) {
-            return;
-        }
-
-        String s = removeChar(word1, index);
-        traverse(s, index + 1, word2, height + 1);
-    }
-
-    private void addIfPermitted(String word1, int index, String word2, int height) {
-        if (index >= word2.length()) {
-            return;
-        }
-        String s = addChar(word1, index, word2);
-        traverse(s, index + 1, word2, height + 1);
-    }
-
-    private void ifEqualThenProceed(String word1, int index, String word2, int height) {
-        if (index >= word2.length() || index >= word1.length()) {
-            return;
-        }
-
-        if (word1.charAt(index) == word2.charAt(index)) {
-            traverse(word1, index + 1, word2, height);
-        }
-    }
-
-    private void replaceIfPermitted(String word1, int index, String word2, int height) {
-        if (index >= word2.length() || index >= word1.length()) {
-            return;
-        }
-
-        String s = replaceChar(word1, index, word2);
-        traverse(s, index + 1, word2, height + 1);
-    }
-
-    private void approach1(String word1, int index, String word2, int height) {
-        //if index goes beyond word1
-        if (index >= word1.length() && index < word2.length()) {
-            //we need to add char
-            String newWord = addChar(word1, index, word2);
-            traverse(newWord, index + 1, word2, height + 1);
-        } else if (index < word1.length() && index >= word2.length()) {
-            //we need to remove char
-            String newWord = removeChar(word1, index);
-            traverse(newWord, index + 1, word2, height + 1);
-        } else {
-            //word1 char equal word2 char do nothing
-            //index + 1
-            if (word1.charAt(index) == word2.charAt(index)) {
-                traverse(word1, index + 1, word2, height);
-            } else {
-                //replace word1 char with word2 char
-                String newWord = replaceChar(word1, index, word2);
-                traverse(newWord, index + 1, word2, height + 1);
-            }
-        }
-    }
 
     String removeChar(String word1, int index) {
         int i = 0;
@@ -212,4 +197,5 @@ public class EditDistance {
         chars[index] = c;
         return new String(chars);
     }
+
 }

@@ -27,6 +27,11 @@ public class EditDistanceTest {
         act("abcdef", "dxyzef", 4);
     }
 
+    @Test
+    public void example_4() {
+        act("spartan", "part", 3);
+    }
+
     public void act(String word1, String word2, int expected) {
         int i = editDistance.minDistance(word1, word2);
         assertEquals(expected,i);
