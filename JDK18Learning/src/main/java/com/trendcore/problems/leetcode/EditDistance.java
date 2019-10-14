@@ -35,7 +35,7 @@ package com.trendcore.problems.leetcode;
 public class EditDistance {
 
 
-    class Traversal{
+    class Traversal {
         int minHeight = 0;
 
         boolean initialized = false;
@@ -65,12 +65,12 @@ public class EditDistance {
         }
 
         private void removeIfPermitted(String word1, int index, String word2, int height) {
-            if (index >= word1.length()) {
+            if (word1.length() < word2.length()) {
                 return;
             }
 
             String s = removeChar(word1, index);
-            traverse(s, index + 1, word2, height + 1);
+            traverse(s, index, word2, height + 1);
         }
 
         private void addIfPermitted(String word1, int index, String word2, int height) {
@@ -130,19 +130,29 @@ public class EditDistance {
         char[] chars = word1.toCharArray();
         char[] temp = new char[word1.length() - 1];
 
-        int j = 0;
-        for (; i < index; ) {
-            temp[j] = chars[i];
-            j++;
-            i++;
-        }
+        if (index >= word1.length()) {
 
-        i++;
+            for (i = 0; i < word1.length() - 1; i++) {
+                temp[i] = chars[i];
+            }
 
-        for (; i < word1.length(); ) {
-            temp[j] = chars[i];
+        } else {
+
+            int j = 0;
+            for (; i < index; ) {
+                temp[j] = chars[i];
+                j++;
+                i++;
+            }
+
             i++;
-            j++;
+
+            for (; i < word1.length(); ) {
+                temp[j] = chars[i];
+                i++;
+                j++;
+            }
+
         }
 
         return new String(temp);
