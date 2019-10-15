@@ -32,6 +32,11 @@ public class EditDistanceTest {
         act("spartan", "part", 3);
     }
 
+    @Test
+    public void time_limit_exceeded() {
+        act("abcdxabcde","abcdeabcdx",2);
+    }
+
     public void act(String word1, String word2, int expected) {
         int i = editDistance.minDistance(word1, word2);
         assertEquals(expected,i);
