@@ -56,6 +56,10 @@ public class EditDistance {
                 return;
             } else {
                 //if index goes beyond word1
+                if (initialized) {
+                    if (height > minHeight)
+                        return;
+                }
 
                 ifEqualThenProceed(word1, index, word2, height);
                 replaceIfPermitted(word1, index, word2, height);
