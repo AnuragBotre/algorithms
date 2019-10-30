@@ -51,7 +51,9 @@ public class DataFileMetadata {
     }
 
     public String getContents() {
-        loadContents();
+        if(contents == null) {
+            loadContents();
+        }
         return contents;
     }
 
