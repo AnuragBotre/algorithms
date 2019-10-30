@@ -1,3 +1,9 @@
+- https://medium.com/@johnmcclean/jdbc-processing-options-with-cyclops-react-49d62b02f775
+- https://github.com/aol/cyclops
+- Fast purely functional datastructures (Vector, Seq / List, LazySeq / LazyList, NonEmptyList, HashSet, TreeSet, TrieSet, HashMap,
+    LinkedMap, MultiMap, TreeMap, BankersQueue, LazyString, Discrete Interval Encoded Tree, Zipper, Range, Tree, DifferenceList, HList, Dependent Map )
+
+
 https://www.codejava.net/java-se/file-io/execute-operating-system-commands-using-runtime-exec-methods
 - Executing command in interactive way. when process requires input.
 
