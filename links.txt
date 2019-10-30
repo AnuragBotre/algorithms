@@ -1,3 +1,6 @@
+https://medium.com/@johnmcclean/dysfunctional-programming-in-java-a-functional-tutorial-20e0bebd2ec9
+- Dysfunctional programming in Java
+
 - https://medium.com/@johnmcclean/jdbc-processing-options-with-cyclops-react-49d62b02f775
 - https://github.com/aol/cyclops
 - Fast purely functional datastructures (Vector, Seq / List, LazySeq / LazyList, NonEmptyList, HashSet, TreeSet, TrieSet, HashMap,
