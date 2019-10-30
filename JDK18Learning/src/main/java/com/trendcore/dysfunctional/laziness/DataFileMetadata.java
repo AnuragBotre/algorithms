@@ -1,5 +1,7 @@
 package com.trendcore.dysfunctional.laziness;
 
+import cyclops.function.Memoize;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -11,8 +13,8 @@ public class DataFileMetadata {
     private String type;
     private File f;
 
-    //Eager initialization with object creation.
-    private Supplier<String> contents = this::loadContents;
+    //Memoize supplier which once invoked remember the value.
+    private Supplier<String> contents = Memoize.memoizeSupplier(this::loadContents);
 
     private String loadContents() {
         try {
