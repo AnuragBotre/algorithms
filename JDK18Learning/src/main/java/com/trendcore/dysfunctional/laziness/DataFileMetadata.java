@@ -9,11 +9,14 @@ public class DataFileMetadata {
     private long customerId;
     private String type;
     private File f;
-    private String contents;
 
-    public void loadContents() {
+    //Eager initialization with object creation.
+    private String contents = loadContents();
+
+    private String loadContents() {
         try {
             contents = loadFromFile();
+            return contents;
         } catch (IOException e) {
             throw new DataFileUnavailableException(e);
         }
