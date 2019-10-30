@@ -3,6 +3,7 @@ package com.trendcore.dysfunctional.laziness;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.function.Supplier;
 
 public class DataFileMetadata {
 
@@ -11,12 +12,11 @@ public class DataFileMetadata {
     private File f;
 
     //Eager initialization with object creation.
-    private String contents;
+    private Supplier<String> contents = this::loadContents;
 
     private String loadContents() {
         try {
-            contents = loadFromFile();
-            return contents;
+            return loadFromFile();
         } catch (IOException e) {
             throw new DataFileUnavailableException(e);
         }
@@ -54,10 +54,10 @@ public class DataFileMetadata {
         if(contents == null) {
             loadContents();
         }
-        return contents;
+        return contents.get();
     }
 
     public void setContents(String contents) {
-        this.contents = contents;
+
     }
 }
