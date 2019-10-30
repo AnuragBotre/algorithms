@@ -11,7 +11,7 @@ public class DataFileMetadata {
     private File f;
 
     //Eager initialization with object creation.
-    private String contents = loadContents();
+    private String contents;
 
     private String loadContents() {
         try {
@@ -51,6 +51,7 @@ public class DataFileMetadata {
     }
 
     public String getContents() {
+        loadContents();
         return contents;
     }
 
