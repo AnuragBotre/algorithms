@@ -1,7 +1,5 @@
 package com.trendcore.dysfunctional.laziness;
 
-import cyclops.function.Memoize;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -14,7 +12,7 @@ public class DataFileMetadata {
     private File f;
 
     //Memoize supplier which once invoked remember the value.
-    private Supplier<String> contents = Memoize.memoizeSupplier(this::loadContents);
+    private Supplier<String> contents = new ExecuteOnceSupplier<>(this::loadContents);
 
     private String loadContents() {
         try {
