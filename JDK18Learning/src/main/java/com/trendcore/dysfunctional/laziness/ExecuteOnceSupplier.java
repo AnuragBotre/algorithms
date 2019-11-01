@@ -1,20 +1,20 @@
 package com.trendcore.dysfunctional.laziness;
 
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Supplier;
 
 public class ExecuteOnceSupplier<T> implements Supplier {
 
     private Supplier<T> originalSupplier;
 
-    boolean executed;
+    private AtomicBoolean executed = new AtomicBoolean(false);
 
     public ExecuteOnceSupplier(Supplier<T> supplier) {
 
         originalSupplier = () -> {
-            if (!executed) {
+            if (!executed.get()) {
                 System.out.println("Intializing !");
-                executed = true;
-                originalSupplier = supplier;
+                executed.getAndSet(true);
             }
             return supplier.get();
         };
