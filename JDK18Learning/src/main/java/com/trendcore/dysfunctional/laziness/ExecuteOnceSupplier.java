@@ -13,7 +13,7 @@ public class ExecuteOnceSupplier<T> implements Supplier {
 
         originalSupplier = () -> {
             if (!executed.get()) {
-                System.out.println("Intializing !");
+                System.out.println("Initializing !");
                 executed.getAndSet(true);
             }
             return supplier.get();

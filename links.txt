@@ -1,3 +1,9 @@
+https://github.com/andrewjdawson2016/Simple-DB
+- Final database class project.
+    Built simple DBMS. Supports insert, delete, joins and aggregations.
+    Supports ACID properties. Uses in memory cache for performance.
+    Uses write ahead log to support crash recovery.
+
 https://medium.com/@johnmcclean/dysfunctional-programming-in-java-a-functional-tutorial-20e0bebd2ec9
 - Dysfunctional programming in Java
 
