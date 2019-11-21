@@ -35,4 +35,14 @@ public class AppTest
     {
         assertTrue( true );
     }
+
+    int SHARED_SHIFT   = 16;
+
+    public void testName() {
+
+        int c = 0;
+        int d = c >>> SHARED_SHIFT;
+        System.out.println(d);
+
+    }
 }
