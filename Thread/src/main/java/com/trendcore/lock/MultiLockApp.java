@@ -1,6 +1,6 @@
 package com.trendcore.lock;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+
 
 import java.util.*;
 import java.util.concurrent.ExecutorService;
@@ -259,8 +259,8 @@ public class MultiLockApp {
         st1.add(new Tree("Product"));
         t.add(st1);
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        System.out.println(objectMapper.writer().writeValueAsString(t));
+        /*ObjectMapper objectMapper = new ObjectMapper();
+        System.out.println(objectMapper.writer().writeValueAsString(t));*/
 
         TreeTraversal treeTraversal = new TreeTraversal();
         final List list  = new ArrayList();
