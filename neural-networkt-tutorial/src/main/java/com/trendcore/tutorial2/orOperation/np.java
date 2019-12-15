@@ -1,4 +1,4 @@
-package com.trendcore.tutorial2;
+package com.trendcore.tutorial2.orOperation;
 
 import java.util.Random;
 
