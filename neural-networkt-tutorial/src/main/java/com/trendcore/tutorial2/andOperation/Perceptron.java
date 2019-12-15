@@ -28,8 +28,6 @@ public class Perceptron {
         int result = 0;
         if (weightedSum > 1) {
             result = 1;
-        } else {
-            result = 0;
         }
 
         return result;
