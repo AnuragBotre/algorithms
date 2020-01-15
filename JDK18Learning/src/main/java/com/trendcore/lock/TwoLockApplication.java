@@ -1,28 +1,40 @@
 package com.trendcore.lock;
 
+import java.util.UUID;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.locks.LoggableReadWriteLock;
 
 public class TwoLockApplication {
+
+    static class LoggableLockEventProcessor implements LoggableLockEvents{
+
+        @Override
+        public void lockAcquired(Thread acquiredByThread, String resourceIdentifier) {
+            System.out.println(acquiredByThread.getId()+" " +resourceIdentifier + " - " + " lock acquired.");
+        }
+
+        @Override
+        public void releasedLock(Thread acquiredByThread, String resourceIdentifier) {
+            System.out.println(acquiredByThread.getId()+" " +resourceIdentifier+ " - " + " lock released.");
+        }
+
+        @Override
+        public void threadParked(Thread parkedThread, String resourceIdentifier) {
+            System.out.println(parkedThread.getId()+" " +resourceIdentifier + " waiting for lock.");
+        }
+    }
 
 
     public static void main(String[] args) throws InterruptedException {
 
-        /*final ReadWriteLock readWriteLock1 = new ReentrantReadWriteLock();
-        final ReadWriteLock readWriteLock2 = new ReentrantReadWriteLock();*/
-
-        final BlockingQueue linkedBlockingQueue = new LinkedBlockingQueue();
+        LoggableLockEvents loggableLockEventProcessor = new LoggableLockEventProcessor();
 
 
-        final LoggableReadWriteLock readWriteLock1 = new LoggableReadWriteLock("Lock for Task1",linkedBlockingQueue);
-        final LoggableReadWriteLock readWriteLock2 = new LoggableReadWriteLock("Lock for Task2",linkedBlockingQueue);
+        final LoggableReentrantReadWriteLock readWriteLock1 = new LoggableReentrantReadWriteLock("Task1#"+ UUID.randomUUID(),true,loggableLockEventProcessor);
+        final LoggableReentrantReadWriteLock readWriteLock2 = new LoggableReentrantReadWriteLock("Task2#"+ UUID.randomUUID(),true,loggableLockEventProcessor);
 
         final CountDownLatch countDownLatch = new CountDownLatch(2);
-
-
-
 
         Runnable task1 = new Runnable() {
             @Override
@@ -70,7 +82,6 @@ public class TwoLockApplication {
 
         t1.start();
         t2.start();
-
 
         countDownLatch.await();
 
