@@ -11,17 +11,17 @@ public class TwoLockApplication {
 
         @Override
         public void lockAcquired(Thread acquiredByThread, String resourceIdentifier) {
-            System.out.println(acquiredByThread.getId()+" " +resourceIdentifier + " - " + " lock acquired.");
+            System.out.println("Thread#"+acquiredByThread.getId()+" " +resourceIdentifier + " - " + " lock acquired.");
         }
 
         @Override
         public void releasedLock(Thread acquiredByThread, String resourceIdentifier) {
-            System.out.println(acquiredByThread.getId()+" " +resourceIdentifier+ " - " + " lock released.");
+            System.out.println("Thread#"+acquiredByThread.getId()+" " +resourceIdentifier+ " - " + " lock released.");
         }
 
         @Override
         public void threadParked(Thread parkedThread, String resourceIdentifier) {
-            System.out.println(parkedThread.getId()+" " +resourceIdentifier + " waiting for lock.");
+            System.out.println("Thread#"+parkedThread.getId()+" " +resourceIdentifier + " waiting for lock.");
         }
     }
 
@@ -45,7 +45,7 @@ public class TwoLockApplication {
                         readWriteLock1.writeLock().lock();
                         try{
                             readWriteLock2.writeLock().lock();
-                            System.out.println("Performing Task1.");
+                            System.out.println("\t\tPerforming Task1.");
                             //linkedBlockingQueue.add(new LoggableReadWriteReentrantLock.LogMessage(LoggableReadWriteReentrantLock.LockState.ACQUIRED, LoggableReadWriteReentrantLock.LockType.WRITE,Thread.currentThread(),"\tPerforming Task1",System.currentTimeMillis()));
                         }finally {
                             readWriteLock2.writeLock().unlock();
@@ -66,7 +66,7 @@ public class TwoLockApplication {
                 while(i < 1000) {
                     try {
                         readWriteLock2.writeLock().lock();
-                        System.out.println("Performing Task2.");
+                        System.out.println("\t\tPerforming Task2.");
                         //linkedBlockingQueue.add(new LoggableReadWriteReentrantLock.LogMessage(LoggableReadWriteReentrantLock.LockState.ACQUIRED, LoggableReadWriteReentrantLock.LockType.WRITE,Thread.currentThread(),"\tPerforming Task2",System.currentTimeMillis()));
                     } finally {
                         readWriteLock2.writeLock().unlock();
