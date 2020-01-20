@@ -261,6 +261,7 @@ public class LoggableReentrantReadWriteLock {
                 }
                 --rh.count;
             }
+            loggableLockEvents.releasedSharedLock(current, resourceIdentifier);
             for (; ; ) {
                 int c = getState();
                 int nextc = c - SHARED_UNIT;
@@ -315,6 +316,7 @@ public class LoggableReentrantReadWriteLock {
                         readHolds.set(rh);
                     rh.count++;
                 }
+                loggableLockEvents.lockAcquiredShared(current,resourceIdentifier);
                 return 1;
             }
             return fullTryAcquireShared(current);
@@ -374,6 +376,7 @@ public class LoggableReentrantReadWriteLock {
                         rh.count++;
                         cachedHoldCounter = rh; // cache for release
                     }
+                    loggableLockEvents.lockAcquired(current,resourceIdentifier);
                     return 1;
                 }
             }
@@ -786,7 +789,7 @@ public class LoggableReentrantReadWriteLock {
          * time the write lock hold count is set to one.
          */
         public void lock() {
-            sync.acquire(1);
+            sync.acquire(1,this);
         }
 
         /**

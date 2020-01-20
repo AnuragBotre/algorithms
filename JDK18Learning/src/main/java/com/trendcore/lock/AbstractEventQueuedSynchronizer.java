@@ -576,6 +576,18 @@ public class AbstractEventQueuedSynchronizer extends AbstractOwnableSynchronizer
      * Convenience method to park and then check if interrupted
      *
      * @return {@code true} if interrupted
+     * @param lock
+     */
+    private final boolean parkAndCheckInterrupt(Lock lock) {
+        loggableLockEvents.threadParked(Thread.currentThread(),resourceIdentifier);
+        return parkAndCheckInterrupt();
+    }
+
+    /**
+     * Convenience method to park and then check if interrupted
+     *
+     * @return {@code true} if interrupted
+     *
      */
     private final boolean parkAndCheckInterrupt() {
         loggableLockEvents.threadParked(Thread.currentThread(),resourceIdentifier);
@@ -943,7 +955,7 @@ public class AbstractEventQueuedSynchronizer extends AbstractOwnableSynchronizer
      *            {@link #tryAcquire} but is otherwise uninterpreted and
      *            can represent anything you like.
      */
-    public final void acquire(int arg) {
+    public final void acquire(int arg,Lock lock) {
         if (!tryAcquire(arg) &&
                 acquireQueued(addWaiter(Node.EXCLUSIVE), arg))
             selfInterrupt();

@@ -1,9 +1,7 @@
 package com.trendcore.lock;
 
 import java.util.UUID;
-import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.LinkedBlockingQueue;
 
 public class TwoLockApplication {
 
@@ -22,6 +20,16 @@ public class TwoLockApplication {
         @Override
         public void threadParked(Thread parkedThread, String resourceIdentifier) {
             System.out.println("Thread#"+parkedThread.getId()+" " +resourceIdentifier + " waiting for lock.");
+        }
+
+        @Override
+        public void releasedSharedLock(Thread acquiredByThread, String resourceIdentifier) {
+            System.out.println("Thread#"+acquiredByThread.getId()+" " +resourceIdentifier+ " - " + " shared lock released.");
+        }
+
+        @Override
+        public void lockAcquiredShared(Thread acquiredByThread, String resourceIdentifier) {
+            System.out.println("Thread#"+acquiredByThread.getId()+" " +resourceIdentifier+ " - " + " shared lock acquired.");
         }
     }
 
@@ -65,17 +73,19 @@ public class TwoLockApplication {
                 int i = 0;
                 while(i < 1000) {
                     try {
-                        readWriteLock2.writeLock().lock();
+                        readWriteLock2.readLock().lock();
                         System.out.println("\t\tPerforming Task2.");
                         //linkedBlockingQueue.add(new LoggableReadWriteReentrantLock.LogMessage(LoggableReadWriteReentrantLock.LockState.ACQUIRED, LoggableReadWriteReentrantLock.LockType.WRITE,Thread.currentThread(),"\tPerforming Task2",System.currentTimeMillis()));
                     } finally {
-                        readWriteLock2.writeLock().unlock();
+                        readWriteLock2.readLock().unlock();
                     }
                     i++;
                 }
                 countDownLatch.countDown();
             }
         };
+
+        task2.run();
 
         Thread t1 = new Thread(task1);
         Thread t2 = new Thread(task2);
