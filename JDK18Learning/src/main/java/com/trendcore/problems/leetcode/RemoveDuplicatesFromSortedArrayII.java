@@ -45,6 +45,88 @@ public class RemoveDuplicatesFromSortedArrayII {
     public int removeDuplicates(int[] nums) {
 
         int lastPos = 0;
+        int i = 0;
+        int count = 0;
+        boolean duplicateInitilized = false;
+        int pointer = 0;
+        boolean duplicate = false;
+        int lengthOfArray = 1;
+        boolean duplicateShift = false;
+        boolean pointerInitialized = false;
+
+        for (; i < nums.length; i++) {
+
+            if (i == 0) {
+                lastPos = i;
+                count = 1;
+                duplicate = false;
+                duplicateInitilized = false;
+            } else {
+                if (nums[lastPos] == nums[i]) {
+                    count++;
+                    if (count > 2 && !duplicateInitilized) {
+                        //pointer to starting position of the duplicate start
+                        if (!pointerInitialized) {
+                            pointer = i;
+                        }
+                        duplicate = true;
+                        duplicateInitilized = true;
+                    } else {
+                        if (!duplicateInitilized) {
+                            lengthOfArray++;
+                        }
+                    }
+                } else {
+                    //do we need to copy the element
+
+                    count = 1;
+                    duplicateInitilized = false;
+
+                    if (duplicate) {
+                        int temp = nums[pointer];
+                        nums[pointer] = nums[i];
+                        nums[i] = temp;
+                        lastPos = pointer;
+                        pointer++;
+                        duplicateShift = true;
+                        pointerInitialized = true;
+                    } else if (duplicateShift) {
+                        int temp = nums[pointer];
+                        nums[pointer] = nums[i];
+                        nums[i] = temp;
+                        lastPos = pointer;
+                        pointer++;
+                        pointerInitialized = true;
+                    }
+                    duplicate = false;
+                    lengthOfArray++;
+                }
+            }
+        }
+
+
+        //try with available gap algo
+        /**
+         * if(count > 2)
+         *      then we need to shift
+         *      calculate available positions while doing skipping more than 2 elements
+         * else
+         *      gap is available then move current element inwards
+         *
+         *
+         * 1 , 1 , 1 , 1 , 1 , 2 , 2 , 3
+         * considering gap is size 3 after completing 1.
+         * 1 , 1 , 1 , 1 , 1
+         * gap -> 1 , 1 , 1 size 3
+         * start element shifting till elements can be moved while shifting
+         * if found other set of common elements then againg increase the gap
+         */
+
+        return lengthOfArray;
+    }
+
+    private int approach1(int[] nums) {
+        int lastPos = 0;
         int count = 0;
 
         int lengthOfArray = nums.length;
@@ -74,7 +156,7 @@ public class RemoveDuplicatesFromSortedArrayII {
 
                         int k;
                         int c = 0;
-                        for (k = i; c < nums.length; k++, j++,c++) {
+                        for (k = i; c < nums.length; k++, j++, c++) {
                             if (j >= nums.length) {
                                 break;
                             }
