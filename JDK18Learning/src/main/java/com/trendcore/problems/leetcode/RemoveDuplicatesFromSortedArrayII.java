@@ -47,11 +47,11 @@ public class RemoveDuplicatesFromSortedArrayII {
         int lastPos = 0;
         int count = 0;
 
+        int lengthOfArray = nums.length;
 
+        //0, 1, 2, 2, 2, 2, 2, 3, 4, 4, 4
 
-        boolean jCrossedNumLen = false;
-
-        for (int i = 0; i < nums.length; i++) {
+        for (int i = 0; i < lengthOfArray; i++) {
             if (i == 0) {
                 lastPos = i;
 
@@ -63,26 +63,26 @@ public class RemoveDuplicatesFromSortedArrayII {
                         //shift array
                         int j = i;
                         int noOfElementsToBeShifted = 0;
-                        for (; j < nums.length; j++) {
+                        int endOfArray = lengthOfArray;
+                        for (; j < endOfArray; j++) {
                             if (nums[j] != nums[lastPos]) {
                                 break;
                             }
                             noOfElementsToBeShifted++;
+                            lengthOfArray--;
                         }
 
                         int k;
                         int c = 0;
-                        for (k = i; c < noOfElementsToBeShifted; k++, j++,c++) {
+                        for (k = i; c < nums.length; k++, j++,c++) {
                             if (j >= nums.length) {
                                 break;
                             }
                             nums[k] = nums[j];
                         }
 
-
-                        i = k;
                         lastPos = i;
-                        i = j;
+                        count = 0;
                     }
                 } else {
                     lastPos = i;
@@ -91,9 +91,7 @@ public class RemoveDuplicatesFromSortedArrayII {
             }
         }
 
-        System.out.println(lastPos + " ");
-
-        return lastPos;
+        return lengthOfArray;
     }
 
 }
