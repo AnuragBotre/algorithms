@@ -101,6 +101,20 @@ public class RemoveDuplicatesFromSortedArrayIITest {
         act(nums, ints.length);
     }
 
+    @Test
+    public void failedInputForApproach3_1() {
+        int nums[] = {1, 1, 1, 2, 2, 3};
+        int[] ints = {1, 1, 2, 2, 3};
+        act(nums, ints.length);
+    }
+
+    @Test
+    public void failedInputForApproach3_2() {
+        int nums[] = {0, 0, 0, 0, 0, 1, 2, 2, 3, 3, 4, 4};
+        int[] ints = {0, 0, 1, 2, 2, 3, 3, 4, 4};
+        act(nums, ints.length);
+    }
+
     private void act(int[] nums, int expected) {
         RemoveDuplicatesFromSortedArrayII r = new RemoveDuplicatesFromSortedArrayII();
         int actual = r.removeDuplicates(nums);

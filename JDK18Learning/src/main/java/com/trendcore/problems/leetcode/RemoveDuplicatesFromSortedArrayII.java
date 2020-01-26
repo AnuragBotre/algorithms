@@ -44,67 +44,6 @@ public class RemoveDuplicatesFromSortedArrayII {
 
     public int removeDuplicates(int[] nums) {
 
-        int lastPos = 0;
-        int i = 0;
-        int count = 0;
-        boolean duplicateInitilized = false;
-        int pointer = 0;
-        boolean duplicate = false;
-        int lengthOfArray = 1;
-        boolean duplicateShift = false;
-        boolean pointerInitialized = false;
-
-        for (; i < nums.length; i++) {
-
-            if (i == 0) {
-                lastPos = i;
-                count = 1;
-                duplicate = false;
-                duplicateInitilized = false;
-            } else {
-                if (nums[lastPos] == nums[i]) {
-                    count++;
-                    if (count > 2 && !duplicateInitilized) {
-                        //pointer to starting position of the duplicate start
-                        if (!pointerInitialized) {
-                            pointer = i;
-                        }
-                        duplicate = true;
-                        duplicateInitilized = true;
-                    } else {
-                        if (!duplicateInitilized) {
-                            lengthOfArray++;
-                        }
-                    }
-                } else {
-                    //do we need to copy the element
-
-                    count = 1;
-                    duplicateInitilized = false;
-
-                    if (duplicate) {
-                        int temp = nums[pointer];
-                        nums[pointer] = nums[i];
-                        nums[i] = temp;
-                        lastPos = pointer;
-                        pointer++;
-                        duplicateShift = true;
-                        pointerInitialized = true;
-                    } else if (duplicateShift) {
-                        int temp = nums[pointer];
-                        nums[pointer] = nums[i];
-                        nums[i] = temp;
-                        lastPos = pointer;
-                        pointer++;
-                        pointerInitialized = true;
-                    }
-                    duplicate = false;
-                    lengthOfArray++;
-                }
-            }
-        }
-
-
         //try with available gap algo
         /**
          * if(count > 2)
@@ -121,6 +60,56 @@ public class RemoveDuplicatesFromSortedArrayII {
          * start element shifting till elements can be moved while shifting
          * if found other set of common elements then againg increase the gap
          */
+
+        /*1, 1, 1, 2, 3
+        1, 1, 2, 2, 3*/
+
+        int lastPos = 0;
+        int count = 0;
+        int startPosOfBuffer = 0;
+        int endPosOfBuffer = 0;
+        int lengthOfArray = 0;
+
+        boolean startPosOfBufferNeedToBeInitialized = true;
+
+        for (int i = 0; i < nums.length; i++) {
+            if (i == 0) {
+                lastPos = i;
+                count = 1;
+                lengthOfArray++;
+            } else {
+                if(endPosOfBuffer == 0){
+                    startPosOfBufferNeedToBeInitialized = true;
+                }
+
+                if (nums[i] == nums[lastPos]) {
+                    count++;
+                    if (count > 2) {
+                        if (startPosOfBufferNeedToBeInitialized) {
+                            startPosOfBuffer = i;
+                            startPosOfBufferNeedToBeInitialized = false;
+                        }
+                        endPosOfBuffer++;
+                    } else {
+                        if ((endPosOfBuffer) > 0) {
+                            nums[startPosOfBuffer] = nums[i];
+                            startPosOfBuffer++;
+                            endPosOfBuffer++;
+                        }
+                        lengthOfArray++;
+                    }
+                } else {
+                    count = 1;
+                    lastPos = i;
+                    if ((endPosOfBuffer) > 0) {
+                        nums[startPosOfBuffer] = nums[i];
+                        startPosOfBuffer++;
+                        endPosOfBuffer++;
+                    }
+                    lengthOfArray++;
+                }
+            }
+        }
 
         return lengthOfArray;
     }
