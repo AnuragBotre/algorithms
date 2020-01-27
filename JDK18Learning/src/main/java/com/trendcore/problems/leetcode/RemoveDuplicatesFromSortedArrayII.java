@@ -44,14 +44,85 @@ public class RemoveDuplicatesFromSortedArrayII {
 
     public int removeDuplicates(int[] nums) {
 
+        //try with available gap algo
+        /**
+         * if(count > 2)
+         *      then we need to shift
+         *      calculate available positions while doing skipping more than 2 elements
+         * else
+         *      gap is available then move current element inwards
+         *
+         *
+         * 1 , 1 , 1 , 1 , 1 , 2 , 2 , 3
+         * considering gap is size 3 after completing 1.
+         * 1 , 1 , 1 , 1 , 1
+         * gap -> 1 , 1 , 1 size 3
+         * start element shifting till elements can be moved while shifting
+         * if found other set of common elements then againg increase the gap
+         */
+
+        /*1, 1, 1, 2, 3
+        1, 1, 2, 2, 3*/
+
+        int lastPos = 0;
+        int count = 0;
+        int startPosOfBuffer = 0;
+        int endPosOfBuffer = 0;
+        int lengthOfArray = 0;
+
+        boolean startPosOfBufferNeedToBeInitialized = true;
+
+        for (int i = 0; i < nums.length; i++) {
+            if (i == 0) {
+                lastPos = i;
+                count = 1;
+                lengthOfArray++;
+            } else {
+                if(endPosOfBuffer == 0){
+                    startPosOfBufferNeedToBeInitialized = true;
+                }
+
+                if (nums[i] == nums[lastPos]) {
+                    count++;
+                    if (count > 2) {
+                        if (startPosOfBufferNeedToBeInitialized) {
+                            startPosOfBuffer = i;
+                            startPosOfBufferNeedToBeInitialized = false;
+                        }
+                        endPosOfBuffer++;
+                    } else {
+                        if ((endPosOfBuffer) > 0) {
+                            nums[startPosOfBuffer] = nums[i];
+                            startPosOfBuffer++;
+                            endPosOfBuffer++;
+                        }
+                        lengthOfArray++;
+                    }
+                } else {
+                    count = 1;
+                    lastPos = i;
+                    if ((endPosOfBuffer) > 0) {
+                        nums[startPosOfBuffer] = nums[i];
+                        startPosOfBuffer++;
+                        endPosOfBuffer++;
+                    }
+                    lengthOfArray++;
+                }
+            }
+        }
+
+        return lengthOfArray;
+    }
+
+    private int approach1(int[] nums) {
         int lastPos = 0;
         int count = 0;
 
+        int lengthOfArray = nums.length;
 
+        //0, 1, 2, 2, 2, 2, 2, 3, 4, 4, 4
 
-        boolean jCrossedNumLen = false;
-
-        for (int i = 0; i < nums.length; i++) {
+        for (int i = 0; i < lengthOfArray; i++) {
             if (i == 0) {
                 lastPos = i;
 
@@ -63,26 +134,26 @@ public class RemoveDuplicatesFromSortedArrayII {
                         //shift array
                         int j = i;
                         int noOfElementsToBeShifted = 0;
-                        for (; j < nums.length; j++) {
+                        int endOfArray = lengthOfArray;
+                        for (; j < endOfArray; j++) {
                             if (nums[j] != nums[lastPos]) {
                                 break;
                             }
                             noOfElementsToBeShifted++;
+                            lengthOfArray--;
                         }
 
                         int k;
                         int c = 0;
-                        for (k = i; c < noOfElementsToBeShifted; k++, j++,c++) {
+                        for (k = i; c < nums.length; k++, j++, c++) {
                             if (j >= nums.length) {
                                 break;
                             }
                             nums[k] = nums[j];
                         }
 
-
-                        i = k;
                         lastPos = i;
-                        i = j;
+                        count = 0;
                     }
                 } else {
                     lastPos = i;
@@ -91,9 +162,7 @@ public class RemoveDuplicatesFromSortedArrayII {
             }
         }
 
-        System.out.println(lastPos + " ");
-
-        return lastPos;
+        return lengthOfArray;
     }
 
 }
