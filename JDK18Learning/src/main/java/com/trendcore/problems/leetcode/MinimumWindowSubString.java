@@ -97,11 +97,14 @@ public class MinimumWindowSubString {
 
         String minWindowSubString = "";
         int i = 0;
+        boolean needToProcessLastChar = false;
 
         for (i = 0; i < s.length(); i++) {
+
             if (originalCharListIsEmpty(originalCharList)) {
                 Optional<OriginalChar> originalChar = originalCharListContains(originalCharList, s.charAt(i));
                 if (originalChar.isPresent()) {
+                    needToProcessLastChar = false;
                     if ((originalChar.get().count > 0)) {
                         if (!pointer1Initialized) {
                             pointer1 = i;
@@ -113,11 +116,14 @@ public class MinimumWindowSubString {
                     } else {
 
                         if (!visitedCharList.isEmpty()) {
-                            VisitedChar remove = visitedCharList.remove(0);
-                            //
-                            //markCharNotVisitedInOriginalCharList(originalCharList, remove.c);
-                            remove.pos = i;
-                            visitedCharList.add(remove);
+                            VisitedChar visitedChar = visitedCharList.get(0);
+                            if (visitedChar.c == originalChar.get().c) {
+                                VisitedChar remove = visitedCharList.remove(0);
+                                //
+                                //markCharNotVisitedInOriginalCharList(originalCharList, remove.c);
+                                remove.pos = i;
+                                visitedCharList.add(remove);
+                            }
                         }
 
                     }
@@ -129,7 +135,7 @@ public class MinimumWindowSubString {
                 if (p2.pos == s.length()) {
                     substring = s.substring(p1.pos, p2.pos);
                 } else {
-                    substring = s.substring(p1.pos, p2.pos+1);
+                    substring = s.substring(p1.pos, p2.pos + 1);
                 }
 
                 if (minWindowSubString.length() == 0) {
@@ -146,13 +152,14 @@ public class MinimumWindowSubString {
                     //
                     markCharNotVisitedInOriginalCharList(originalCharList, remove.c);
                 }
+                needToProcessLastChar = true;
             }
         }
 
         //check if min windows still needs to calculated
         //if (visitedCharList.size() == originalCharList.size()) {
 
-        if (visitedCharList.size() != t.length()) {
+        if (needToProcessLastChar) {
             Optional<OriginalChar> originalChar = originalCharListContains(originalCharList, s.charAt(i - 1));
             if (originalChar.isPresent()) {
                 if ((originalChar.get().count > 0)) {
@@ -174,7 +181,7 @@ public class MinimumWindowSubString {
             if (p2.pos == s.length()) {
                 substring = s.substring(p1.pos, p2.pos);
             } else {
-                substring = s.substring(p1.pos, p2.pos+1);
+                substring = s.substring(p1.pos, p2.pos + 1);
             }
 
             if (minWindowSubString.length() == 0) {

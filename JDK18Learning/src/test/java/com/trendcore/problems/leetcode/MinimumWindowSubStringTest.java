@@ -11,47 +11,63 @@ public class MinimumWindowSubStringTest {
     @Test
     public void input1() {
         String s = "ADOBECODEBANC", t = "ABC";
-        String output = "BANC";
-        act(s, t, output);
+        String expected = "BANC";
+        act(s, t, expected);
     }
 
     @Test
     public void intput2() {
         String s = "ADOBECODEBANC", t = "AD";
-        String output = "AD";
-        act(s, t, output);
+        String expected = "AD";
+        act(s, t, expected);
     }
 
     @Test
     public void intput3() {
         String s = "ADOBECODEBANC", t = "XY";
-        String output = "";
-        act(s, t, output);
+        String expected = "";
+        act(s, t, expected);
     }
 
     @Test
     public void input4() {
         String s = "ADOBECODEBANC", t = "DBC";
-        String output = "DOBEC";
-        act(s, t, output);
+        String expected = "DOBEC";
+        act(s, t, expected);
     }
 
     @Test
     public void failedInput_1() {
         String s = "aa", t = "aa";
-        String output = "aa";
-        act(s, t, output);
+        String expected = "aa";
+        act(s, t, expected);
     }
 
     @Test
     public void failedInput_2() {
         String s = "bdab", t = "ab";
-        String output = "ab";
-        act(s, t, output);
+        String expected = "ab";
+        act(s, t, expected);
     }
 
-    private void act(String s, String t, String output) {
+    @Test
+    public void failedInput_3() {
+        String s = "a", t = "aa";
+        String expected = "";
+        act(s, t, expected);
+    }
+
+    @Test
+    public void failedInput_4() {
+        String s = "acbbaca", t = "aba";
+        String expected = "baca";
+        act(s, t, expected);
+    }
+
+
+
+    private void act(String s, String t, String expected) {
         String s1 = m.minWindow(s, t);
-        assertEquals(output,s1);
+        assertEquals(expected,s1);
     }
 }
