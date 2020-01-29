@@ -92,23 +92,23 @@ public class MinimumWindowSubString {
         List<VisitedChar> visitedCharList = new ArrayList<>();
 
         for (int i = 0; i < t.length(); i++) {
-            OriginalChar originalChar = new OriginalChar(t.charAt(i));
-            originalCharList.add(originalChar);
+            addCharacter(originalCharList, t.charAt(i));
         }
 
         String minWindowSubString = "";
+        int i = 0;
 
-        for (int i = 0; i < s.length(); i++) {
+        for (i = 0; i < s.length(); i++) {
             if (originalCharListIsEmpty(originalCharList)) {
                 Optional<OriginalChar> originalChar = originalCharListContains(originalCharList, s.charAt(i));
                 if (originalChar.isPresent()) {
-                    if (!originalChar.get().visited) {
+                    if ((originalChar.get().count > 0)) {
                         if (!pointer1Initialized) {
                             pointer1 = i;
                             pointer1Initialized = true;
                         }
                         OriginalChar originalChar1 = originalChar.get();
-                        originalChar1.visited = true;
+                        originalChar1.count--;
                         addInVisitedCharList(visitedCharList, i, originalChar1.c);
                     } else {
 
@@ -125,7 +125,12 @@ public class MinimumWindowSubString {
             } else {
                 VisitedChar p2 = visitedCharList.get(visitedCharList.size() - 1);
                 VisitedChar p1 = visitedCharList.get(0);
-                String substring = s.substring(p1.pos, p2.pos+1);
+                String substring;
+                if (p2.pos == s.length()) {
+                    substring = s.substring(p1.pos, p2.pos);
+                } else {
+                    substring = s.substring(p1.pos, p2.pos+1);
+                }
 
                 if (minWindowSubString.length() == 0) {
                     minWindowSubString = substring;
@@ -145,10 +150,32 @@ public class MinimumWindowSubString {
         }
 
         //check if min windows still needs to calculated
-        if(visitedCharList.size() == originalCharList.size()){
+        //if (visitedCharList.size() == originalCharList.size()) {
+
+        if (visitedCharList.size() != t.length()) {
+            Optional<OriginalChar> originalChar = originalCharListContains(originalCharList, s.charAt(i - 1));
+            if (originalChar.isPresent()) {
+                if ((originalChar.get().count > 0)) {
+                    if (!pointer1Initialized) {
+                        pointer1 = i;
+                        pointer1Initialized = true;
+                    }
+                    OriginalChar originalChar1 = originalChar.get();
+                    originalChar1.count--;
+                    addInVisitedCharList(visitedCharList, i, originalChar1.c);
+                }
+            }
+        }
+
+        if (visitedCharList.size() == t.length()) {
             VisitedChar p2 = visitedCharList.get(visitedCharList.size() - 1);
             VisitedChar p1 = visitedCharList.get(0);
-            String substring = s.substring(p1.pos, p2.pos+1);
+            String substring;
+            if (p2.pos == s.length()) {
+                substring = s.substring(p1.pos, p2.pos);
+            } else {
+                substring = s.substring(p1.pos, p2.pos+1);
+            }
 
             if (minWindowSubString.length() == 0) {
                 minWindowSubString = substring;
@@ -162,10 +189,20 @@ public class MinimumWindowSubString {
         return minWindowSubString;
     }
 
+    private void addCharacter(List<OriginalChar> originalCharList, char originalChar) {
+        Optional<OriginalChar> first = originalCharList.stream().filter(originalChar1 -> originalChar1.c == originalChar).findFirst();
+        if (first.isPresent()) {
+            first.get().count++;
+        } else {
+            originalCharList.add(new OriginalChar(originalChar));
+        }
+    }
+
     private void markCharNotVisitedInOriginalCharList(List<OriginalChar> originalCharList, char c) {
         Optional<OriginalChar> first = originalCharList.stream().filter(originalChar -> originalChar.c == c).findFirst();
         if (first.isPresent()) {
-            first.get().visited = false;
+            OriginalChar originalChar = first.get();
+            originalChar.count++;
         }
     }
 
@@ -181,15 +218,16 @@ public class MinimumWindowSubString {
     }
 
     private boolean originalCharListIsEmpty(List<OriginalChar> originalCharList) {
-        return originalCharList.stream().filter(originalChar -> !originalChar.visited).findAny().isPresent();
+        return originalCharList.stream().filter(originalChar -> (originalChar.count > 0)).findAny().isPresent();
     }
 
     class OriginalChar {
         char c;
-        boolean visited;
+        int count;
 
         public OriginalChar(char c) {
             this.c = c;
+            count = 1;
         }
     }
 

@@ -43,6 +43,13 @@ public class MinimumWindowSubStringTest {
         act(s, t, output);
     }
 
+    @Test
+    public void failedInput_2() {
+        String s = "bdab", t = "ab";
+        String output = "ab";
+        act(s, t, output);
+    }
+
     private void act(String s, String t, String output) {
         String s1 = m.minWindow(s, t);
         assertEquals(output,s1);
