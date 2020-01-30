@@ -116,14 +116,33 @@ public class MinimumWindowSubString {
                     } else {
 
                         if (!visitedCharList.isEmpty()) {
-                            VisitedChar visitedChar = visitedCharList.get(0);
-                            if (visitedChar.c == originalChar.get().c) {
-                                VisitedChar remove = visitedCharList.remove(0);
-                                //
-                                //markCharNotVisitedInOriginalCharList(originalCharList, remove.c);
-                                remove.pos = i;
-                                visitedCharList.add(remove);
+
+                            if (!originalCharList.isEmpty()) {
+                                VisitedChar visitedChar = visitedCharList.get(visitedCharList.size() - 1);
+                                if (visitedChar.c == originalChar.get().c) {
+                                    visitedChar.pos = i;
+                                }else{
+                                    visitedChar = visitedCharList.get(0);
+                                    if (visitedChar.c == originalChar.get().c) {
+                                        VisitedChar remove = visitedCharList.remove(0);
+                                        //
+                                        //markCharNotVisitedInOriginalCharList(originalCharList, remove.c);
+                                        remove.pos = i;
+                                        visitedCharList.add(remove);
+                                    }
+                                }
+                            } else {
+                                VisitedChar visitedChar = visitedCharList.get(0);
+                                if (visitedChar.c == originalChar.get().c) {
+                                    VisitedChar remove = visitedCharList.remove(0);
+                                    //
+                                    //markCharNotVisitedInOriginalCharList(originalCharList, remove.c);
+                                    remove.pos = i;
+                                    visitedCharList.add(remove);
+                                }
                             }
+
+
                         }
 
                     }
@@ -236,6 +255,14 @@ public class MinimumWindowSubString {
             this.c = c;
             count = 1;
         }
+
+        @Override
+        public String toString() {
+            return "OriginalChar{" +
+                    "c=" + c +
+                    ", count=" + count +
+                    '}';
+        }
     }
 
     class VisitedChar {
@@ -245,6 +272,14 @@ public class MinimumWindowSubString {
         public VisitedChar(char originalChar, int i) {
             this.c = originalChar;
             this.pos = i;
+        }
+
+        @Override
+        public String toString() {
+            return "VisitedChar{" +
+                    "c=" + c +
+                    ", pos=" + pos +
+                    '}';
         }
     }
 
