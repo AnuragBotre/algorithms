@@ -1,8 +1,6 @@
 package com.trendcore.problems.leetcode;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * https://leetcode.com/problems/minimum-window-substring/
@@ -24,6 +22,90 @@ public class MinimumWindowSubString {
 
     public String minWindow(String s, String t) {
 
+        int leftPointer = 0;
+        int rightPointer = 0;
+
+        int regularPointer = 0;
+
+        Map<Character, Integer> map = new HashMap();
+        for (int i = 0; i < t.length(); i++) {
+            map.compute(t.charAt(i), (o, o2) -> Optional.ofNullable(o2).orElse(0) + 1);
+        }
+
+        String minSubString = "";
+        while (regularPointer < s.length()) {
+            if (isAllCharactersVisited(map)) {
+                if (map.containsKey(s.charAt(regularPointer))) {
+                    Integer integer = map.get(s.charAt(regularPointer));
+
+                    map.put(s.charAt(regularPointer), integer - 1);
+                    rightPointer = regularPointer;
+                }
+                regularPointer++;
+            } else {
+
+                int tempPointer = leftPointer;
+
+                while (tempPointer <= rightPointer) {
+
+                    if (!isAllCharactersVisited(map)) {
+                        String substring = s.substring(leftPointer, rightPointer+1);
+                        if (minSubString.equals("")) {
+                            minSubString = substring;
+                        } else {
+                            if (substring.length() < minSubString.length()) {
+                                minSubString = substring;
+                            }
+                        }
+                    }
+
+                    if (map.containsKey(s.charAt(tempPointer))) {
+                        Integer integer = map.get(s.charAt(tempPointer));
+                        map.put(s.charAt(tempPointer), integer + 1);
+                        leftPointer = tempPointer;
+                    }
+
+                    tempPointer++;
+                }
+                leftPointer = tempPointer;
+            }
+        }
+
+        while (leftPointer < rightPointer) {
+
+            if (!isAllCharactersVisited(map)) {
+                String substring = s.substring(leftPointer, rightPointer+1);
+                if (minSubString.equals("")) {
+                    minSubString = substring;
+                } else {
+                    if (substring.length() < minSubString.length()) {
+                        minSubString = substring;
+                    }
+                }
+            }
+
+            if (map.containsKey(s.charAt(leftPointer))) {
+                Integer integer = map.get(s.charAt(leftPointer));
+                map.put(s.charAt(leftPointer), integer + 1);
+            }
+
+            leftPointer++;
+        }
+
+        return minSubString;
+    }
+
+    boolean isAllCharactersVisited(Map<Character, Integer> map) {
+        return map
+                .entrySet()
+                .stream()
+                .filter(characterIntegerEntry -> characterIntegerEntry.getValue() > 0)
+                .findFirst()
+                .isPresent();
+
+    }
+
+    private String approach1(String s, String t) {
         String window = "";
 
 
@@ -121,7 +203,7 @@ public class MinimumWindowSubString {
                                 VisitedChar visitedChar = visitedCharList.get(visitedCharList.size() - 1);
                                 if (visitedChar.c == originalChar.get().c) {
                                     visitedChar.pos = i;
-                                }else{
+                                } else {
                                     visitedChar = visitedCharList.get(0);
                                     if (visitedChar.c == originalChar.get().c) {
                                         VisitedChar remove = visitedCharList.remove(0);

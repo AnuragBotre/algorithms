@@ -2,6 +2,10 @@ package com.trendcore.problems.leetcode;
 
 import org.junit.Test;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+
 import static org.junit.Assert.*;
 
 public class MinimumWindowSubStringTest {
@@ -64,10 +68,32 @@ public class MinimumWindowSubStringTest {
         act(s, t, expected);
     }
 
+    @Test
+    public void checkHashMapMethod() {
+        Map<Character, Integer> map = new HashMap();
+        String t = "aab";
+        for (int i = 0; i < t.length(); i++) {
+            map.compute(t.charAt(i), (o, o2) -> Optional.ofNullable(o2).orElse(0) + 1);
+        }
 
+        map.entrySet().stream().forEach(characterIntegerEntry -> System.out.println(characterIntegerEntry.getKey() + " " + characterIntegerEntry.getValue()));
+    }
+
+    @Test
+    public void isAllCharactersVisited() {
+        Map<Character, Integer> map = new HashMap();
+        String t = "aab";
+        for (int i = 0; i < t.length(); i++) {
+            //map.compute(t.charAt(i),(o, o2) -> Optional.ofNullable(o2).orElse(0) + 1);
+            map.compute(t.charAt(i), (o, o2) -> Optional.ofNullable(o2).orElse(0));
+        }
+
+        assertTrue(!m.isAllCharactersVisited(map));
+
+    }
 
     private void act(String s, String t, String expected) {
         String s1 = m.minWindow(s, t);
-        assertEquals(expected,s1);
+        assertEquals(expected, s1);
     }
 }
