@@ -62,6 +62,48 @@ public class MinimumWindowSubStringTest {
     }
 
     @Test
+    public void failedInput_5() {
+        String s = "a", t = "a";
+        String expected = "a";
+        act(s, t, expected);
+    }
+
+    @Test
+    public void failedInput_6() {
+        String s = "abc", t = "b";
+        String expected = "b";
+        act(s, t, expected);
+    }
+
+    @Test
+    public void failedInput_7() {
+        String s = "bbaac", t = "aba";
+        String expected = "baa";
+        act(s, t, expected);
+    }
+
+    @Test
+    public void input_4() {
+        String s = "a", t = "a";
+        String expected = "a";
+        act(s, t, expected);
+    }
+
+    @Test
+    public void input_5() {
+        String s = "a", t = "b";
+        String expected = "";
+        act(s, t, expected);
+    }
+
+    @Test
+    public void input_6() {
+        String s = "abacdef", t = "bx";
+        String expected = "";
+        act(s, t, expected);
+    }
+
+    @Test
     public void checkHashMapMethod() {
         Map<Character, Integer> map = new HashMap();
         String t = "aab";

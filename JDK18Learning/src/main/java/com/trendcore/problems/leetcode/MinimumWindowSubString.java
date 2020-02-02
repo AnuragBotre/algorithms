@@ -25,6 +25,8 @@ public class MinimumWindowSubString {
         int leftPointer = 0;
         int rightPointer = 0;
 
+        boolean leftPointerInitialized = false;
+
         int regularPointer = 0;
 
         Map<Character, Integer> map = new HashMap();
@@ -40,6 +42,11 @@ public class MinimumWindowSubString {
 
                     map.put(s.charAt(regularPointer), integer - 1);
                     rightPointer = regularPointer;
+
+                    if (!leftPointerInitialized) {
+                        leftPointer = regularPointer;
+                        leftPointerInitialized = true;
+                    }
                 }
                 regularPointer++;
             } else {
@@ -67,7 +74,7 @@ public class MinimumWindowSubString {
                     }
 
                     if (!isAllCharactersVisited(map)) {
-                        substring = s.substring(leftPointer, rightPointer + 1);
+                        substring = s.substring(tempPointer, rightPointer + 1);
                         if (minSubString.equals("")) {
                             minSubString = substring;
                         } else {
@@ -85,10 +92,10 @@ public class MinimumWindowSubString {
             }
         }
 
-        while (leftPointer < rightPointer) {
+        while (leftPointer <= rightPointer) {
 
             if (!isAllCharactersVisited(map)) {
-                String substring = s.substring(leftPointer, rightPointer+1);
+                String substring = s.substring(leftPointer, rightPointer + 1);
                 if (minSubString.equals("")) {
                     minSubString = substring;
                 } else {
