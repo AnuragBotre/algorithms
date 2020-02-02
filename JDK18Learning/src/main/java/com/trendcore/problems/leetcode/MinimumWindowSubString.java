@@ -44,12 +44,30 @@ public class MinimumWindowSubString {
                 regularPointer++;
             } else {
 
+                String substring = s.substring(leftPointer, rightPointer + 1);
+                if (minSubString.equals("")) {
+                    minSubString = substring;
+                } else {
+                    if (substring.length() < minSubString.length()) {
+                        minSubString = substring;
+                    }
+                }
+                //if all char visisted then min sub string
+                boolean allCharPresent = true;
                 int tempPointer = leftPointer;
-
                 while (tempPointer <= rightPointer) {
+                    if (map.containsKey(s.charAt(tempPointer))) {
+                        leftPointer = tempPointer;
+                        if (!allCharPresent) {
+                            break;
+                        } else {
+                            Integer integer = map.get(s.charAt(tempPointer));
+                            map.put(s.charAt(tempPointer), integer + 1);
+                        }
+                    }
 
                     if (!isAllCharactersVisited(map)) {
-                        String substring = s.substring(leftPointer, rightPointer+1);
+                        substring = s.substring(leftPointer, rightPointer + 1);
                         if (minSubString.equals("")) {
                             minSubString = substring;
                         } else {
@@ -57,17 +75,13 @@ public class MinimumWindowSubString {
                                 minSubString = substring;
                             }
                         }
-                    }
-
-                    if (map.containsKey(s.charAt(tempPointer))) {
-                        Integer integer = map.get(s.charAt(tempPointer));
-                        map.put(s.charAt(tempPointer), integer + 1);
-                        leftPointer = tempPointer;
+                        allCharPresent = true;
+                    } else {
+                        allCharPresent = false;
                     }
 
                     tempPointer++;
                 }
-                leftPointer = tempPointer;
             }
         }
 

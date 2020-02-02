@@ -34,13 +34,6 @@ public class MinimumWindowSubStringTest {
     }
 
     @Test
-    public void input4() {
-        String s = "ADOBECODEBANC", t = "DBC";
-        String expected = "DOBEC";
-        act(s, t, expected);
-    }
-
-    @Test
     public void failedInput_1() {
         String s = "aa", t = "aa";
         String expected = "aa";
@@ -94,6 +87,7 @@ public class MinimumWindowSubStringTest {
 
     private void act(String s, String t, String expected) {
         String s1 = m.minWindow(s, t);
+        System.out.println(s + " :: " + t);
         assertEquals(expected, s1);
     }
 }
