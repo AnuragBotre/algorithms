@@ -20,7 +20,7 @@ public class SearchInRotatedArrayIITest {
 
     @Test
     public void input3() {
-        act(new int[]{2, 5, 6, 0, 0, 1, 2}, 2, false);
+        act(new int[]{2, 5, 6, 0, 0, 1, 2}, 2, true);
     }
 
     @Test
@@ -38,8 +38,38 @@ public class SearchInRotatedArrayIITest {
     }
 
     @Test
+    public void input5() {
+        act(new int[]{3}, 3, true);
+    }
+
+    @Test
+    public void input6() {
+        act(new int[]{3}, 1, false);
+    }
+
+    @Test
     public void failedInput_1() {
         act(new int[]{3, 1}, 1, true);
+    }
+
+    @Test
+    public void failedInput_2() {
+        act(new int[]{}, 1, false);
+    }
+
+    @Test
+    public void failedInput_3() {
+        act(new int[]{1, 3}, 3, true);
+    }
+
+    @Test
+    public void failedInput_4() {
+        act(new int[]{5, 1, 3}, 3, true);
+    }
+
+    @Test
+    public void failedInput_5() {
+        act(new int[]{3, 1}, 3, true);
     }
 
     private void act(int[] nums, int target, boolean expected) {

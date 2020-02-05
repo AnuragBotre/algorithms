@@ -27,20 +27,23 @@ package com.trendcore.problems.leetcode;
 public class SearchInRotatedArrayII {
 
     public boolean search(int[] nums, int target) {
-        int low = 0;
         int high = nums.length - 1;
-        boolean b = true;
-
         //2,5,6,0,0,1,2
+
+        if (nums.length == 0)
+            return false;
 
         int pivotPosition = findPivot(nums);
 
-        if (nums[pivotPosition] < target) {
+        if (pivotPosition == 0) {
+            //binary search
+            return binarySearch(pivotPosition, nums.length - 1, nums, target);
+        } else if (nums[pivotPosition] <= target && nums[high] >= target) {
+            //2nd half
+            return binarySearch(pivotPosition, nums.length - 1, nums, target);
+        } else {
             //1st half
             return binarySearch(0, pivotPosition - 1, nums, target);
-        } else {
-            //2nd half
-            return binarySearch(pivotPosition, nums.length, nums, target);
         }
 
     }
@@ -52,7 +55,7 @@ public class SearchInRotatedArrayII {
             if (nums[mid] == target) {
                 return true;
             } else {
-                if (nums[mid] < target) {
+                if (nums[mid] > target) {
                     high = mid - 1;
                 } else {
                     low = mid + 1;
