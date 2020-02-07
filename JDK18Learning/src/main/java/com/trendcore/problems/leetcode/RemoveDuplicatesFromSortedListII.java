@@ -25,6 +25,11 @@ public class RemoveDuplicatesFromSortedListII {
         ListNode(int x) {
             val = x;
         }
+
+        @Override
+        public String toString() {
+            return "" + val;
+        }
     }
 
     public ListNode deleteDuplicates(ListNode head) {
@@ -35,12 +40,36 @@ public class RemoveDuplicatesFromSortedListII {
         while (temp != null) {
 
             if (temp.next != null && temp.val == temp.next.val) {
+                ListNode t = temp;
+                while (t != null) {
+                    if (!(t.next != null && t.val == t.next.val)) {
+                        break;
+                    }
+                    t = t.next;
+                }
+                temp = t;
 
+                if (head.val == t.val) {
+                    head = t.next;
+                }
 
+                if (previousNode != null) {
+                    if (t.next != null) {
+                        previousNode.next = t.next;
+                    } else {
+                        previousNode.next = null;
+                    }
+                } else {
+                    previousNode = t.next;
+                }
+
+            } else {
+                previousNode = temp;
             }
 
-            previousNode = temp;
-            temp = temp.next;
+            if (temp != null) {
+                temp = temp.next;
+            }
         }
         return head;
     }

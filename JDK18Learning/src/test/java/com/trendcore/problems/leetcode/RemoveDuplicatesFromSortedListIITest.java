@@ -11,14 +11,39 @@ public class RemoveDuplicatesFromSortedListIITest {
 
     @Test
     public void input1() {
-
         act(toList(1, 2, 3, 3, 4, 4, 5), toList(1, 2, 5));
+    }
+
+    @Test
+    public void duplicateElementAtStart() {
+        act(toList(1, 1, 1, 3, 3, 4, 4, 5), toList(5));
+    }
+
+    @Test
+    public void allDuplicate() {
+        act(toList(1, 1, 2, 2), toList());
+    }
+
+    @Test
+    public void input4() {
+        act(toList(1, 2, 2), toList(1));
+    }
+
+    @Test
+    public void input5() {
+        act(toList(1), toList(1));
+    }
+
+    @Test
+    public void input6() {
+        act(toList(1, 2, 3), toList(1, 2, 3));
     }
 
     private void act(RemoveDuplicatesFromSortedListII.ListNode inputListNode, RemoveDuplicatesFromSortedListII.ListNode expectedListNode) {
         RemoveDuplicatesFromSortedListII.ListNode outputListNode = r.deleteDuplicates(inputListNode);
 
         while (expectedListNode != null) {
+            System.out.print(expectedListNode.val + ":" + outputListNode.val + ",");
             assertEquals(expectedListNode.val, outputListNode.val);
             expectedListNode = expectedListNode.next;
             outputListNode = outputListNode.next;
