@@ -18,8 +18,8 @@ public class MaximalRectangleTest {
         }, 6);
     }
 
-    private void act(char[][] strings, int actual) {
+    private void act(char[][] strings, int expected) {
         int output = m.maximalRectangle(strings);
-        assertEquals(output, actual);
+        assertEquals(expected, output);
     }
 }
