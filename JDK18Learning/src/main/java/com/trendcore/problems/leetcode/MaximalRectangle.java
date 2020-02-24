@@ -1,7 +1,5 @@
 package com.trendcore.problems.leetcode;
 
-import java.util.List;
-
 /**
  * https://leetcode.com/problems/maximal-rectangle/
  * <p>
@@ -20,6 +18,8 @@ import java.util.List;
  */
 public class MaximalRectangle {
 
+    private int maxArea = 0;
+
     class Coordinate {
         int x;
         int y;
@@ -27,32 +27,11 @@ public class MaximalRectangle {
 
     public int maximalRectangle(char[][] matrix) {
 
-        int maxArea = 0;
-
-
         for (int i = 0; i < matrix.length; i++) {
             for (int j = 0; j < matrix[i].length; j++) {
 
                 if (matrix[i][j] != '0') {
-                    int height = getHeight(i, j, matrix);
-                    int[] widthAndHeight = getWidth(i, j, matrix, height);
-
-                    int width = widthAndHeight[0];
-                    int tempHeight = widthAndHeight[1];
-
-                    int width1 = 1;
-                    if (height == tempHeight) {
-                        width1 = width;
-                    }
-
-                    int area1 = width1 * height;
-                    int area2 = width * tempHeight;
-
-                    int area = Math.max(area1, area2);
-
-                    if (maxArea < area) {
-                        maxArea = area;
-                    }
+                    traverseMatrix(i, j, 0, 0, matrix, i, j);
                 }
             }
         }
@@ -60,49 +39,55 @@ public class MaximalRectangle {
         return maxArea;
     }
 
-    private int[] getWidth(int i, int j, char[][] matrix, int height) {
-        int width = 1;
-        int newHeight = 1;
+    class Tuple2 {
+        int height;
+        int width;
 
-        int finalHeight = height + j;
-
-        if (finalHeight > matrix[0].length) {
-            finalHeight = matrix[0].length;
+        public Tuple2(int width, int height) {
+            this.height = height;
+            this.width = width;
         }
+    }
 
-        for (int l = j; l < finalHeight; l++) {
-            boolean zeroPresent = false;
-            for (int k = i; k < matrix.length; k++) {
+    private Tuple2 traverseMatrix(int i, int j, int width, int height, char[][] matrix, int originalPosI, int originalPosJ) {
+        traverseDownWords(i, j, width + 1, height + 1, matrix, originalPosI, originalPosJ, -1);
+        return null;
+    }
 
-                if (matrix[k][l] != '0') {
-                    //0 present in the row then this cannot be included
-                    width++;
-                } else {
-                    zeroPresent = true;
-                    break;
+    private boolean traverseDownWords(int i, int j, int width, int height, char[][] matrix, int originalPosI, int originalPosJ, int previousHeight) {
+        if (i >= matrix.length || j >= matrix[0].length || matrix[i][j] == '0') {
+            return false;
+        } else {
+            /*if (previousHeight != -1 && height == previousHeight) {
+                return true;
+            }*/
+            boolean preVHeightIsSameAsThisHeight = traverseDownWords(i + 1, j, width, height + 1, matrix, originalPosI, originalPosJ, previousHeight);
+            if (previousHeight != -1 && height == previousHeight) {
+                //width = width + 1;
+                //System.out.println(" " + previousHeight + " " + width + " i = " + i + ", j = " + j);
+                int area = height * width;
+                if (maxArea < area) {
+                    maxArea = area;
                 }
-            }
-            if (!zeroPresent) {
-                newHeight++;
-
             } else {
-                break;
+
             }
+            /*if (preVHeightIsSameAsThisHeight) {
+                height = height + 1;
+            }*/
+            /*int area = height * width;
+            if (maxArea < area) {
+                maxArea = area;
+            }*/
+            return traverseRight(originalPosI, j, width, 0, matrix, originalPosI, originalPosJ, height);
         }
-        return new int[]{width, newHeight};
     }
 
-    private int getHeight(int i, int j, char[][] matrix) {
-        int height = 0;
-
-        for (int k = i; k < matrix.length; k++) {
-            if (matrix[k][j] != '0') {
-                height++;
-            } else {
-                break;
-            }
+    private boolean traverseRight(int i, int j, int width, int height, char[][] matrix, int originalPosI, int originalPosJ, int previousHeight) {
+        if (j >= matrix[0].length || i >= matrix.length || matrix[i][j] == '0') {
+            return false;
+        } else {
+            return traverseDownWords(i, j + 1, width + 1, height + 1, matrix, originalPosI, originalPosJ, previousHeight);
         }
-        return height;
     }
-
 }
