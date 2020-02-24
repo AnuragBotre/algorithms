@@ -58,34 +58,31 @@ public class MaximalRectangle {
         if (i >= matrix.length || j >= matrix[0].length || matrix[i][j] == '0') {
             return false;
         } else {
-            /*if (previousHeight != -1 && height == previousHeight) {
-                return true;
-            }*/
-            boolean preVHeightIsSameAsThisHeight = traverseDownWords(i + 1, j, width, height + 1, matrix, originalPosI, originalPosJ, previousHeight);
             if (previousHeight != -1 && height == previousHeight) {
-                //width = width + 1;
-                //System.out.println(" " + previousHeight + " " + width + " i = " + i + ", j = " + j);
+
                 int area = height * width;
                 if (maxArea < area) {
                     maxArea = area;
                 }
+
+                return traverseRight(originalPosI, j, width, 0, matrix, originalPosI, originalPosJ, height);
+
             } else {
 
+                boolean preVHeightIsSameAsThisHeight = traverseDownWords(i + 1, j, width, height + 1, matrix, originalPosI, originalPosJ, previousHeight);
+
+                int area = height * width;
+                if (maxArea < area) {
+                    maxArea = area;
+                }
+                return traverseRight(originalPosI, j, width, 0, matrix, originalPosI, originalPosJ, height);
             }
-            /*if (preVHeightIsSameAsThisHeight) {
-                height = height + 1;
-            }*/
-            /*int area = height * width;
-            if (maxArea < area) {
-                maxArea = area;
-            }*/
-            return traverseRight(originalPosI, j, width, 0, matrix, originalPosI, originalPosJ, height);
         }
     }
 
     private boolean traverseRight(int i, int j, int width, int height, char[][] matrix, int originalPosI, int originalPosJ, int previousHeight) {
         if (j >= matrix[0].length || i >= matrix.length || matrix[i][j] == '0') {
-            return false;
+            return true;
         } else {
             return traverseDownWords(i, j + 1, width + 1, height + 1, matrix, originalPosI, originalPosJ, previousHeight);
         }
