@@ -39,9 +39,9 @@ public class MaximalRectangle {
         traverseDownWords(i, j, width + 1, height + 1, matrix, originalPosI, originalPosJ, -1);
     }
 
-    private boolean traverseDownWords(int i, int j, int width, int height, char[][] matrix, int originalPosI, int originalPosJ, int previousHeight) {
+    private void traverseDownWords(int i, int j, int width, int height, char[][] matrix, int originalPosI, int originalPosJ, int previousHeight) {
         if (i >= matrix.length || j >= matrix[0].length || matrix[i][j] == '0') {
-            return false;
+            return;
         } else {
             if (previousHeight != -1 && height == previousHeight) {
 
@@ -50,26 +50,26 @@ public class MaximalRectangle {
                     maxArea = area;
                 }
 
-                return traverseRight(originalPosI, j, width, 0, matrix, originalPosI, originalPosJ, height);
+                traverseRight(originalPosI, j, width, 0, matrix, originalPosI, originalPosJ, height);
 
             } else {
 
-                boolean preVHeightIsSameAsThisHeight = traverseDownWords(i + 1, j, width, height + 1, matrix, originalPosI, originalPosJ, previousHeight);
+                traverseDownWords(i + 1, j, width, height + 1, matrix, originalPosI, originalPosJ, previousHeight);
 
                 int area = height * width;
                 if (maxArea < area) {
                     maxArea = area;
                 }
-                return traverseRight(originalPosI, j, width, 0, matrix, originalPosI, originalPosJ, height);
+                traverseRight(originalPosI, j, width, 0, matrix, originalPosI, originalPosJ, height);
             }
         }
     }
 
-    private boolean traverseRight(int i, int j, int width, int height, char[][] matrix, int originalPosI, int originalPosJ, int previousHeight) {
+    private void traverseRight(int i, int j, int width, int height, char[][] matrix, int originalPosI, int originalPosJ, int previousHeight) {
         if (j >= matrix[0].length || i >= matrix.length || matrix[i][j] == '0') {
-            return true;
+            return;
         } else {
-            return traverseDownWords(i, j + 1, width + 1, height + 1, matrix, originalPosI, originalPosJ, previousHeight);
+            traverseDownWords(i, j + 1, width + 1, height + 1, matrix, originalPosI, originalPosJ, previousHeight);
         }
     }
 }
