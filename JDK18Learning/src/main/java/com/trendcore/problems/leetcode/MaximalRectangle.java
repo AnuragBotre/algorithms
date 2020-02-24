@@ -20,11 +20,6 @@ public class MaximalRectangle {
 
     private int maxArea = 0;
 
-    class Coordinate {
-        int x;
-        int y;
-    }
-
     public int maximalRectangle(char[][] matrix) {
 
         for (int i = 0; i < matrix.length; i++) {
@@ -39,19 +34,9 @@ public class MaximalRectangle {
         return maxArea;
     }
 
-    class Tuple2 {
-        int height;
-        int width;
 
-        public Tuple2(int width, int height) {
-            this.height = height;
-            this.width = width;
-        }
-    }
-
-    private Tuple2 traverseMatrix(int i, int j, int width, int height, char[][] matrix, int originalPosI, int originalPosJ) {
+    private void traverseMatrix(int i, int j, int width, int height, char[][] matrix, int originalPosI, int originalPosJ) {
         traverseDownWords(i, j, width + 1, height + 1, matrix, originalPosI, originalPosJ, -1);
-        return null;
     }
 
     private boolean traverseDownWords(int i, int j, int width, int height, char[][] matrix, int originalPosI, int originalPosJ, int previousHeight) {
