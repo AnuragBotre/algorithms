@@ -52,7 +52,7 @@ public class MaximalRectangleTest {
     }
 
     private void act(char[][] strings, int expected) {
-        MaximalRectangle m = new MaximalRectangle();
+        MaximalRectangle_DynamicProgramming m = new MaximalRectangle_DynamicProgramming();
         int output = m.maximalRectangle(strings);
         assertEquals(expected, output);
     }
