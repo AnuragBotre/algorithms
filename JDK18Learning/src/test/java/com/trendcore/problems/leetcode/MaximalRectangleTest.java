@@ -17,58 +17,25 @@ public class MaximalRectangleTest {
     }
 
     @Test
-    public void input2() {
+    public void input3() {
         act(new char[][]{
-                {'1', '1', '0',},
-                {'1', '1', '0',},
-                {'1', '1', '0',},
-                {'0', '0', '0',}
+                {'1', '1', '0'},
+                {'1', '1', '0'},
+                {'1', '1', '0'},
+                {'0', '0', '0'},
         }, 6);
     }
 
     @Test
-    public void input3() {
+    public void input2() {
         act(new char[][]{
-                {'1', '0', '0',},
-                {'1', '1', '1',},
-                {'0', '0', '0',},
-        }, 3);
-    }
-
-    @Test
-    public void input4() {
-        act(new char[][]{
-                {'1', '1', '1',}
-        }, 3);
-    }
-
-    @Test
-    public void input5() {
-        act(new char[][]{
-                {'1'},
-                {'1'},
-                {'1'}
-        }, 3);
-    }
-
-    @Test
-    public void blankArray() {
-        act(new char[][]{}, 0);
-    }
-
-    @Test
-    public void failedInput1() {
-        act(new char[][]{
-                {'0','1','1','0','1'},
-                {'1','1','0','1','0'},
-                {'0','1','1','1','0'},
-                {'1','1','1','1','0'},
-                {'1','1','1','1','1'},
-                {'0','0','0','0','0'}}, 9);
+                {'1', '1', '1', '1', '1'},
+                {'0', '0', '0', '0', '0'},
+        }, 5);
     }
 
     private void act(char[][] strings, int expected) {
-        MaximalRectangle_DynamicProgramming m = new MaximalRectangle_DynamicProgramming();
+        MaximalRectangle m = new MaximalRectangle();
         int output = m.maximalRectangle(strings);
         assertEquals(expected, output);
     }
