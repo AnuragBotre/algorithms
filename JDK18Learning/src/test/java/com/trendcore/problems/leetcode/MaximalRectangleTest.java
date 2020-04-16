@@ -51,6 +51,22 @@ public class MaximalRectangleTest {
         }, 3);
     }
 
+    @Test
+    public void blankArray() {
+        act(new char[][]{}, 0);
+    }
+
+    @Test
+    public void failedInput1() {
+        act(new char[][]{
+                {'0','1','1','0','1'},
+                {'1','1','0','1','0'},
+                {'0','1','1','1','0'},
+                {'1','1','1','1','0'},
+                {'1','1','1','1','1'},
+                {'0','0','0','0','0'}}, 9);
+    }
+
     private void act(char[][] strings, int expected) {
         MaximalRectangle_DynamicProgramming m = new MaximalRectangle_DynamicProgramming();
         int output = m.maximalRectangle(strings);

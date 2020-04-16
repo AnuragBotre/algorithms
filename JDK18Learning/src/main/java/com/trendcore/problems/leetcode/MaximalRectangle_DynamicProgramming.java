@@ -21,12 +21,31 @@ import java.util.Arrays;
 public class MaximalRectangle_DynamicProgramming {
 
     class Temp {
-        int height;
-        int width;
+
+        class HeightWise {
+            int area;
+            int height;
+            int width;
+        }
+
+        class WidthWise {
+            int area;
+            int height;
+            int width;
+        }
+
+
+        HeightWise heightWise = new HeightWise();
+        WidthWise widthWise = new WidthWise();
+
         int area;
     }
 
     public int maximalRectangle(char[][] matrix) {
+
+        if (matrix.length == 0) {
+            return 0;
+        }
 
         Temp output[][] = new Temp[matrix.length][matrix[0].length];
 
@@ -40,82 +59,92 @@ public class MaximalRectangle_DynamicProgramming {
 
                     if (i == 0 && j == 0) {
                         output[i][j] = new Temp();
-                        output[i][j].width = 1;
-                        output[i][j].height = 1;
+                        output[i][j].heightWise.height = 1;
+                        output[i][j].heightWise.width = 1;
+
+                        output[i][j].widthWise.width = 1;
+                        output[i][j].widthWise.height = 1;
                         maxArea = 1;
                     } else {
                         output[i][j] = new Temp();
-                        if (j != 0) {
-                            if (output[i][j - 1] != null) {
-                                output[i][j].width = output[i][j - 1].width + 1;
+
+                        //when j == 0 then increase height
+
+                        /*
+                            for given i,j
+                                        */
+                        if (i == 0) {
+
+                            if (matrix[i][j - 1] == '0') {
+                                //whatever height and width 1
+                                output[i][j].heightWise.height = 1;
+                                output[i][j].heightWise.width = 1;
+                                output[i][j].heightWise.area = 1;
+
+                                output[i][j].widthWise.height = 1;
+                                output[i][j].widthWise.width = 1;
+                                output[i][j].widthWise.area = 1;
                             } else {
-                                output[i][j].width = 1;
+                                output[i][j].heightWise.height = output[i-1][j].heightWise.height + 1;
+                                output[i][j].heightWise.width = 1;
+                                output[i][j].heightWise.area = output[i][j].heightWise.height * output[i][j].heightWise.width;
+
+                                output[i][j].widthWise.height = 1;
+                                output[i][j].widthWise.width = 1;
+                                output[i][j].widthWise.area = 1;
+                            }
+
+
+                        } else if (j == 0) {
+                            if (matrix[i - 1][j] == '0') {
+                                //whatever width and height 1
+                                output[i][j].widthWise.width = output[i][j - 1].widthWise.width + 1;
+                                output[i][j].widthWise.height = 1;
+                                int widthWiseArea = (output[i][j - 1].widthWise.width + 1) * 1;
                             }
                         } else {
-                            output[i][j].width = 1;
-                        }
 
-                        if (i != 0) {
-                            if (output[i - 1][j] != null) {
-                                output[i][j].height = output[i - 1][j].height + 1;
-                            } else {
-                                output[i][j].height = 1;
+                            if (matrix[i - 1][j] != '0' && matrix[i][j - 1] != '0') {
+                                //area will be calculated height wise or width wise
+                                int heightWiseArea = (output[i - 1][j].heightWise.height + 1) * output[i - 1][j].heightWise.width;
+                                int widthWiseArea = (output[i][j - 1].widthWise.width + 1) * output[i][j - 1].widthWise.height;
+
+                            } else if (matrix[i - 1][j] == '0') {
+                                //whatever width and height 1
+                                int widthWiseArea = (output[i][j - 1].widthWise.width + 1) * 1;
+                            } else if (matrix[i][j - 1] == '0') {
+                                //whatever height and width 1
+                                int heightWiseArea = (output[i][j - 1].heightWise.height + 1) * 1;
                             }
-                        } else {
-                            output[i][j].height = 1;
                         }
-
-
-                        if (i != 0) {
-                            int width;
-                            if (output[i - 1][j] != null) {
-                                width = output[i - 1][j].width;
-                            } else {
-                                width = 1;
-                            }
-                            if (output[i][j].width >= width) {
-                                int calculatedArea = width * output[i][j].height;
-                                if (calculatedArea > output[i][j].width) {
-                                    if (calculatedArea > output[i][j].height) {
-                                        output[i][j].area = calculatedArea;
-                                    } else {
-                                        output[i][j].area = output[i][j].height;
-                                    }
-                                } else {
-                                    if (output[i][j].width > output[i][j].height) {
-                                        output[i][j].area = output[i][j].width;
-                                    } else {
-                                        output[i][j].area = output[i][j].height;
-                                    }
-                                }
-                            }
-                        } else {
-                            output[i][j].area = output[i][j].width;
-                        }
-
-                        if (maxArea < output[i][j].area) {
-                            maxArea = output[i][j].area;
-                        }
+                        /*    output[i-1].width + 1 * output[i-1].height
+                         */
 
                     }
                 }
             }
         }
 
+        debug(output);
+
+        //return maxArea;
+        return maxArea;
+    }
+
+    private void debug(Temp[][] output) {
+        System.out.println();
+        System.out.println("-------------------------------------------------");
         Arrays.stream(output).forEach(ints -> {
                     Arrays.stream(ints).forEach(value -> {
                         if (value != null) {
-                            System.out.print("{" + value.width + "," + value.height + "," + value.area + "}\t");
+                            System.out.print("{" + value.widthWise.width + "," + value.widthWise.height + "," + value.area + "}\t\t\t");
                         } else {
-                            System.out.print("{" + 0 + "," + 0 + "," + 0 + "}\t");
+                            System.out.print("{" + 0 + "," + 0 + "," + 0 + "}\t\t\t");
                         }
                     });
                     System.out.println();
                 }
         );
-
-        //return maxArea;
-        return maxArea;
     }
 
 }
