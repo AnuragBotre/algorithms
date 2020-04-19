@@ -1,3 +1,7 @@
+https://medium.com/olivers-tech-blog/profiling-with-java-agents-part-2-37792b0d2f53
+
+https://dzone.com/articles/java-profiling-under-covers
+
 https://www.infoq.com/presentations/LMAX/
 - LMAX distruptors
 

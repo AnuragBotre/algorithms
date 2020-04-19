@@ -1,6 +1,6 @@
 package com.trendcore;
 
-import com.trendcore.instrument.PreMain;
+//import com.trendcore.instrument.PreMain;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,7 +13,9 @@ public class Main {
 
         map.put("1","ABC");
 
-        System.out.println(PreMain.sizeof(map));
+        //System.out.println(PreMain.sizeof(map));
+
+
     }
 
 }
