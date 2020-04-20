@@ -3,6 +3,9 @@ package com.trendcore;
 import javassist.CannotCompileException;
 import javassist.ClassPool;
 import javassist.CtClass;
+import javassist.CtMethod;
+import javassist.expr.ExprEditor;
+import javassist.expr.MethodCall;
 
 import java.io.*;
 import java.lang.reflect.Modifier;
@@ -30,7 +33,7 @@ public class JarReader {
         jarFile.stream().forEach(jarEntry -> {
             if (!jarEntry.isDirectory() && jarEntry.getName().endsWith(".class")) {
                 InputStream classFileInputStream = getClassFileInputStream(jarFile, jarEntry);
-                processEntry(jarEntry, pool, classFileInputStream, tempJar,jarFile);
+                processEntry(jarEntry, pool, classFileInputStream, tempJar, jarFile);
             } else {
                 if (!jarEntry.isDirectory()) {
                     copyFile(jarFile, tempJar, jarEntry);
@@ -74,11 +77,10 @@ public class JarReader {
 
             if (annotation != null) {
                 Arrays.stream(ctClass.getMethods()).filter(ctMethod -> !Modifier.isNative(ctMethod.getModifiers())).forEach(ctMethod -> {
-                    //ctMethod.setWrappedBody();
+                    //
                     try {
                         ctMethod.insertBefore("System.out.println(\"Entering method\");");
-
-                        ctMethod.insertAfter("System.out.println(\"Exiting method\");");
+                        ctMethod.insertAfter("System.out.println(\"Exiting method\");",true);
                     } catch (CannotCompileException e) {
                         throw new RuntimeException(e);
                     }
@@ -92,10 +94,8 @@ public class JarReader {
                 outputJar.write(b);
 
             } else {
-                copyFile(jarFile,outputJar,jarEntry);
+                copyFile(jarFile, outputJar, jarEntry);
             }
-
-
 
 
         } catch (Exception e) {
