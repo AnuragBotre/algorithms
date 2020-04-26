@@ -17,11 +17,6 @@ public class MethodAdviceVisitor extends AdviceAdapter {
         this.className = className;
     }
 
-    @Override
-    public void visitCode() {
-        super.visitCode();
-        mv.visitLabel(startFinally);
-    }
 
     @Override
     protected void onMethodEnter() {
@@ -44,7 +39,7 @@ public class MethodAdviceVisitor extends AdviceAdapter {
 
 
     private void onFinally(int opcode) {
-        mv.visitMethodInsn(INVOKESTATIC, "java/lang/System", "currentTimeMillis", "()J", false);
-        mv.visitMethodInsn(INVOKESTATIC, "com/trendcore/Profiler", "popMethod", "(J)V", false);
+        visitMethodInsn(INVOKESTATIC, "java/lang/System", "currentTimeMillis", "()J", false);
+        visitMethodInsn(INVOKESTATIC, "com/trendcore/Profiler", "popMethod", "(J)V", false);
     }
 }
