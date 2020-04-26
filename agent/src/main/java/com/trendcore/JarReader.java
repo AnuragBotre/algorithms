@@ -1,11 +1,9 @@
 package com.trendcore;
 
-import javassist.CannotCompileException;
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtMethod;
-import javassist.expr.ExprEditor;
-import javassist.expr.MethodCall;
+import javassist.NotFoundException;
 
 import java.io.*;
 import java.lang.reflect.Modifier;
@@ -13,11 +11,11 @@ import java.util.Arrays;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.jar.JarOutputStream;
-import java.util.zip.ZipEntry;
+import java.util.stream.Collectors;
 
 public class JarReader {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, NotFoundException {
         //read jar and show visit each class
 
         String resource = JarReader.class.getResource(".").getFile();
@@ -26,6 +24,10 @@ public class JarReader {
         System.out.println(file.isFile());
         JarFile jarFile = new JarFile(file);
         ClassPool pool = ClassPool.getDefault();
+        String pathname = outpath + "profiler-1.0-SNAPSHOT.jar";
+        File profilerJarFile = new File(pathname);
+        System.out.println(profilerJarFile.isFile());
+        pool.appendClassPath(pathname);
 
         JarOutputStream tempJar =
                 new JarOutputStream(new FileOutputStream(resource + "../../../../lib/data-structures-1.0-SNAPSHOT-profiled.jar"));
@@ -75,13 +77,29 @@ public class JarReader {
 
             System.out.println("processing " + jarEntry.getName());
 
-            if (annotation != null) {
+            //if (annotation != null)
+            {
                 Arrays.stream(ctClass.getMethods()).filter(ctMethod -> !Modifier.isNative(ctMethod.getModifiers())).forEach(ctMethod -> {
                     //
                     try {
-                        ctMethod.insertBefore("System.out.println(\"Entering method\");");
-                        ctMethod.insertAfter("System.out.println(\"Exiting method\");",true);
-                    } catch (CannotCompileException e) {
+                        String collect = Arrays.stream(ctMethod.getParameterTypes()).map(ctClass1 -> "\"" + ctClass1.getName() + "\"").collect(Collectors.joining(","));
+
+                        String args =  collect;
+                        if (collect.equals("")) {
+                            args = null;
+                        }
+                        args = null;
+
+                        String methodName = "\" Entering :- " + ctMethod.getName() + "\"";
+                        String methodName1 = "\" Exiting :- " + ctMethod.getName() + "\"";
+                        /*ctMethod.insertBefore("com.trendcore.Profiler.pushMethod(" + methodName + ",System.currentTimeMillis(), " + args + " );");
+                        ctMethod.insertAfter("com.trendcore.Profiler.popMethod(System.currentTimeMillis());", true);*/
+
+                        /*ctMethod.insertBefore("System.out.println(  "+methodName+");");
+                        ctMethod.insertAfter("System.out.println("+methodName+");",true);*/
+                        //ctMethod.insertAfter("System.out.println("+methodName+");",true);
+
+                    } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
                 });
@@ -93,9 +111,9 @@ public class JarReader {
                 outputJar.putNextEntry(outputJarEntry);
                 outputJar.write(b);
 
-            } else {
+            } /*else {
                 copyFile(jarFile, outputJar, jarEntry);
-            }
+            }*/
 
 
         } catch (Exception e) {
