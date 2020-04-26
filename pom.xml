@@ -45,6 +45,7 @@
         <module>sql-batch</module>
         <module>mps-testing</module>
         <module>sample-application</module>
+        <module>profiler</module>
     </modules>
 
     <dependencyManagement>
