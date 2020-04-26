@@ -9,6 +9,10 @@
     <version>1.0-SNAPSHOT</version>
     <artifactId>agent</artifactId>
 
+    <properties>
+        <asm.version>8.0.1</asm.version>
+    </properties>
+
     <dependencies>
         <!--<dependency>
             <groupId>com.trendcore</groupId>
@@ -19,6 +23,26 @@
             <groupId>javassist</groupId>
             <artifactId>javassist</artifactId>
             <version>3.12.1.GA</version>
+        </dependency>
+        <dependency>
+            <groupId>org.ow2.asm</groupId>
+            <artifactId>asm-commons</artifactId>
+            <version>${asm.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.ow2.asm</groupId>
+            <artifactId>asm</artifactId>
+            <version>${asm.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.ow2.asm</groupId>
+            <artifactId>asm-util</artifactId>
+            <version>${asm.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.trendcore</groupId>
+            <artifactId>profiler</artifactId>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
 
