@@ -1,6 +1,8 @@
 package com.trendcore;
 
 import java.util.UUID;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class Profiler {
 
@@ -39,4 +41,11 @@ public class Profiler {
     }
 
 
+    public static void wrap(Runnable runnable) {
+
+    }
+
+    public static void wrap(Supplier consumer) {
+
+    }
 }

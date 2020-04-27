@@ -12,6 +12,8 @@ public class AsmNotifierUtil {
         System.out.println(path + ProfileMe.class.getName());
         //ASMifier.main(new String[]{ProfileMe.class.getName()});
         ASMifier.main(new String[]{TryFinallyBlockASM.class.getName()});
+
+        //ASMifier.main(new String[]{UsingLambda.class.getName()});
     }
 
 }

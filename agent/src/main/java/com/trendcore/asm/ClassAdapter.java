@@ -16,6 +16,11 @@ public class ClassAdapter extends ClassVisitor implements Opcodes {
     @Override
     public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
         MethodVisitor mv = cv.visitMethod(access, name, desc, signature, exceptions);
-        return mv == null ? null : new MethodAdviceVisitor(className,api,mv,access,name,desc);
+
+        if (AsmUtil.isSpecial(name)) {
+            return mv;
+        }
+
+        return mv == null ? null : new TryCatchMethodAdviceVisitor(api,mv,access,name,desc);
     }
 }
