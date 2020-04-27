@@ -5,6 +5,9 @@ import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.commons.AdviceAdapter;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 public class TryCatchMethodAdviceVisitor extends AdviceAdapter {
 
     private final Label tryLabel = new Label();
@@ -30,11 +33,17 @@ public class TryCatchMethodAdviceVisitor extends AdviceAdapter {
 
         //System.out.println(this.className + ":" + super.getName());
 
+        String args = getArguments();
+
         visitLdcInsn(getName());
         visitMethodInsn(INVOKESTATIC, "java/lang/System", "currentTimeMillis", "()J", false);
-        visitLdcInsn("java.lang.String,java.lang.String");
+        visitLdcInsn(args);
         visitMethodInsn(INVOKESTATIC, "com/trendcore/Profiler", "pushMethod", "(Ljava/lang/String;JLjava/lang/String;)V", false);
 
+    }
+
+    private String getArguments() {
+        return Arrays.stream(getArgumentTypes()).map(type -> type.toString()).collect(Collectors.joining(","));
     }
 
     @Override
