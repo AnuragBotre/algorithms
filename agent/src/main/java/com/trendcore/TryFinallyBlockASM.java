@@ -4,7 +4,7 @@ public class TryFinallyBlockASM {
 
     public void method1(int i, String j) {
 
-        Profiler.pushMethod("profileMe", System.currentTimeMillis(), "java.lang.String,java.lang.String");
+        Profiler.pushMethod("TryFinallyBlockASM","profileMe", System.currentTimeMillis(), "java.lang.String,java.lang.String");
 
         try {
 

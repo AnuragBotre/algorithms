@@ -19,12 +19,12 @@ public class ExecutionTask {
     }
 
 
-    public void addMethod(String methodName, long startTime, String parameterNames) {
+    public void addMethod(String className, String methodName, long startTime, String parameterNames) {
         if (root == null) {
-            root = new Method(methodName, startTime, current, parameterNames);
+            root = new Method(className,methodName, startTime, current, parameterNames);
             current = root;
         } else {
-            Method method = new Method(methodName, startTime, current, parameterNames);
+            Method method = new Method(className,methodName, startTime, current, parameterNames);
             current.getMethods().add(method);
             current = method;
         }

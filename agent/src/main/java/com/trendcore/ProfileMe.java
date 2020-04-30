@@ -1,11 +1,10 @@
 package com.trendcore;
 
-import java.io.PrintStream;
-
 public class ProfileMe {
 
     public void profileMe(String a,String b){
-        Profiler.pushMethod("profileMe",System.currentTimeMillis(),"java.lang.String,java.lang.String");
+        //Profiler.pushMethod("PassingArguments", "profileMe",System.currentTimeMillis(), "java.lang.String,java.lang.String", "java.lang.String,java.lang.String", a, "java.lang.String,java.lang.String");
+        Profiler.pushMethod("PassingArguments", "profileMe",System.currentTimeMillis(), "java.lang.String,java.lang.String");
 
         /* do call */
         //method1();

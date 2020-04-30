@@ -21,6 +21,6 @@ public class ClassAdapter extends ClassVisitor implements Opcodes {
             return mv;
         }
 
-        return mv == null ? null : new TryCatchMethodAdviceVisitor(api,mv,access,name,desc);
+        return mv == null ? null : new TryCatchMethodAdviceVisitor(className,api,mv,access,name,desc);
     }
 }

@@ -10,10 +10,12 @@ public class AsmNotifierUtil {
     public static void main(String[] args) throws IOException {
         String path = AsmNotifierUtil.class.getResource(".").getPath();
         System.out.println(path + ProfileMe.class.getName());
-        //ASMifier.main(new String[]{ProfileMe.class.getName()});
-        ASMifier.main(new String[]{TryFinallyBlockASM.class.getName()});
+        ASMifier.main(new String[]{ProfileMe.class.getName()});
+        //ASMifier.main(new String[]{TryFinallyBlockASM.class.getName()});
 
         //ASMifier.main(new String[]{UsingLambda.class.getName()});
+
+        //ASMifier.main(new String[]{PassingArguments.class.getName()});
     }
 
 }

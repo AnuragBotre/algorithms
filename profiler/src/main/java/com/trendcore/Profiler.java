@@ -1,7 +1,6 @@
 package com.trendcore;
 
 import java.util.UUID;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class Profiler {
@@ -14,14 +13,24 @@ public class Profiler {
 
     private static StorageService storageService = new InMemoryStorageService();
 
-    public static void pushMethod(String methodName, long startTime, String parameterNames) {
+    public static void pushMethod(String className,String methodName, long startTime, String parameterNames) {
         ExecutionTask request = profiler.get();
         if (request == null) {
             request = new ExecutionTask(UUID.randomUUID());
             profiler.set(request);
         }
 
-        request.addMethod(methodName, startTime, parameterNames);
+        request.addMethod(className,methodName, startTime, parameterNames);
+    }
+
+    public static void pushMethod(String className, String methodName, long startTime, String parameterNames, String category, Object... args) {
+        ExecutionTask request = profiler.get();
+        if (request == null) {
+            request = new ExecutionTask(UUID.randomUUID());
+            profiler.set(request);
+        }
+
+        request.addMethod(className, methodName, startTime, parameterNames);
     }
 
 

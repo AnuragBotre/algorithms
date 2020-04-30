@@ -12,9 +12,11 @@ public class TryCatchMethodAdviceVisitor extends AdviceAdapter {
 
     private final Label tryLabel = new Label();
     private final Label catchLabel = new Label();
+    private final String className;
 
-    protected TryCatchMethodAdviceVisitor(int api, MethodVisitor methodVisitor, int access, String name, String descriptor) {
+    protected TryCatchMethodAdviceVisitor(String className, int api, MethodVisitor methodVisitor, int access, String name, String descriptor) {
         super(api, methodVisitor, access, name, descriptor);
+        this.className = className;
     }
 
     @Override
@@ -35,11 +37,11 @@ public class TryCatchMethodAdviceVisitor extends AdviceAdapter {
 
         String args = getArguments();
 
+        visitLdcInsn(className);
         visitLdcInsn(getName());
         visitMethodInsn(INVOKESTATIC, "java/lang/System", "currentTimeMillis", "()J", false);
         visitLdcInsn(args);
-        visitMethodInsn(INVOKESTATIC, "com/trendcore/Profiler", "pushMethod", "(Ljava/lang/String;JLjava/lang/String;)V", false);
-
+        visitMethodInsn(INVOKESTATIC, "com/trendcore/Profiler", "pushMethod", "(Ljava/lang/String;Ljava/lang/String;JLjava/lang/String;)V", false);
     }
 
     private String getArguments() {

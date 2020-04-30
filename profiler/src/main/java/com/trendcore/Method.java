@@ -5,6 +5,8 @@ import java.util.List;
 
 public class Method {
 
+    private final String className;
+
     private final String methodName;
 
     private long startTime;
@@ -17,7 +19,8 @@ public class Method {
 
     private String parameterNames;
 
-    public Method(String methodName, long startTime, Method current, String parameterNames) {
+    public Method(String className, String methodName, long startTime, Method current, String parameterNames) {
+        this.className = className;
         this.methodName = methodName;
         this.parameterNames = parameterNames;
         this.startTime = startTime;
@@ -65,5 +68,9 @@ public class Method {
 
     public void setParameterNames(String parameterNames) {
         this.parameterNames = parameterNames;
+    }
+
+    public String getClassName() {
+        return className;
     }
 }
