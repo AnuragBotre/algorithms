@@ -1,8 +1,6 @@
 package com.trendcore.asm;
 
 import org.objectweb.asm.AnnotationVisitor;
-import org.objectweb.asm.Attribute;
-import org.objectweb.asm.FieldVisitor;
 
 public class ProfilerAnnotationFieldVisitor extends AnnotationVisitor {
 

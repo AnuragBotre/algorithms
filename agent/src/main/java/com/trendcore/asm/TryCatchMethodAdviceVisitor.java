@@ -11,6 +11,9 @@ import java.util.stream.Collectors;
 
 public class TryCatchMethodAdviceVisitor extends AdviceAdapter {
 
+    public static final String PROFILER_CLASS_NAME = "com/trendcore/Profiler";
+    public static final String PROFILE_ANNOTATION_CLASS_NAME = "com/trendcore/Profile";
+
     private final Label tryLabel = new Label();
     private final Label catchLabel = new Label();
     private final String className;
@@ -25,7 +28,8 @@ public class TryCatchMethodAdviceVisitor extends AdviceAdapter {
     public AnnotationVisitor visitAnnotation(String desc, boolean visible) {
         //System.out.println(className + " visitAnnotation: desc="+desc+" visible="+visible);
         AnnotationVisitor annotationVisitor = super.visitAnnotation(desc, visible);
-        if(visible && "Lcom/trendcore/Profile;".equals(desc)) {
+        String profileAnnotationDescriptor = "L" + PROFILE_ANNOTATION_CLASS_NAME + ";";
+        if(visible && profileAnnotationDescriptor.equals(desc)) {
             profilerAnnotationFieldVisitor = new ProfilerAnnotationFieldVisitor(api, annotationVisitor);
             return profilerAnnotationFieldVisitor;
         }
@@ -63,7 +67,7 @@ public class TryCatchMethodAdviceVisitor extends AdviceAdapter {
         visitLdcInsn(getName());
         visitMethodInsn(INVOKESTATIC, "java/lang/System", "currentTimeMillis", "()J", false);
         visitLdcInsn(args);
-        visitMethodInsn(INVOKESTATIC, "com/trendcore/Profiler", "pushMethod", "(Ljava/lang/String;Ljava/lang/String;JLjava/lang/String;)V", false);
+        visitMethodInsn(INVOKESTATIC, PROFILER_CLASS_NAME, "pushMethod", "(Ljava/lang/String;Ljava/lang/String;JLjava/lang/String;)V", false);
     }
 
     private String getArguments() {
@@ -108,7 +112,7 @@ public class TryCatchMethodAdviceVisitor extends AdviceAdapter {
             visitInsn(AASTORE); // store value into array
         }
 
-        visitMethodInsn(INVOKESTATIC, "com/trendcore/Profiler",
+        visitMethodInsn(INVOKESTATIC, PROFILER_CLASS_NAME,
                 "pushMethod",
                 "(Ljava/lang/String;Ljava/lang/String;JLjava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)V", false);
     }
