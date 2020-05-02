@@ -1,5 +1,6 @@
 package com.trendcore;
 
+import java.util.Map;
 import java.util.UUID;
 import java.util.function.Supplier;
 
@@ -13,17 +14,17 @@ public class Profiler {
 
     private static StorageService storageService = new InMemoryStorageService();
 
-    public static void pushMethod(String className,String methodName, long startTime, String parameterNames) {
-        ExecutionTask request = profiler.get();
-        if (request == null) {
-            request = new ExecutionTask(UUID.randomUUID());
-            profiler.set(request);
-        }
+    private static MethodProcessor methodProcessor;
 
-        request.addMethod(className,methodName, startTime, parameterNames);
+    public static void registerMethodProcessor(MethodProcessor m) {
+        methodProcessor = m;
     }
 
-    public static void pushMethod(String className, String methodName, long startTime, String parameterNames, String category, Object... args) {
+    public static void pushMethod(String className, String methodName, long startTime, String parameterNames) {
+        registerExecution(className, methodName, startTime, parameterNames);
+    }
+
+    private static ExecutionTask registerExecution(String className, String methodName, long startTime, String parameterNames) {
         ExecutionTask request = profiler.get();
         if (request == null) {
             request = new ExecutionTask(UUID.randomUUID());
@@ -31,6 +32,16 @@ public class Profiler {
         }
 
         request.addMethod(className, methodName, startTime, parameterNames);
+        return request;
+    }
+
+    public static void pushMethod(String className, String methodName, long startTime, String parameterNames, String category, Object... methodArgs) {
+
+        ExecutionTask request = registerExecution(className, methodName, startTime, parameterNames);
+        if (methodProcessor != null) {
+            Map<String, String> attributes = methodProcessor.process(category, className, methodName, methodArgs);
+            request.setAttributes(attributes);
+        }
     }
 
 

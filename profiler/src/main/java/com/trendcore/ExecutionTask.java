@@ -1,5 +1,7 @@
 package com.trendcore;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 public class ExecutionTask {
@@ -14,8 +16,11 @@ public class ExecutionTask {
 
     private UUID taskId;
 
+    private Map<String,String> attributes;
+
     public ExecutionTask(UUID taskId) {
         this.taskId = taskId;
+        attributes = new HashMap<>();
     }
 
 
@@ -76,5 +81,9 @@ public class ExecutionTask {
 
     public void setTaskId(UUID taskId) {
         this.taskId = taskId;
+    }
+
+    public void setAttributes(Map<String, String> attributes) {
+        attributes.putAll(attributes);
     }
 }
