@@ -15,9 +15,11 @@ public class AsmNotifierUtil {
 
         //ASMifier.main(new String[]{UsingLambda.class.getName()});
 
-        ASMifier.main(new String[]{PassingArguments.class.getName()});
+        //ASMifier.main(new String[]{PassingArguments.class.getName()});
 
         //ASMifier.main(new String[]{Vararg.class.getName()});
+
+        ASMifier.main(new String[]{WithAnnotation.class.getName()});
     }
 
 }

@@ -1,5 +1,6 @@
 package com.trendcore.asm;
 
+import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Type;
@@ -13,10 +14,23 @@ public class TryCatchMethodAdviceVisitor extends AdviceAdapter {
     private final Label tryLabel = new Label();
     private final Label catchLabel = new Label();
     private final String className;
+    private ProfilerAnnotationFieldVisitor profilerAnnotationFieldVisitor;
 
     protected TryCatchMethodAdviceVisitor(String className, int api, MethodVisitor methodVisitor, int access, String name, String descriptor) {
         super(api, methodVisitor, access, name, descriptor);
         this.className = className;
+    }
+
+    @Override
+    public AnnotationVisitor visitAnnotation(String desc, boolean visible) {
+        //System.out.println(className + " visitAnnotation: desc="+desc+" visible="+visible);
+        AnnotationVisitor annotationVisitor = super.visitAnnotation(desc, visible);
+        if(visible && "Lcom/trendcore/Profile;".equals(desc)) {
+            profilerAnnotationFieldVisitor = new ProfilerAnnotationFieldVisitor(api, annotationVisitor);
+            return profilerAnnotationFieldVisitor;
+        }
+
+        return annotationVisitor;
     }
 
     @Override
@@ -35,8 +49,11 @@ public class TryCatchMethodAdviceVisitor extends AdviceAdapter {
 
         //System.out.println(this.className + ":" + super.getName());
 
-        //invokeDefaultProfilerMethod();
-        invokeWithArgumentProfilerMethod();
+        if(profilerAnnotationFieldVisitor != null) {
+            invokeWithArgumentProfilerMethod();
+        } else {
+            invokeDefaultProfilerMethod();
+        }
     }
 
     private void invokeDefaultProfilerMethod() {
@@ -63,7 +80,7 @@ public class TryCatchMethodAdviceVisitor extends AdviceAdapter {
         visitLdcInsn(getName());
         visitMethodInsn(INVOKESTATIC, "java/lang/System", "currentTimeMillis", "()J", false);
         visitLdcInsn(getArguments());
-        visitLdcInsn("<category>");
+        visitLdcInsn(profilerAnnotationFieldVisitor.getCategory());
 
         /**
          * TODO
