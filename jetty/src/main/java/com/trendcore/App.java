@@ -26,7 +26,7 @@ public class App {
         app.addSessionIdManager(server);
 
         String rootPath = App.class.getClassLoader().getResource(".").toString();
-        WebAppContext webapp = new WebAppContext(rootPath+ "../../src/main/webapp/","");
+        WebAppContext webapp = new WebAppContext(rootPath+ "../../src/main/webapp/","/app1");
         server.setHandler(webapp);
 
         //app.addSessionHandlerToContext(webapp);
@@ -52,7 +52,7 @@ public class App {
     private void addServletHandler(Server server) {
         ServletHandler handler = new ServletHandler();
         server.setHandler(handler);
-        handler.addServletWithMapping(JettyServlet.class, "/*");
+        handler.addServletWithMapping(JettyServlet.class, "/jetty/*");
         addSessionHandlerToContext(handler);
     }
 

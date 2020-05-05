@@ -7,6 +7,7 @@ import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Opcodes;
 
 import java.io.*;
+import java.util.Arrays;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.jar.JarOutputStream;
@@ -15,7 +16,7 @@ import java.util.jar.JarOutputStream;
  * http://modularity.info/conference/2007/program/industry/I5-UsingASMFramework.pdf
  * 3.2.3 Insert Code before Method Exit
  * Look for try / finally
- *
+ * <p>
  * http://web.cs.ucla.edu/~msb/cs239-tutorial/
  */
 
@@ -30,8 +31,42 @@ public class AsmReader {
         System.out.println(file.isFile());
         JarFile jarFile = new JarFile(file);
 
-        JarOutputStream tempJar =
-                new JarOutputStream(new FileOutputStream(resource + "../../../../lib/data-structures-1.0-SNAPSHOT-profiled.jar"));
+        //processJar(resource, jarFile);
+
+        /*String dir = "E:\\profilation";
+        scanDirectory(dir);*/
+
+        JarOutputStream dest = new JarOutputStream(new FileOutputStream(outpath+"data-structures-1.0-SNAPSHOT-new.jar"));
+        processJar(jarFile, dest);
+    }
+
+    private static void scanDirectory(String dir) {
+        File jarDir = new File(dir);
+        Arrays.stream(jarDir.listFiles()).forEach(file -> {
+            try {
+                JarFile source = new JarFile(file);
+                String destNameJarFileName = getDestName(file);
+                JarOutputStream dest = new JarOutputStream(new FileOutputStream(destNameJarFileName));
+                processJar(source, dest);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
+
+    private static String getDestName(File file) {
+        StringBuilder newName = new StringBuilder();
+        String[] split = file.getName().split("\\.");
+        for (int i = 0; i < split.length - 1; i++) {
+            newName.append(split[i]);
+            if (i < split.length - 2)
+                newName.append(".");
+        }
+        newName.append("-profiled.jar");
+        return newName.toString();
+    }
+
+    private static void processJar(JarFile jarFile, JarOutputStream tempJar) throws IOException {
 
         jarFile.stream().forEach(jarEntry -> {
             if (!jarEntry.isDirectory() && jarEntry.getName().endsWith(".class")) {
@@ -76,10 +111,10 @@ public class AsmReader {
             //byte[] bytes = getBytes(classFileInputStream);
 
             ClassReader cr = new ClassReader(classFileInputStream);
-            ClassWriter cw = new ClassWriter(cr,ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
-            ClassAdapter classAdapter = new ClassAdapter(Opcodes.ASM5,cw,jarEntry.getName());
+            ClassWriter cw = new ClassWriter(cr, ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
+            ClassAdapter classAdapter = new ClassAdapter(Opcodes.ASM8, cw, jarEntry.getName());
 
-            cr.accept(classAdapter,  ClassReader.EXPAND_FRAMES);
+            cr.accept(classAdapter, ClassReader.EXPAND_FRAMES);
 
             byte[] b = cw.toByteArray();
             JarEntry outputJarEntry = new JarEntry(jarEntry.getName());

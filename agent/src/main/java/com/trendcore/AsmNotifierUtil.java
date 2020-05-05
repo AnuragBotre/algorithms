@@ -19,7 +19,9 @@ public class AsmNotifierUtil {
 
         //ASMifier.main(new String[]{Vararg.class.getName()});
 
-        ASMifier.main(new String[]{WithAnnotation.class.getName()});
+        //ASMifier.main(new String[]{WithAnnotation.class.getName()});
+
+        ASMifier.main(new String[]{EnumClass.class.getName()});
     }
 
 }
