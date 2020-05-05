@@ -36,7 +36,7 @@ public class AsmReader {
         /*String dir = "E:\\profilation";
         scanDirectory(dir);*/
 
-        JarOutputStream dest = new JarOutputStream(new FileOutputStream(outpath+"data-structures-1.0-SNAPSHOT-new.jar"));
+        JarOutputStream dest = new JarOutputStream(new FileOutputStream(outpath+"data-structures-1.0-SNAPSHOT-profiled.jar"));
         processJar(jarFile, dest);
     }
 
