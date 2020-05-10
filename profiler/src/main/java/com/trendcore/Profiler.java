@@ -56,8 +56,10 @@ public class Profiler {
                 profiler.remove();
             }
         }
+    }
 
-
+    public static void createProfileDump(){
+        storageService.dump();
     }
 
 

@@ -6,4 +6,6 @@ import com.trendcore.Method;
 public interface StorageService {
 
     void registerExecutionTaskDetails(ExecutionTask root);
+
+    void dump();
 }

@@ -1,9 +1,10 @@
 package com.trendcore;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Method {
+public class Method implements Serializable {
 
     private final String className;
 
