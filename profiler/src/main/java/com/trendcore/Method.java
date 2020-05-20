@@ -20,11 +20,12 @@ public class Method implements Serializable {
 
     private String parameterNames;
 
-    public Method(String className, String methodName, long startTime, Method current, String parameterNames) {
+    public Method(String className, String methodName, long startTime, Method parent, String parameterNames) {
         this.className = className;
         this.methodName = methodName;
         this.parameterNames = parameterNames;
         this.startTime = startTime;
+        this.parent = parent;
     }
 
     public List<Method> getMethods() {
