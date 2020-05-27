@@ -9,6 +9,7 @@ import static org.junit.Assert.*;
 public class LargestRectangleInHistogramTest {
 
     LargestRectangleInHistogram l = new LargestRectangleInHistogram();
+    MaximalRectangle_DynamicProgramming m = new MaximalRectangle_DynamicProgramming();
 
     @Test
     public void input1() {
@@ -141,7 +142,13 @@ public class LargestRectangleInHistogramTest {
     }
 
     private void act(int[] nums, int expected) {
-        int output = l.largestRectangleArea(nums);
+        //int output = l.largestRectangleArea(nums);
+        int output = m.findLargestHistogram(nums);
         assertEquals(expected, output);
+    }
+
+    @Test
+    public void testHistogram() {
+        act(new int[]{2, 0, 2, 1, 1},3);
     }
 }

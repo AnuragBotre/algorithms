@@ -1,6 +1,7 @@
 package com.trendcore.problems.leetcode;
 
 import java.util.Arrays;
+import java.util.Stack;
 
 /**
  * https://leetcode.com/problems/maximal-rectangle/
@@ -20,26 +21,6 @@ import java.util.Arrays;
  */
 public class MaximalRectangle_DynamicProgramming {
 
-    class Temp {
-
-        class HeightWise {
-            int area;
-            int height;
-            int width;
-        }
-
-        class WidthWise {
-            int area;
-            int height;
-            int width;
-        }
-
-
-        HeightWise heightWise = new HeightWise();
-        WidthWise widthWise = new WidthWise();
-
-        int area;
-    }
 
     public int maximalRectangle(char[][] matrix) {
 
@@ -47,104 +28,97 @@ public class MaximalRectangle_DynamicProgramming {
             return 0;
         }
 
-        Temp output[][] = new Temp[matrix.length][matrix[0].length];
+
+        int arr[] = new int[matrix[0].length];
 
         int maxArea = 0;
 
-
         for (int i = 0; i < matrix.length; i++) {
+            //copy row into arr
             for (int j = 0; j < matrix[i].length; j++) {
-
-                if (matrix[i][j] != '0') {
-
-                    if (i == 0 && j == 0) {
-                        output[i][j] = new Temp();
-                        output[i][j].heightWise.height = 1;
-                        output[i][j].heightWise.width = 1;
-
-                        output[i][j].widthWise.width = 1;
-                        output[i][j].widthWise.height = 1;
-                        maxArea = 1;
-                    } else {
-                        output[i][j] = new Temp();
-
-                        //when j == 0 then increase height
-
-                        /*
-                            for given i,j
-                                        */
-                        if (i == 0) {
-
-                            if (matrix[i][j - 1] == '0') {
-                                //whatever height and width 1
-                                output[i][j].heightWise.height = 1;
-                                output[i][j].heightWise.width = 1;
-                                output[i][j].heightWise.area = 1;
-
-                                output[i][j].widthWise.height = 1;
-                                output[i][j].widthWise.width = 1;
-                                output[i][j].widthWise.area = 1;
-                            } else {
-                                output[i][j].heightWise.height = output[i-1][j].heightWise.height + 1;
-                                output[i][j].heightWise.width = 1;
-                                output[i][j].heightWise.area = output[i][j].heightWise.height * output[i][j].heightWise.width;
-
-                                output[i][j].widthWise.height = 1;
-                                output[i][j].widthWise.width = 1;
-                                output[i][j].widthWise.area = 1;
-                            }
-
-
-                        } else if (j == 0) {
-                            if (matrix[i - 1][j] == '0') {
-                                //whatever width and height 1
-                                output[i][j].widthWise.width = output[i][j - 1].widthWise.width + 1;
-                                output[i][j].widthWise.height = 1;
-                                int widthWiseArea = (output[i][j - 1].widthWise.width + 1) * 1;
-                            }
-                        } else {
-
-                            if (matrix[i - 1][j] != '0' && matrix[i][j - 1] != '0') {
-                                //area will be calculated height wise or width wise
-                                int heightWiseArea = (output[i - 1][j].heightWise.height + 1) * output[i - 1][j].heightWise.width;
-                                int widthWiseArea = (output[i][j - 1].widthWise.width + 1) * output[i][j - 1].widthWise.height;
-
-                            } else if (matrix[i - 1][j] == '0') {
-                                //whatever width and height 1
-                                int widthWiseArea = (output[i][j - 1].widthWise.width + 1) * 1;
-                            } else if (matrix[i][j - 1] == '0') {
-                                //whatever height and width 1
-                                int heightWiseArea = (output[i][j - 1].heightWise.height + 1) * 1;
-                            }
-                        }
-                        /*    output[i-1].width + 1 * output[i-1].height
-                         */
-
-                    }
+                if (matrix[i][j] == '0') {
+                    arr[j] = 0;
+                } else {
+                    arr[j] = arr[j] + getInt(matrix[i][j]);
                 }
             }
-        }
 
-        debug(output);
+            int area = findLargestHistogram(arr);
+            if (maxArea < area) {
+                maxArea = area;
+            }
+        }
 
         //return maxArea;
         return maxArea;
     }
 
-    private void debug(Temp[][] output) {
-        System.out.println();
-        System.out.println("-------------------------------------------------");
-        Arrays.stream(output).forEach(ints -> {
-                    Arrays.stream(ints).forEach(value -> {
-                        if (value != null) {
-                            System.out.print("{" + value.widthWise.width + "," + value.widthWise.height + "," + value.area + "}\t\t\t");
-                        } else {
-                            System.out.print("{" + 0 + "," + 0 + "," + 0 + "}\t\t\t");
-                        }
-                    });
-                    System.out.println();
+    public int findLargestHistogram(int[] arr) {
+
+        /*int stack[] = new int[arr.length];
+        int stackPointer = 0;*/
+        Stack<Integer> stack = new Stack();
+
+        int maxArea = 0;
+
+        int i = 0;
+        while (i < arr.length) {
+            if (stack.isEmpty()) {
+                //stack is empty
+
+                stack.push(i);
+
+            } else if (arr[stack.peek()] <= arr[i]) {
+                stack.push(i);
+            } else {
+                //need to calculate area
+                //1,2,3,4,3,2,1
+                //1,2,3,4,
+
+                int pos = 0;
+                while (!stack.isEmpty() && arr[i] < arr[stack.peek()]) {
+                    pos = stack.pop();
+                    int element = arr[pos];
+                    int area;
+                    if (stack.isEmpty()) {
+                        area = element * i;
+                    } else {
+                        //i-1 will be current position of highest element
+                        //stack.peek() will give length elements to be processed
+                        area = element * (i-1- stack.peek());
+                    }
+
+                    if (maxArea < area) {
+                        maxArea = area;
+                    }
                 }
-        );
+                stack.push(i);
+            }
+            i++;
+        }
+
+        int pos = 0;
+        while (!stack.isEmpty()) {
+            pos = stack.pop();
+            int element = arr[pos];
+            int area;
+            if (stack.isEmpty()) {
+                area = element * i;
+            } else {
+                area = element * (i-stack.peek()-1);
+            }
+
+            if (maxArea < area) {
+                maxArea = area;
+            }
+        }
+
+        return maxArea;
     }
+
+    private int getInt(char c) {
+        return c == '0' ? 0 : 1;
+    }
+
 
 }
