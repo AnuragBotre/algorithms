@@ -10,11 +10,11 @@ import java.util.Set;
 public class ListJVMs {
 
     @Test
-    public void name() throws MonitorException, URISyntaxException {
+    public void getListOfJVMs() throws MonitorException, URISyntaxException {
         MonitoredHost local = MonitoredHost.getMonitoredHost("localhost");
-        Set vmlist = new HashSet(local.activeVms());
+        Set<Integer> vmLists = local.activeVms();
 
-        for (Object id : vmlist) {
+        for (Integer id : vmLists) {
             MonitoredVm vm = local.getMonitoredVm(new VmIdentifier("//" + id));
             String processname = MonitoredVmUtil.mainClass(vm, true);
             System.out.println(id + " ------> " + processname);
