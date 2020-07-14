@@ -20,6 +20,10 @@ public class Profiler {
         methodProcessor = m;
     }
 
+    public static void registerStorageService(StorageService s) {
+        storageService = s;
+    }
+
     public static void pushMethod(String className, String methodName, long startTime, String parameterNames) {
         registerExecution(className, methodName, startTime, parameterNames);
     }
@@ -27,7 +31,7 @@ public class Profiler {
     private static ExecutionTask registerExecution(String className, String methodName, long startTime, String parameterNames) {
         ExecutionTask request = profiler.get();
         if (request == null) {
-            request = new ExecutionTask(UUID.randomUUID());
+            request = new ExecutionTask();
             profiler.set(request);
         }
 

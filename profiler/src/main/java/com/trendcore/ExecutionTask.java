@@ -19,8 +19,8 @@ public class ExecutionTask implements Serializable {
 
     private Map<String,String> attributes;
 
-    public ExecutionTask(UUID taskId) {
-        this.taskId = taskId;
+    public ExecutionTask() {
+        this.taskId = UUID.randomUUID();
         attributes = new HashMap<>();
     }
 
@@ -86,5 +86,9 @@ public class ExecutionTask implements Serializable {
 
     public void setAttributes(Map<String, String> attributes) {
         attributes.putAll(attributes);
+    }
+
+    public Map<String, String> getAttributes() {
+        return attributes;
     }
 }

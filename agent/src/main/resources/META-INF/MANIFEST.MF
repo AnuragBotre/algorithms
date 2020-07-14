@@ -1,0 +1,4 @@
+Premain-Class: com.trendcore.agent.PreMain
+Agent-Class: com.trendcore.agent.PreMain
+Can-Redefine-Classes: true
+Can-Retransform-Classes: true

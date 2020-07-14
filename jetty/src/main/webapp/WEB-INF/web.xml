@@ -4,4 +4,13 @@
 
 <web-app>
     <display-name>Archetype Created Web com.trendcore.spring.boot.Application</display-name>
+
+    <servlet>
+        <servlet-name>JettyServlet</servlet-name>
+        <servlet-class>com.trendcore.servlet.JettyServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>JettyServlet</servlet-name>
+        <url-pattern>*.html</url-pattern>
+    </servlet-mapping>
 </web-app>

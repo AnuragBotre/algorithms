@@ -46,6 +46,7 @@
         <module>mps-testing</module>
         <module>sample-application</module>
         <module>profiler</module>
+        <module>agent-class-loader</module>
     </modules>
 
     <dependencyManagement>
