@@ -29,7 +29,7 @@ public class PreMain {
         System.out.println("Initializing Agent agent main.");
         instrumentation = inst;
 
-        Map<String, String> args = parserArgs(agentArgs);
+        Map<String, String> args = ArgumentParserUtil.parserArgs(agentArgs);
 
         try {
             attachLibrariesToBootStrapClassLoader(args,inst);
@@ -74,18 +74,6 @@ public class PreMain {
                 inst.appendToBootstrapClassLoaderSearch(jarFile);
             }
         }
-    }
-
-    private static Map<String, String> parserArgs(String agentArgs) {
-        Map<String, String> collect = Arrays.stream(agentArgs.split(";"))
-                .filter(s -> !s.isEmpty())
-                .map(s -> {
-                    String[] split = s.split("=");
-                    return split;
-                }).collect(Collectors.toMap(strings -> strings[0], o -> o[1]));
-
-        return collect;
-
     }
 
     private static void addTransformer(Instrumentation inst) {

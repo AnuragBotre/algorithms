@@ -32,7 +32,7 @@ public class AgentLoader {
         System.out.println(agentFile.getAbsolutePath());
         System.out.println(dependenciesPath);
 
-        vm.loadAgent(agentFile.getAbsolutePath(),"dependenciesPath="+dependenciesPath + "/");
+        vm.loadAgent(agentFile.getAbsolutePath(),"dependenciesPath="+dependenciesPath + "/;storage=DATABASE");
 
         scanner.next();
 

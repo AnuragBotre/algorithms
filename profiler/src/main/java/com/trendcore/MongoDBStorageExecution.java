@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class MongoDBStorageExecution implements StorageService {
 
@@ -34,10 +35,11 @@ public class MongoDBStorageExecution implements StorageService {
         }
 
         profilingDatabase = mongoClient.getDatabase(databaseName);
+        executor = Executors.newFixedThreadPool(2);
     }
 
 
-    public static void init(Map<String, String> args) {
+    public static MongoDBStorageExecution getInstance(Map<String, String> args) {
         String mongoDBPropertiesFile = args.get("mongodb.properties");
         Properties mongoDBProperties = new Properties();
         try {
@@ -47,7 +49,7 @@ public class MongoDBStorageExecution implements StorageService {
             //throw new RuntimeException(e);
         }
         MongoDBStorageExecution s = new MongoDBStorageExecution(mongoDBProperties);
-
+        return s;
     }
 
     @Override

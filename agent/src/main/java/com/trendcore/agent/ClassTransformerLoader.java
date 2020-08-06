@@ -1,11 +1,17 @@
 package com.trendcore.agent;
 
+import com.trendcore.Profiler;
+import com.trendcore.StorageService;
+import com.trendcore.agent.storage.StorageServiceFactory;
+import com.trendcore.agent.storage.StorageServiceFactory.Type;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.instrument.ClassDefinition;
 import java.lang.instrument.Instrumentation;
 import java.util.Arrays;
+import java.util.Map;
 
 public class ClassTransformerLoader {
 
@@ -39,6 +45,13 @@ public class ClassTransformerLoader {
                 });
 
         inst.addTransformer(classTransformer,true);
+
+        Map<String, String> args = ArgumentParserUtil.parserArgs(agentArgs);
+        Type storageType = Type.valueOf(args.getOrDefault("storage", Type.IN_MEMORY.toString()));
+        StorageService storageService = StorageServiceFactory.getStorageService(args, storageType);
+        if(storageService != null) {
+            Profiler.registerStorageService(storageService);
+        }
     }
 
 
