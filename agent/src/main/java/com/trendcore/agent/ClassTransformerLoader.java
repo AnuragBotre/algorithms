@@ -39,7 +39,7 @@ public class ClassTransformerLoader {
                                 }
                             }
                         }
-                    } catch (Exception e) {
+                    } catch (Throwable e) {
                         System.out.println("Error occurred while transforming class " + aClass.getName());
                     }
                 });
