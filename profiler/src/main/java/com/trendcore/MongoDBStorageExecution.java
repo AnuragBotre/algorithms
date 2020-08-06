@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.UUID;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 
 public class MongoDBStorageExecution implements StorageService {
@@ -67,7 +66,7 @@ public class MongoDBStorageExecution implements StorageService {
         if (root != null) {
             //save execution summary
             saveExecutionSummary(root);
-            saveMethodsInfo(root.getRoot(), root.getTaskId(), null);
+            saveMethodsInfo(root.getRoot(), root.getTaskId(), null , 1);
         }
     }
 
@@ -81,7 +80,7 @@ public class MongoDBStorageExecution implements StorageService {
         executionSummary.insertOne(document);
     }
 
-    void saveMethodsInfo(Method method, UUID taskId, ObjectId parentObjectId) {
+    void saveMethodsInfo(Method method, UUID taskId, ObjectId parentObjectId, long i) {
         if (method != null) {
             //save current method details
             MongoCollection<Document> methodInformation = profilingDatabase.getCollection("methodInformation");
@@ -92,6 +91,7 @@ public class MongoDBStorageExecution implements StorageService {
             document.put("startTime", method.getStartTime());
             document.put("endTime", method.getEndTime());
             document.put("parameterNames", method.getParameterNames());
+            document.put("methodInvocationIndex", i);
 
             if (parentObjectId != null) {
                 document.put("parentMethodId", parentObjectId);
@@ -102,8 +102,10 @@ public class MongoDBStorageExecution implements StorageService {
             ObjectId id = document.getObjectId("_id");
 
             List<Method> methods = method.getMethods();
+            long methodInvocationIndex = 1;
             for (Method m : methods) {
-                saveMethodsInfo(m, taskId, id);
+                saveMethodsInfo(m, taskId, id, methodInvocationIndex);
+                methodInvocationIndex++;
             }
         }
     }
