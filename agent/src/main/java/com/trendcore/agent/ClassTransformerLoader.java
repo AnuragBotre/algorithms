@@ -9,8 +9,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.instrument.ClassDefinition;
+import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.Instrumentation;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 public class ClassTransformerLoader {
@@ -20,29 +23,25 @@ public class ClassTransformerLoader {
 
         Class[] allLoadedClasses = inst.getAllLoadedClasses();
 
+        List<Class> keyClasses = new ArrayList();
+
         Arrays.stream(allLoadedClasses)
+                .filter(aClass -> {
+                    if(aClass.getName().equalsIgnoreCase("java.lang.Thread")) {
+                        keyClasses.add(aClass);
+                    }
+                    return true;
+                })
                 .filter(aClass -> aClass.getName().contains("com.trendcore"))
                 .filter(aClass -> !(aClass.getName().startsWith("com.trendcore.agent") ||
                                     aClass.getName().startsWith("com.trendcore.asm") ||
                                     aClass.getName().startsWith("com.trendcore.classloader") ) )
-                .forEach(aClass -> {
-                    try {
-                        if (!aClass.isInterface()) {
-                            String name = aClass.getName().replace('.', '/');
-                            InputStream is = aClass.getResourceAsStream("/" + name + ".class");
-                            if(is != null) {
-                                //need to read from byte buffer
-                                byte[] bytes = getBytes(is);
-                                byte[] transform = classTransformer.transform(aClass.getClassLoader(), aClass.getName(), aClass, aClass.getProtectionDomain(), bytes);
-                                if (transform != null) {
-                                    inst.redefineClasses(new ClassDefinition(aClass, transform));
-                                }
-                            }
-                        }
-                    } catch (Throwable e) {
-                        System.out.println("Error occurred while transforming class " + aClass.getName());
-                    }
-                });
+                .forEach(aClass -> redefineClass(inst, classTransformer, aClass));
+
+        /*JavaClassTransformer javaClassTransformer = new JavaClassTransformer();
+        keyClasses.forEach(aClass -> {
+            redefineClass(inst, javaClassTransformer, aClass);
+        });*/
 
         inst.addTransformer(classTransformer,true);
 
@@ -54,17 +53,23 @@ public class ClassTransformerLoader {
         }
     }
 
-
-    private static byte[] getBytes(InputStream is) throws IOException {
-
-            try (ByteArrayOutputStream os = new ByteArrayOutputStream();) {
-                byte[] buffer = new byte[0xFFFF];
-                for (int len; (len = is.read(buffer)) != -1; )
-                    os.write(buffer, 0, len);
-                os.flush();
-                return os.toByteArray();
+    private static void redefineClass(Instrumentation inst, ClassFileTransformer classTransformer, Class aClass) {
+        try {
+            if (!aClass.isInterface()) {
+                String name = aClass.getName().replace('.', '/');
+                InputStream is = aClass.getResourceAsStream("/" + name + ".class");
+                if(is != null) {
+                    //need to read from byte buffer
+                    byte[] bytes = ClassByteBuffer.getBytes(is);
+                    byte[] transform = classTransformer.transform(aClass.getClassLoader(), aClass.getName(), aClass, aClass.getProtectionDomain(), bytes);
+                    if (transform != null) {
+                        inst.redefineClasses(new ClassDefinition(aClass, transform));
+                    }
+                }
             }
-
-
+        } catch (Throwable e) {
+            System.out.println("Error occurred while transforming class " + aClass.getName());
+        }
     }
+
 }
