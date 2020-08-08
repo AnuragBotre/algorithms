@@ -17,9 +17,7 @@ public class ClassTransformer implements ClassFileTransformer {
 
         if (className.contains("com.trendcore")) {
 
-            if(!(className.startsWith("com.trendcore.agent") ||
-                    className.startsWith("com.trendcore.asm") ||
-                    className.startsWith("com.trendcore.classloader") )) {
+            if(ClassTransformationUtil.skipTransformationForClasses(classBeingRedefined)) {
 
 
                 ClassReader cr = new ClassReader(classfileBuffer);

@@ -5,8 +5,6 @@ import com.trendcore.StorageService;
 import com.trendcore.agent.storage.StorageServiceFactory;
 import com.trendcore.agent.storage.StorageServiceFactory.Type;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.lang.instrument.ClassDefinition;
 import java.lang.instrument.ClassFileTransformer;
@@ -33,9 +31,7 @@ public class ClassTransformerLoader {
                     return true;
                 })
                 .filter(aClass -> aClass.getName().contains("com.trendcore"))
-                .filter(aClass -> !(aClass.getName().startsWith("com.trendcore.agent") ||
-                                    aClass.getName().startsWith("com.trendcore.asm") ||
-                                    aClass.getName().startsWith("com.trendcore.classloader") ) )
+                .filter(aClass -> ClassTransformationUtil.skipTransformationForClasses(aClass))
                 .forEach(aClass -> redefineClass(inst, classTransformer, aClass));
 
         /*JavaClassTransformer javaClassTransformer = new JavaClassTransformer();
@@ -53,6 +49,8 @@ public class ClassTransformerLoader {
         }
     }
 
+
+
     private static void redefineClass(Instrumentation inst, ClassFileTransformer classTransformer, Class aClass) {
         try {
             if (!aClass.isInterface()) {
@@ -60,7 +58,7 @@ public class ClassTransformerLoader {
                 InputStream is = aClass.getResourceAsStream("/" + name + ".class");
                 if(is != null) {
                     //need to read from byte buffer
-                    byte[] bytes = ClassByteBuffer.getBytes(is);
+                    byte[] bytes = ClassTransformationUtil.getBytes(is);
                     byte[] transform = classTransformer.transform(aClass.getClassLoader(), aClass.getName(), aClass, aClass.getProtectionDomain(), bytes);
                     if (transform != null) {
                         inst.redefineClasses(new ClassDefinition(aClass, transform));

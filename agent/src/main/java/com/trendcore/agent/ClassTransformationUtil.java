@@ -4,7 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class ClassByteBuffer {
+public class ClassTransformationUtil {
 
     public static byte[] getBytes(InputStream is) throws IOException {
 
@@ -15,5 +15,13 @@ public class ClassByteBuffer {
             os.flush();
             return os.toByteArray();
         }
+    }
+
+    public static boolean skipTransformationForClasses(Class aClass) {
+        return !(
+                aClass.getName().startsWith("com.trendcore.agent") ||
+                aClass.getName().startsWith("com.trendcore.asm") ||
+                aClass.getName().startsWith("com.trendcore.classloader")
+        );
     }
 }

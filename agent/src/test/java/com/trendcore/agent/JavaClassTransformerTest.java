@@ -6,8 +6,6 @@ import java.io.InputStream;
 import java.lang.instrument.ClassDefinition;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.net.URL;
-import java.net.URLClassLoader;
 
 public class JavaClassTransformerTest {
 
@@ -20,7 +18,7 @@ public class JavaClassTransformerTest {
 
         String threadClassName = threadClass.getName().replace('.', '/');
         InputStream is = classLoader.getResourceAsStream(threadClassName + ".class");
-        byte[] bytes = ClassByteBuffer.getBytes(is);
+        byte[] bytes = ClassTransformationUtil.getBytes(is);
 
         byte[] transform = javaClassTransformer.transform(classLoader, name, threadClass, null, bytes);
 
