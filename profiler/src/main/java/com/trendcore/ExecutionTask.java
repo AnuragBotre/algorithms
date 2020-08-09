@@ -25,12 +25,12 @@ public class ExecutionTask implements Serializable {
     }
 
 
-    public void addMethod(String className, String methodName, long startTime, String parameterNames) {
+    public void addMethod(String className, String methodName, long startTime, String parameterNames, String category) {
         if (root == null) {
-            root = new Method(className,methodName, startTime, current, parameterNames);
+            root = new Method(className,methodName, startTime, current, parameterNames,category);
             current = root;
         } else {
-            Method method = new Method(className,methodName, startTime, current, parameterNames);
+            Method method = new Method(className,methodName, startTime, current, parameterNames,category);
             current.getMethods().add(method);
             current = method;
         }

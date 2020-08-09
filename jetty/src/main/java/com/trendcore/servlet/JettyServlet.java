@@ -1,5 +1,7 @@
 package com.trendcore.servlet;
 
+import com.trendcore.Profile;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -13,6 +15,7 @@ import java.io.IOException;
 public class JettyServlet extends HttpServlet{
 
     @Override
+    @Profile(category = "HTTP_SERVLET")
     protected void doGet(HttpServletRequest request,
                          HttpServletResponse response) throws ServletException,
             IOException {

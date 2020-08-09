@@ -1,7 +1,6 @@
 package com.trendcore;
 
 import java.util.Map;
-import java.util.UUID;
 import java.util.function.Supplier;
 
 public class Profiler {
@@ -25,23 +24,23 @@ public class Profiler {
     }
 
     public static void pushMethod(String className, String methodName, long startTime, String parameterNames) {
-        registerExecution(className, methodName, startTime, parameterNames);
+        registerExecution(className, methodName, startTime, parameterNames, null);
     }
 
-    private static ExecutionTask registerExecution(String className, String methodName, long startTime, String parameterNames) {
+    private static ExecutionTask registerExecution(String className, String methodName, long startTime, String parameterNames, String category) {
         ExecutionTask request = profiler.get();
         if (request == null) {
             request = new ExecutionTask();
             profiler.set(request);
         }
-
-        request.addMethod(className, methodName, startTime, parameterNames);
+        request.setStartTime(startTime);
+        request.addMethod(className, methodName, startTime, parameterNames,category);
         return request;
     }
 
     public static void pushMethod(String className, String methodName, long startTime, String parameterNames, String category, Object... methodArgs) {
 
-        ExecutionTask request = registerExecution(className, methodName, startTime, parameterNames);
+        ExecutionTask request = registerExecution(className, methodName, startTime, parameterNames,category);
         if (methodProcessor != null) {
             Map<String, String> attributes = methodProcessor.process(category, className, methodName, methodArgs);
             request.setAttributes(attributes);
@@ -56,6 +55,7 @@ public class Profiler {
 
             if (method == null) {
                 //clear thread local
+                request.setEndTime(endTime);
                 storageService.registerExecutionTaskDetails(request);
                 profiler.remove();
             }

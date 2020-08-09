@@ -50,24 +50,24 @@ public class MongoDBStorageExecutionTest {
     }
 
     private Method getMethod() {
-        Method root = new Method(MongoDBStorageExecution.class.getName(), "test", System.currentTimeMillis(), null, "");
+        Method root = new Method(MongoDBStorageExecution.class.getName(), "test", System.currentTimeMillis(), null, "", null);
         root.setEndTime(System.currentTimeMillis());
 
-        Method save = new Method(MongoDBStorageExecution.class.getName(), "save", System.currentTimeMillis(), root, "java.lang.String");
+        Method save = new Method(MongoDBStorageExecution.class.getName(), "save", System.currentTimeMillis(), root, "java.lang.String", null);
         save.setEndTime(System.currentTimeMillis());
 
-        Method innerSave1 = new Method(MongoDBStorageExecution.class.getName(), "innerSave1", System.currentTimeMillis(), save, "java.lang.String");
+        Method innerSave1 = new Method(MongoDBStorageExecution.class.getName(), "innerSave1", System.currentTimeMillis(), save, "java.lang.String", null);
         innerSave1.setEndTime(System.currentTimeMillis());
 
-        Method innerSave2 = new Method(MongoDBStorageExecution.class.getName(), "innerSave2", System.currentTimeMillis(), save, "java.lang.String");
+        Method innerSave2 = new Method(MongoDBStorageExecution.class.getName(), "innerSave2", System.currentTimeMillis(), save, "java.lang.String", null);
         innerSave2.setEndTime(System.currentTimeMillis());
 
-        Method innerSave3 = new Method(MongoDBStorageExecution.class.getName(), "innerSave3", System.currentTimeMillis(), save, "java.lang.String");
+        Method innerSave3 = new Method(MongoDBStorageExecution.class.getName(), "innerSave3", System.currentTimeMillis(), save, "java.lang.String", null);
         innerSave3.setEndTime(System.currentTimeMillis());
 
         save.getMethods().addAll(Arrays.asList(innerSave1,innerSave2,innerSave3));
 
-        Method method1 = new Method(MongoDBStorageExecution.class.getName(), "method1", System.currentTimeMillis(), root, "java.lang.String");
+        Method method1 = new Method(MongoDBStorageExecution.class.getName(), "method1", System.currentTimeMillis(), root, "java.lang.String", null);
         method1.setEndTime(System.currentTimeMillis());
 
         root.getMethods().add(save);

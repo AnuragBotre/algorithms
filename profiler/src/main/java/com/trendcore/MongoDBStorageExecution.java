@@ -68,7 +68,7 @@ public class MongoDBStorageExecution implements StorageService {
         if (root != null) {
             //save execution summary
             saveExecutionSummary(root);
-            saveMethodsInfo(root.getRoot(), root.getTaskId(), null , 1);
+            saveMethodsInfo(root.getRoot(), root.getTaskId(), null, 1);
         }
     }
 
@@ -94,6 +94,9 @@ public class MongoDBStorageExecution implements StorageService {
             document.put("endTime", method.getEndTime());
             document.put("parameterNames", method.getParameterNames());
             document.put("methodInvocationIndex", i);
+            if (method.getCategory() != null) {
+                document.put("category", method.getCategory());
+            }
 
             if (parentObjectId != null) {
                 document.put("parentMethodId", parentObjectId);

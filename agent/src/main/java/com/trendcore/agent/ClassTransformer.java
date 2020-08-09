@@ -15,7 +15,7 @@ public class ClassTransformer implements ClassFileTransformer {
     public byte[] transform(ClassLoader loader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer)
             throws IllegalClassFormatException {
 
-        if (className.contains("com.trendcore")) {
+        //if (className.contains("com.trendcore")) {
 
             if(ClassTransformationUtil.skipTransformationForClasses(classBeingRedefined)) {
 
@@ -28,7 +28,7 @@ public class ClassTransformer implements ClassFileTransformer {
 
                 return cw.toByteArray();
             }
-        }
+        //}
         return null;
     }
 }

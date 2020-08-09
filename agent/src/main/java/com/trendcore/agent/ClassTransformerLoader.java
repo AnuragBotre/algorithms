@@ -30,7 +30,7 @@ public class ClassTransformerLoader {
                     }
                     return true;
                 })
-                .filter(aClass -> aClass.getName().contains("com.trendcore"))
+                //.filter(aClass -> aClass.getName().contains("com.trendcore"))
                 .filter(aClass -> ClassTransformationUtil.skipTransformationForClasses(aClass))
                 .forEach(aClass -> redefineClass(inst, classTransformer, aClass));
 

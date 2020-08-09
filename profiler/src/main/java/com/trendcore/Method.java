@@ -10,6 +10,8 @@ public class Method implements Serializable {
 
     private final String methodName;
 
+    private final String category;
+
     private long startTime;
 
     private long endTime;
@@ -20,12 +22,13 @@ public class Method implements Serializable {
 
     private String parameterNames;
 
-    public Method(String className, String methodName, long startTime, Method parent, String parameterNames) {
+    public Method(String className, String methodName, long startTime, Method parent, String parameterNames, String category) {
         this.className = className;
         this.methodName = methodName;
         this.parameterNames = parameterNames;
         this.startTime = startTime;
         this.parent = parent;
+        this.category = category;
     }
 
     public List<Method> getMethods() {
@@ -74,5 +77,9 @@ public class Method implements Serializable {
 
     public String getClassName() {
         return className;
+    }
+
+    public String getCategory() {
+        return category;
     }
 }
