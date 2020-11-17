@@ -1,10 +1,11 @@
 package com.trendcore;
 
+import com.oath.cyclops.matching.Deconstruct;
 import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Java8StreamsTest {
@@ -113,6 +114,43 @@ public class Java8StreamsTest {
                 .limit(5)
                 .skip(3)
                 .forEach(integer -> System.out.println(integer))
+        ;
+    }
+
+    @Test
+    public void groupByWithClassifier() {
+        Stream<Object> stream = Stream.of(tuple(1, "Adam"), tuple(1, "Barn"), tuple(2, "Casilo"), tuple(2, "Sergio"), tuple(3, "Mikel"));
+        stream.map(o -> (Tuple2<Integer,String>)o)
+            .collect(
+                Collectors.groupingBy(integerStringTuple2 -> integerStringTuple2.t1)
+            )
+            .forEach((integer, integers) -> System.out.println(integer + " " + integers))
+        ;
+    }
+
+    @Test
+    public void groupByWithClassifierAndCollectionObject() {
+        Supplier<Stream<Object>> streamSupplier = () -> Stream.of(tuple(1, "Adam"), tuple(1, "Barn"), tuple(2, "Casilo"), tuple(2, "Sergio"), tuple(3, "Mikel"));
+        streamSupplier.get().map(o -> (Tuple2<Integer,String>)o)
+                .collect(
+                        Collectors.groupingBy(integerStringTuple2 -> integerStringTuple2.t1,
+                                /*This is data structure in which above values will be stored*/
+                                Collectors.toCollection(() -> new ArrayList<>())
+                        )
+                )
+                .forEach((integer, integers) -> System.out.println(integer + " " + integers))
+        ;
+
+        System.out.println("--------------------------------------------------------------");
+
+        streamSupplier.get().map(o -> (Tuple2<Integer,String>)o)
+                .collect(
+                        Collectors.groupingBy(integerStringTuple2 -> integerStringTuple2.t1,
+                                /*This is data structure in which above values will be stored*/
+                                Collectors.toCollection(() -> new LinkedList<>())
+                        )
+                )
+                .forEach((integer, integers) -> System.out.println(integer + " " + integers))
         ;
     }
 
