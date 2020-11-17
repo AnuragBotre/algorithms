@@ -130,7 +130,12 @@ public class Java8StreamsTest {
 
     @Test
     public void groupByWithClassifierAndCollectionObject() {
-        Supplier<Stream<Object>> streamSupplier = () -> Stream.of(tuple(1, "Adam"), tuple(1, "Barn"), tuple(2, "Casilo"), tuple(2, "Sergio"), tuple(3, "Mikel"));
+        Supplier<Stream<Object>> streamSupplier = () -> Stream.of(tuple(1, "Adam"),
+                                            tuple(1, "Barn"),
+                                            tuple(2, "Casilo"),
+                                            tuple(2, "Sergio"),
+                                            tuple(3, "Mikel"));
+
         streamSupplier.get().map(o -> (Tuple2<Integer,String>)o)
                 .collect(
                         Collectors.groupingBy(integerStringTuple2 -> integerStringTuple2.t1,
