@@ -1,3 +1,6 @@
+https://galaktika-soft.com/blog/what-are-measures-and-dimensions-in-olap-cube.html
+-- What Are Measures And Dimensions In OLAP Cube
+
 https://blog.jooq.org/2015/08/13/common-sql-clauses-and-their-equivalents-in-java-8-streams/
 -- Common SQL Clauses and Their Equivalents in Java 8 Streams
 
