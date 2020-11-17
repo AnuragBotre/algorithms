@@ -2,23 +2,25 @@ package com.trendcore;
 
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Java8StreamsTest {
 
-    class Tuple2<T1, T2> {
+    class Tuple2<T1, T2> implements Comparable<Tuple2<T1,T2>>{
         T1 t1;
         T2 t2;
 
         public Tuple2(T1 t1, T2 t2) {
             this.t1 = t1;
             this.t2 = t2;
+        }
+
+        @Override
+        public int compareTo(Tuple2<T1, T2> anotherObject) {
+            return ((Comparable)this.t1).compareTo(anotherObject.t1);
         }
 
         @Override
@@ -121,7 +123,11 @@ public class Java8StreamsTest {
 
     @Test
     public void groupByWithClassifier() {
-        Stream<Object> stream = Stream.of(tuple(1, "Adam"), tuple(1, "Barn"), tuple(2, "Casilo"), tuple(2, "Sergio"), tuple(3, "Mikel"));
+        Stream<Object> stream = Stream.of(tuple(1, "Adam"),
+                                    tuple(1, "Barn"),
+                                    tuple(2, "Casilo"),
+                                    tuple(2, "Sergio"),
+                                    tuple(3, "Mikel"));
         stream.map(o -> (Tuple2<Integer,String>)o)
             .collect(
                 Collectors.groupingBy(integerStringTuple2 -> integerStringTuple2.t1)
@@ -131,14 +137,14 @@ public class Java8StreamsTest {
     }
 
     @Test
-    public void groupByWithClassifierAndCollectionObject() {
-        Supplier<Stream<Object>> streamSupplier = () -> Stream.of(tuple(1, "Adam"),
+    public void groupByWithClassifierAndCollectionAsArrayList() {
+        Stream<Object> stream = Stream.of(tuple(1, "Adam"),
                                             tuple(1, "Barn"),
                                             tuple(2, "Casilo"),
                                             tuple(2, "Sergio"),
                                             tuple(3, "Mikel"));
 
-        streamSupplier.get().map(o -> (Tuple2<Integer,String>)o)
+        stream.map(o -> (Tuple2<Integer,String>)o)
                 .collect(
                         Collectors.groupingBy(integerStringTuple2 -> integerStringTuple2.t1,
                                 /*This is data structure in which above values will be stored*/
@@ -147,10 +153,17 @@ public class Java8StreamsTest {
                 )
                 .forEach((integer, integers) -> System.out.println(integer + " " + integers))
         ;
+    }
 
-        System.out.println("--------------------------------------------------------------");
+    @Test
+    public void groupByWithClassifierAndCollectionAsLinkedList() {
+        Stream<Object> stream = Stream.of(tuple(1, "Adam"),
+                tuple(1, "Barn"),
+                tuple(2, "Casilo"),
+                tuple(2, "Sergio"),
+                tuple(3, "Mikel"));
 
-        streamSupplier.get().map(o -> (Tuple2<Integer,String>)o)
+        stream.map(o -> (Tuple2<Integer,String>)o)
                 .collect(
                         Collectors.groupingBy(integerStringTuple2 -> integerStringTuple2.t1,
                                 /*This is data structure in which above values will be stored*/
@@ -158,6 +171,72 @@ public class Java8StreamsTest {
                         )
                 )
                 .forEach((integer, integers) -> System.out.println(integer + " " + integers))
+        ;
+    }
+
+    @Test(expected = ClassCastException.class)
+    public void orderBy() {
+        Stream<Object> stream = Stream.of(tuple(1, "Adam"),
+                tuple(1, "Barn"),
+                tuple(2, "Casilo"),
+                tuple(2, "Sergio"),
+                tuple(3, "Mikel"));
+
+        stream
+            .map(object -> (Tuple2<Integer,String>)object)
+            .sorted()
+            .forEach(tuple2 -> System.out.println(tuple2))
+        ;
+    }
+
+    @Test
+    public void orderByWithComparator() {
+        Stream<Object> stream = Stream.of(tuple(1, "Adam"),
+                tuple(1, "Barn"),
+                tuple(2, "Casilo"),
+                tuple(2, "Sergio"),
+                tuple(3, "Mikel"));
+
+        stream
+                .map(object -> (Tuple2<Integer,String>)object)
+                .sorted((firstObject, secondObject) -> firstObject.t1.compareTo(secondObject.t1))
+                .forEach(tuple2 -> System.out.println(tuple2))
+        ;
+    }
+
+    @Test
+    public void orderByWithComparatorClass() {
+        Stream<Object> stream = Stream.of(tuple(1, "Adam"),
+                tuple(1, "Barn"),
+                tuple(2, "Casilo"),
+                tuple(2, "Sergio"),
+                tuple(3, "Mikel"));
+
+        stream
+                .map(object -> (Tuple2<Integer,String>)object)
+                .sorted(
+                        Comparator
+                                .comparing(tuple2 -> tuple2.t1)
+
+
+
+                )
+                .forEach(tuple2 -> System.out.println(tuple2))
+        ;
+    }
+
+    @Test
+    public void orderByReverseOrder() {
+        Stream<Object> stream = Stream.of(tuple(1, "Adam"),
+                tuple(1, "Barn"),
+                tuple(2, "Casilo"),
+                tuple(2, "Sergio"),
+                tuple(3, "Mikel"));
+
+        stream
+                .map(object -> (Tuple2<Integer,String>)object)
+                .sorted(Comparator.reverseOrder())
+                .forEach(tuple2 -> System.out.println(tuple2))
         ;
     }
 
