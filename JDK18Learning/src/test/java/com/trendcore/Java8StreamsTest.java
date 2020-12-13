@@ -240,6 +240,118 @@ public class Java8StreamsTest {
         ;
     }
 
+    @Test
+    public void reduce() {
+        Stream<Object> stream = Stream.of(tuple(1, "Adam"),
+                tuple(1, "Barn"),
+                tuple(2, "Casilo"),
+                tuple(2, "Sergio"),
+                tuple(3, "Mikel"));
+
+        Optional<Tuple2<Integer, String>> reduce = stream
+                                                    .map(o -> (Tuple2<Integer, String>) o)
+                                                    .reduce((prevTuple, currentTuple) -> {
+                                                        return new Tuple2<Integer, String>(prevTuple.t1, currentTuple.t2);
+                                                    })
+                                                    ;
+
+        System.out.println(reduce);
+    }
+
+    @Test
+    public void reduce_With_Empty_Stream() {
+        Stream<Object> stream = Stream.of();
+
+        Optional<Tuple2<Integer, String>> reduce = stream
+                .map(o -> (Tuple2<Integer, String>) o)
+                .reduce((prevTuple, currentTuple) -> {
+                    return new Tuple2<Integer, String>(prevTuple.t1, currentTuple.t2);
+                })
+                ;
+
+        System.out.println(reduce);
+    }
+
+    @Test
+    public void reduceWithIdentity_IdentityMeansInitialValue() {
+        Stream<Object> stream = Stream.of(tuple(1, "Adam"),
+                tuple(1, "Barn"),
+                tuple(2, "Casilo"),
+                tuple(2, "Sergio"),
+                tuple(3, "Mikel"));
+
+        Tuple2<Integer, String> firstValue = stream
+                                    .map(o -> (Tuple2<Integer, String>) o)
+                                    .reduce(
+                                            /*
+                                                Identity means initial value.
+                                                This initial value is of same type which returned from Map
+                                                operation.
+                                            */
+                                            new Tuple2<>(0, "firstValue")
+
+                                        , (identityTuple, currentTuple) -> {
+                                            System.out.println(identityTuple + " " + currentTuple);
+                                            return new Tuple2<>(currentTuple.t1, currentTuple.t2);
+                                    })
+                                    ;
+
+        System.out.println(firstValue);
+    }
+
+    @Test
+    public void reduceWithIdentity_IdentityMeansInitialValue_With_Empty_Stream() {
+        Stream<Object> stream = Stream.of();
+
+        Tuple2<Integer, String> firstValue = stream
+                .map(o -> (Tuple2<Integer, String>) o)
+                .reduce(/*
+                            Identity means initial value.
+                            This initial value is of same type which returned from Map
+                            operation.
+                        */
+                        new Tuple2<>(0, "firstValue")
+
+                        , (identityTuple, currentTuple) -> {
+                            System.out.println(identityTuple + " " + currentTuple);
+                            return new Tuple2<>(currentTuple.t1, currentTuple.t2);
+                        })
+                ;
+
+        System.out.println(firstValue);
+    }
+
+    @Test
+    public void reduce_with_identity_accumulator_combiner() {
+        Stream<Object> stream = Stream.of(tuple(1, "Adam"),
+                tuple(1, "Barn"),
+                tuple(2, "Casilo"),
+                tuple(2, "Sergio"),
+                tuple(3, "Mikel"));
+
+        Tuple2<String, String> reduce = stream
+                .map(o -> (Tuple2<Integer, String>) o)
+                .reduce(
+                        /*
+                            In this method you can have identity type of any.
+                            and it will be used in reduction method.
+                         */
+                        new Tuple2<String, String>("String", "firstValue"),
+
+                        (stringStringTuple, integerStringTuple) -> {
+
+                            System.out.println("Inside accumulator :- Tuple from identity " + stringStringTuple + " Tuple from map function" + integerStringTuple);
+                            return new Tuple2<String, String>(stringStringTuple.t2, integerStringTuple.t2);
+
+                        }, (stringStringTuple2, stringStringTuple22) -> {
+
+                            System.out.println("Inside accumulator :- Tuple from accumulator " + stringStringTuple2 + " Tuple from accumulator" + stringStringTuple22);
+                            return new Tuple2<>(stringStringTuple2.t1, stringStringTuple22.t2);
+                        });
+
+        System.out.println(reduce);
+    }
+
     private <T1, T2> Object tuple(T1 t1, T2 t2) {
         return new Tuple2(t1, t2);
     }
