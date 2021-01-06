@@ -1,3 +1,7 @@
+https://stackoverflow.com/questions/299659/whats-the-difference-between-softreference-and-weakreference-in-java
+Java Soft References - Weak references.
+
+
 https://galaktika-soft.com/blog/what-are-measures-and-dimensions-in-olap-cube.html
 -- What Are Measures And Dimensions In OLAP Cube
 
